@@ -258,13 +258,15 @@ body::after {
 /* ========== Quick Add ========== */
 .quick-add {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 16px 18px; margin-top: 20px;
-  display: flex; gap: 8px; align-items: stretch; flex-wrap: wrap;
+  padding: 14px; margin-top: 20px;
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  box-shadow: 0 10px 30px -18px rgba(0,0,0,.65);
 }
+.quick-add > * { height: 44px; box-sizing: border-box; }
 .quick-add input[type="text"] {
-  flex: 1; min-width: 0; font-family: inherit; font-size: .9em;
+  flex: 1 1 200px; min-width: 0; font-family: inherit; font-size: .9em;
   background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm);
-  color: var(--ink); padding: 10px 14px; outline: none;
+  color: var(--ink); padding: 0 14px; outline: none;
   transition: border-color .2s ease;
 }
 .quick-add input[type="text"]::placeholder { color: var(--faint); }
@@ -272,17 +274,17 @@ body::after {
 .quick-add select {
   font-family: inherit; font-size: .82em; font-weight: 600;
   background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm);
-  color: var(--ink2); padding: 8px 12px; outline: none; cursor: pointer;
+  color: var(--ink2); padding: 0 30px 0 12px; outline: none; cursor: pointer;
   -webkit-appearance: none; appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234a6490'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px;
+  background-repeat: no-repeat; background-position: right 10px center;
   min-width: 130px;
 }
 .quick-add select:focus { border-color: var(--teal); }
 .quick-add input[type="date"] {
   font-family: inherit; font-size: .82em;
   background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm);
-  color: var(--ink2); padding: 8px 12px; outline: none;
+  color: var(--ink2); padding: 0 12px; outline: none;
   color-scheme: dark; text-align: left;
 }
 /* Left-align the date value (WebKit/iOS centers it by default when full-width) */
@@ -291,15 +293,16 @@ body::after {
 .quick-add .qa-btn {
   background: linear-gradient(135deg, var(--teal), var(--green));
   color: #05201a; border: none; border-radius: var(--radius-sm);
-  padding: 10px 18px; font-weight: 700; font-size: .88em; cursor: pointer;
+  padding: 0 22px; font-weight: 700; font-size: .88em; cursor: pointer;
   font-family: inherit; white-space: nowrap;
+  display: inline-flex; align-items: center; justify-content: center;
   transition: box-shadow .2s ease, transform .15s ease;
 }
 .quick-add .qa-btn:hover { box-shadow: 0 4px 16px rgba(56,201,181,.3); transform: translateY(-1px); }
 .quick-add .qa-btn:active { transform: translateY(0); }
 @media (max-width: 620px) {
-  .quick-add { flex-direction: column; }
-  .quick-add select, .quick-add input[type="date"] { width: 100%; }
+  .quick-add { flex-direction: column; align-items: stretch; }
+  .quick-add > * { width: 100%; flex: 0 0 44px; }
 }
 
 /* ========== Section Headers ========== */
@@ -593,12 +596,12 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
     </div>
     <div class="items">
       <div class="item"><input type="checkbox" id="u1" onchange="save()"><label for="u1">Submit DLA (Dislocation Allowance) advance</label><span class="date">May 30</span></div>
-      <div class="item"><input type="checkbox" id="u2" onchange="save()"><label for="u2">SATO travel office — book flights for family + cat</label><span class="date">Mon Jun 2</span></div>
-      <div class="item"><input type="checkbox" id="u3" onchange="save()"><label for="u3">Pre-move inspection — main house @ 1000</label><span class="date">Tue Jun 3</span></div>
       <div class="item"><input type="checkbox" id="u4" onchange="save()"><label for="u4">Confirm BMW X5 fair value + Hawaii premium</label><span class="date">Jun 1</span></div>
+      <div class="item"><input type="checkbox" id="u7" onchange="save()"><label for="u7">Book rental car Hawaii 6/20–6/30 (SUV or minivan)</label><span class="date">Jun 1</span></div>
+      <div class="item"><input type="checkbox" id="u2" onchange="save()"><label for="u2">SATO travel office — book flights for family + cat</label><span class="date">Mon Jun 2</span></div>
       <div class="item"><input type="checkbox" id="u5" onchange="save()"><label for="u5">List BMW X5 for sale (FB Marketplace, Craigslist, MilMove groups)</label><span class="date">Jun 2</span></div>
       <div class="item"><input type="checkbox" id="u6" onchange="save()"><label for="u6">Schedule Ford Focus detailing before shipment</label><span class="date">Jun 2</span></div>
-      <div class="item"><input type="checkbox" id="u7" onchange="save()"><label for="u7">Book rental car Hawaii 6/20–6/30 (SUV or minivan)</label><span class="date">Jun 1</span></div>
+      <div class="item"><input type="checkbox" id="u3" onchange="save()"><label for="u3">Pre-move inspection — main house @ 1000</label><span class="date">Tue Jun 3</span></div>
     </div>
   </div>
 
@@ -610,19 +613,19 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
       <span class="badge" id="badge-premove"></span>
     </div>
     <div class="items">
-      <div class="item"><input type="checkbox" id="p1" onchange="save()"><label for="p1">Move-out pre-inspection @ 1300</label><span class="date">Jun 9</span></div>
       <div class="item"><input type="checkbox" id="p2" onchange="save()"><label for="p2">Start decluttering — donate/trash items you won't ship</label><span class="date">Jun 1</span></div>
-      <div class="item"><input type="checkbox" id="p3" onchange="save()"><label for="p3">Separate "Do Not Pack" items (docs, meds, valuables, kids' essentials)</label><span class="date">Jun 7</span></div>
-      <div class="item"><input type="checkbox" id="p4" onchange="save()"><label for="p4">Pack hotel living bins (see packing list below)</label><span class="date">Jun 12</span></div>
-      <div class="item"><input type="checkbox" id="p5" onchange="save()"><label for="p5">Transfer/cancel Hawaii utilities, internet, subscriptions</label><span class="date">Jun 10</span></div>
+      <div class="item"><input type="checkbox" id="p10" onchange="save()"><label for="p10">Notify landlord / housing office of move-out</label><span class="date">Jun 1</span></div>
       <div class="item"><input type="checkbox" id="p6" onchange="save()"><label for="p6">Forward mail via USPS (update to GA address or PO Box)</label><span class="date">Jun 5</span></div>
       <div class="item"><input type="checkbox" id="p7" onchange="save()"><label for="p7">Get copies of kids' school records</label><span class="date">Jun 6</span></div>
       <div class="item"><input type="checkbox" id="p8" onchange="save()"><label for="p8">Get copies of medical/dental records for family</label><span class="date">Jun 6</span></div>
-      <div class="item"><input type="checkbox" id="p9" onchange="save()"><label for="p9">Vet records + health certificate for cat</label><span class="date">Jun 20</span></div>
-      <div class="item"><input type="checkbox" id="p10" onchange="save()"><label for="p10">Notify landlord / housing office of move-out</label><span class="date">Jun 1</span></div>
+      <div class="item"><input type="checkbox" id="p3" onchange="save()"><label for="p3">Separate "Do Not Pack" items (docs, meds, valuables, kids' essentials)</label><span class="date">Jun 7</span></div>
+      <div class="item"><input type="checkbox" id="p1" onchange="save()"><label for="p1">Move-out pre-inspection @ 1300</label><span class="date">Jun 9</span></div>
+      <div class="item"><input type="checkbox" id="p5" onchange="save()"><label for="p5">Transfer/cancel Hawaii utilities, internet, subscriptions</label><span class="date">Jun 10</span></div>
+      <div class="item"><input type="checkbox" id="p4" onchange="save()"><label for="p4">Pack hotel living bins (see packing list below)</label><span class="date">Jun 12</span></div>
+      <div class="item"><input type="checkbox" id="p13" onchange="save()"><label for="p13">Ford Focus — remove personal items, document condition with photos</label><span class="date">Jun 12</span></div>
       <div class="item"><input type="checkbox" id="p11" onchange="save()"><label for="p11">Take photos of all high-value items for insurance</label><span class="date">Jun 13</span></div>
       <div class="item"><input type="checkbox" id="p12" onchange="save()"><label for="p12">Arrange cleaning service for house (post move-out)</label><span class="date">Jun 19</span></div>
-      <div class="item"><input type="checkbox" id="p13" onchange="save()"><label for="p13">Ford Focus — remove personal items, document condition with photos</label><span class="date">Jun 12</span></div>
+      <div class="item"><input type="checkbox" id="p9" onchange="save()"><label for="p9">Vet records + health certificate for cat</label><span class="date">Jun 20</span></div>
     </div>
   </div>
 
@@ -675,17 +678,17 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
       <div class="item"><input type="checkbox" id="g1" onchange="save()"><label for="g1">Pick up rental car at SAV airport</label><span class="date">Jun 30</span></div>
       <div class="item"><input type="checkbox" id="g2" onchange="save()"><label for="g2">Check into Georgia hotel (Richmond Hill / Savannah)</label><span class="date">Jun 30</span></div>
       <div class="item"><input type="checkbox" id="g3" onchange="save()"><label for="g3">In-processing at Fort Stewart / Hunter AAF</label><span class="date">Jul 1</span></div>
+      <div class="item"><input type="checkbox" id="g14" onchange="save()"><label for="g14">Update DEERS / Tricare to new region</label><span class="date">Jul 1</span></div>
       <div class="item"><input type="checkbox" id="g4" onchange="save()"><label for="g4">Enroll kids in school (register early!)</label><span class="date">Jul 7</span></div>
       <div class="item"><input type="checkbox" id="g5" onchange="save()"><label for="g5">House hunting / on-post housing application</label><span class="date">Jul 7</span></div>
       <div class="item"><input type="checkbox" id="g6" onchange="save()"><label for="g6">Set up Georgia utilities, internet</label><span class="date">Jul 14</span></div>
+      <div class="item"><input type="checkbox" id="g9" onchange="save()"><label for="g9">Test drive / buy / lease Hyundai Palisade Hybrid</label><span class="date">Jul 14</span></div>
+      <div class="item"><input type="checkbox" id="g13" onchange="save()"><label for="g13">Find pediatrician, dentist, vet for cat</label><span class="date">Jul 14</span></div>
+      <div class="item"><input type="checkbox" id="g10" onchange="save()"><label for="g10">Return rental car once personal vehicle secured</label><span class="date">Jul 18</span></div>
       <div class="item"><input type="checkbox" id="g7" onchange="save()"><label for="g7">Get Georgia driver's license</label><span class="date">Jul 21</span></div>
       <div class="item"><input type="checkbox" id="g8" onchange="save()"><label for="g8">Register vehicles in Georgia</label><span class="date">Jul 21</span></div>
-      <div class="item"><input type="checkbox" id="g9" onchange="save()"><label for="g9">Test drive / buy / lease Hyundai Palisade Hybrid</label><span class="date">Jul 14</span></div>
-      <div class="item"><input type="checkbox" id="g10" onchange="save()"><label for="g10">Return rental car once personal vehicle secured</label><span class="date">Jul 18</span></div>
       <div class="item"><input type="checkbox" id="g11" onchange="save()"><label for="g11">Receive HHG shipment — check inventory for damage</label><span class="date">TBD</span></div>
       <div class="item"><input type="checkbox" id="g12" onchange="save()"><label for="g12">File any damage claims within 75 days of delivery</label><span class="date">After delivery</span></div>
-      <div class="item"><input type="checkbox" id="g13" onchange="save()"><label for="g13">Find pediatrician, dentist, vet for cat</label><span class="date">Jul 14</span></div>
-      <div class="item"><input type="checkbox" id="g14" onchange="save()"><label for="g14">Update DEERS / Tricare to new region</label><span class="date">Jul 1</span></div>
     </div>
   </div>
 
@@ -1030,7 +1033,7 @@ function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalenda
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()}
 
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-30T23:19:39Z';
+const LAST_UPDATED='2026-05-30T23:32:29Z';
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';

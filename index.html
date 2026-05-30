@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0b1220">
+<meta name="theme-color" content="#080e1a">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -12,349 +12,451 @@
 <meta name="apple-mobile-web-app-title" content="PCS 2026">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
-<title>Hawaii → Georgia · Your PCS Concierge</title>
+<title>Hawaii → Georgia · PCS Concierge</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 @media print {
   body { background: #fff !important; color: #111 !important; }
-  .no-print, .hero-bg, .topbar { display: none !important; }
+  .no-print, .topbar, .install-banner { display: none !important; }
   .card { break-inside: avoid; border: 1px solid #ddd !important; box-shadow: none !important; background: #fff !important; }
   .item label { color: #111 !important; }
   input[type="checkbox"]:checked + label { text-decoration: line-through; }
 }
 
 :root {
-  --bg: #0b1220;
-  --bg-soft: #111a2e;
-  --panel: #131d33;
-  --panel-2: #18233d;
-  --line: #243150;
-  --ink: #e8edf7;
-  --muted: #9fb0cf;
-  --faint: #64759a;
-  --gold: #e9c46a;
-  --gold-soft: #e9c46a22;
-  --teal: #4fd1c5;
-  --teal-soft: #4fd1c51f;
-  --green: #45c97f;
-  --amber: #f0a04b;
-  --radius: 16px;
-  --shadow: 0 10px 30px -12px rgba(0,0,0,.55);
+  --bg: #080e1a;
+  --bg2: #0c1425;
+  --bg3: #101c30;
+  --surface: #111d32;
+  --surface2: #152240;
+  --border: #1e3055;
+  --border2: #264070;
+  --ink: #edf2fc;
+  --ink2: #c4d2eb;
+  --muted: #7e96be;
+  --faint: #4a6490;
+  --gold: #d4a745;
+  --gold2: #edc567;
+  --gold-glow: #d4a74520;
+  --teal: #38c9b5;
+  --teal2: #5ae0ce;
+  --teal-glow: #38c9b518;
+  --green: #3ec97a;
+  --red: #e0544d;
+  --amber: #e89a3c;
+  --radius: 20px;
+  --radius-sm: 12px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background:
-    radial-gradient(1200px 600px at 80% -10%, #1b2c52 0%, transparent 55%),
-    radial-gradient(900px 500px at -10% 0%, #14283f 0%, transparent 50%),
-    var(--bg);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
   color: var(--ink);
-  line-height: 1.55;
+  line-height: 1.6;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
-  padding-bottom: 60px;
+  padding-bottom: 80px;
+  overflow-x: hidden;
 }
-.wrap { max-width: 860px; margin: 0 auto; padding: 0 18px; }
 
-/* ---------- Top bar ---------- */
+/* Ambient background glow */
+body::before {
+  content: "";
+  position: fixed; top: -200px; right: -150px;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, #1a3568 0%, transparent 65%);
+  pointer-events: none; z-index: 0;
+}
+body::after {
+  content: "";
+  position: fixed; bottom: -300px; left: -200px;
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, #0f2a3d 0%, transparent 60%);
+  pointer-events: none; z-index: 0;
+}
+
+.wrap { max-width: 820px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+/* ========== Top Bar ========== */
 .topbar {
-  position: sticky; top: 0; z-index: 50;
-  backdrop-filter: saturate(160%) blur(12px);
-  background: rgba(11,18,32,.72);
-  border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; z-index: 60;
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  background: rgba(8,14,26,.78);
+  border-bottom: 1px solid var(--border);
 }
 .topbar-inner {
-  max-width: 860px; margin: 0 auto; padding: 10px 18px;
+  max-width: 820px; margin: 0 auto; padding: 12px 20px;
   display: flex; align-items: center; gap: 12px;
 }
-.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .2px; }
+.brand { display: flex; align-items: center; gap: 11px; }
 .brand .mark {
-  width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0;
+  width: 32px; height: 32px; border-radius: 10px;
   background: linear-gradient(135deg, var(--gold), var(--amber));
-  display: grid; place-items: center; color: #2a1c00; font-weight: 800; font-size: .9em;
-  box-shadow: 0 6px 16px -6px var(--amber);
+  display: grid; place-items: center;
+  color: #1a0e00; font-weight: 800; font-size: .82em; letter-spacing: .5px;
+  box-shadow: 0 4px 16px -4px rgba(212,167,69,.4);
 }
-.brand small { color: var(--muted); font-weight: 500; font-size: .72em; display: block; letter-spacing: .4px; text-transform: uppercase; }
-.topbar .mini-progress { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: .8em; color: var(--muted); }
-.mini-track { width: 90px; height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
-.mini-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--green)); border-radius: 99px; transition: width .4s ease; }
+.brand-text { font-weight: 700; font-size: .92em; letter-spacing: .1px; }
+.brand small { display: block; font-weight: 500; font-size: .7em; color: var(--muted); letter-spacing: .5px; text-transform: uppercase; }
+.topbar .prog { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.prog-track { width: 80px; height: 5px; border-radius: 99px; background: var(--border); overflow: hidden; }
+.prog-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--green)); border-radius: 99px; transition: width .5s cubic-bezier(.4,0,.2,1); }
+.prog-pct { font-size: .78em; font-weight: 700; color: var(--teal); min-width: 30px; text-align: right; }
 
-/* ---------- Hero ---------- */
-.hero { position: relative; padding: 40px 0 8px; }
-.eyebrow {
+/* ========== Hero ========== */
+.hero { padding: 44px 0 0; }
+.hero-eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
-  color: var(--gold); font-size: .76em; font-weight: 600;
-  text-transform: uppercase; letter-spacing: 1.6px; margin-bottom: 14px;
+  font-size: .72em; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 2px; color: var(--gold);
+  margin-bottom: 16px;
 }
-.eyebrow::before { content: ""; width: 22px; height: 1px; background: var(--gold); display: inline-block; }
+.hero-eyebrow::before { content: ""; width: 28px; height: 1.5px; background: linear-gradient(90deg, var(--gold), transparent); }
 .hero h1 {
-  font-family: 'Fraunces', Georgia, serif; font-weight: 600;
-  font-size: clamp(2em, 6vw, 3.1em); line-height: 1.05; letter-spacing: -.5px;
-  margin-bottom: 14px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600; font-size: clamp(2.2em, 7vw, 3.4em);
+  line-height: 1.08; letter-spacing: -.5px; margin-bottom: 16px;
 }
-.hero h1 .accent { background: linear-gradient(90deg, var(--gold), var(--teal)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.hero p.lede { color: var(--muted); font-size: 1.05em; max-width: 56ch; }
-.route {
-  display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
-  margin: 22px 0 6px; font-weight: 600;
+.hero h1 .grad {
+  background: linear-gradient(135deg, var(--gold2), var(--teal2));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-.route .pin { background: var(--panel); border: 1px solid var(--line); padding: 7px 14px; border-radius: 99px; font-size: .9em; }
+.hero .lede { color: var(--ink2); font-size: 1em; max-width: 52ch; line-height: 1.65; }
+
+/* Route pills */
+.route { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin: 24px 0 8px; }
+.route .pin {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 8px 16px; border-radius: 99px; font-size: .88em; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 6px;
+}
 .route .arrow { color: var(--gold); font-size: 1.1em; }
-.meta-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-.chip { font-size: .8em; color: var(--muted); background: var(--bg-soft); border: 1px solid var(--line); padding: 5px 12px; border-radius: 99px; }
-.chip b { color: var(--ink); }
-
-/* ---------- Countdown ---------- */
-.countdown {
-  margin-top: 26px;
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+.chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+.chip {
+  font-size: .76em; font-weight: 500; color: var(--muted);
+  background: var(--bg2); border: 1px solid var(--border); padding: 5px 13px; border-radius: 99px;
 }
-.cd-box {
-  background: linear-gradient(180deg, var(--panel-2), var(--panel));
-  border: 1px solid var(--line); border-radius: 14px; padding: 14px 8px; text-align: center;
-}
-.cd-box .num { font-family: 'Fraunces', serif; font-size: 1.7em; font-weight: 600; color: var(--gold); }
-.cd-box .lbl { font-size: .68em; text-transform: uppercase; letter-spacing: 1px; color: var(--faint); margin-top: 2px; }
+.chip b { color: var(--ink2); font-weight: 600; }
 
-/* ---------- Concierge banner ---------- */
+/* ========== Countdown ========== */
+.countdown { margin-top: 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.cd {
+  background: linear-gradient(180deg, var(--surface2), var(--surface));
+  border: 1px solid var(--border); border-radius: 16px;
+  padding: 16px 8px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.cd::before {
+  content: ""; position: absolute; top: 0; left: 20%; right: 20%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: .4;
+}
+.cd .num {
+  font-family: 'Playfair Display', serif; font-size: 2em; font-weight: 700;
+  background: linear-gradient(180deg, var(--gold2), var(--gold));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  line-height: 1.1;
+}
+.cd .lbl { font-size: .62em; text-transform: uppercase; letter-spacing: 1.5px; color: var(--faint); margin-top: 4px; font-weight: 600; }
+
+/* ========== Calendar ========== */
+.cal-wrap { margin-top: 28px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+.cal-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 14px; }
+.cal-nav button {
+  background: var(--bg2); border: 1px solid var(--border); color: var(--ink);
+  width: 36px; height: 36px; border-radius: 10px; cursor: pointer; font-size: 1.1em;
+  display: grid; place-items: center; transition: all .15s ease;
+}
+.cal-nav button:hover { border-color: var(--gold); background: var(--surface2); }
+.cal-nav .cal-month { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 1.15em; min-width: 150px; text-align: center; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-dow { text-align: center; font-size: .6em; font-weight: 700; color: var(--faint); text-transform: uppercase; letter-spacing: 1.2px; padding: 6px 0; }
+.cal-day {
+  text-align: center; padding: 8px 2px; border-radius: var(--radius-sm); font-size: .82em;
+  color: var(--muted); position: relative; cursor: default; min-height: 42px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: background .15s ease;
+}
+.cal-day.empty { visibility: hidden; }
+.cal-day.today {
+  background: var(--teal-glow); border: 1.5px solid var(--teal);
+  color: var(--teal); font-weight: 800;
+  box-shadow: 0 0 12px rgba(56,201,181,.15);
+}
+.cal-day.has-event { font-weight: 700; color: var(--ink); cursor: pointer; }
+.cal-day.has-event:hover { background: var(--surface2); }
+.cal-day.has-event::after {
+  content: ""; width: 6px; height: 6px; border-radius: 50%; position: absolute; bottom: 4px;
+  box-shadow: 0 0 6px currentColor;
+}
+.cal-day.evt-urgent::after { background: var(--amber); color: var(--amber); }
+.cal-day.evt-move::after { background: var(--red); color: var(--red); }
+.cal-day.evt-hotel::after { background: var(--teal); color: var(--teal); }
+.cal-day.evt-flight::after { background: var(--gold); color: var(--gold); }
+.cal-day.evt-general::after { background: var(--green); color: var(--green); }
+.cal-day.past { opacity: .3; }
+.cal-tooltip {
+  display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius-sm);
+  padding: 10px 14px; font-size: .78em; color: var(--ink); font-weight: 500;
+  box-shadow: 0 12px 32px -8px rgba(0,0,0,.7); z-index: 10; text-align: left;
+  max-width: 200px; white-space: normal; line-height: 1.45;
+  backdrop-filter: blur(8px);
+}
+.cal-day:hover .cal-tooltip, .cal-day:active .cal-tooltip { display: block; }
+.cal-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; justify-content: center; padding-top: 12px; border-top: 1px solid var(--border); }
+.cal-legend span { display: flex; align-items: center; gap: 6px; font-size: .68em; color: var(--faint); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+.cal-legend .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* ========== Concierge Banner ========== */
 .concierge {
-  margin-top: 26px; display: flex; gap: 14px; align-items: flex-start;
-  background: linear-gradient(135deg, var(--gold-soft), transparent 60%), var(--panel);
-  border: 1px solid var(--line); border-left: 3px solid var(--gold);
-  border-radius: var(--radius); padding: 16px 18px;
+  margin-top: 28px; display: flex; gap: 14px; align-items: flex-start;
+  background: linear-gradient(135deg, var(--gold-glow), transparent 50%), var(--surface);
+  border: 1px solid var(--border); border-left: 3px solid var(--gold);
+  border-radius: var(--radius); padding: 18px 20px;
 }
-.concierge .ic { font-size: 1.4em; }
-.concierge h3 { font-size: 1em; margin-bottom: 3px; }
-.concierge p { color: var(--muted); font-size: .9em; }
+.concierge .ic { font-size: 1.3em; margin-top: 2px; }
+.concierge h3 { font-size: .95em; margin-bottom: 4px; font-weight: 700; }
+.concierge p { color: var(--ink2); font-size: .88em; }
 
-/* ---------- Toolbar ---------- */
-.toolbar { margin: 26px 0 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+/* ========== Toolbar ========== */
+.toolbar { margin: 28px 0 20px; display: flex; flex-wrap: wrap; gap: 8px; }
 .btn {
-  font-family: inherit; font-size: .88em; font-weight: 600; cursor: pointer;
-  border: 1px solid var(--line); color: var(--ink); background: var(--panel);
-  padding: 10px 16px; border-radius: 11px; transition: all .18s ease; display: inline-flex; align-items: center; gap: 7px;
+  font-family: inherit; font-size: .84em; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border); color: var(--ink2); background: var(--surface);
+  padding: 10px 18px; border-radius: var(--radius-sm);
+  transition: all .2s cubic-bezier(.4,0,.2,1);
+  display: inline-flex; align-items: center; gap: 7px;
 }
-.btn:hover { border-color: var(--gold); transform: translateY(-1px); }
-.btn-primary { background: linear-gradient(135deg, var(--gold), var(--amber)); color: #2a1c00; border: none; }
-.btn-primary:hover { box-shadow: 0 8px 22px -8px var(--amber); }
+.btn:hover { border-color: var(--border2); background: var(--surface2); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,.3); }
+.btn:active { transform: translateY(0); }
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), var(--amber));
+  color: #1a0e00; border: none; font-weight: 700;
+}
+.btn-gold:hover { box-shadow: 0 6px 24px -4px rgba(212,167,69,.4); }
 
-/* ---------- Section heading ---------- */
-.section-head { margin: 40px 0 14px; }
-.section-head .kicker { color: var(--teal); font-size: .74em; font-weight: 700; text-transform: uppercase; letter-spacing: 1.4px; }
-.section-head h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.5em; letter-spacing: -.3px; margin-top: 2px; }
-.section-head p { color: var(--muted); font-size: .9em; margin-top: 4px; }
+/* ========== Section Headers ========== */
+.sh { margin: 48px 0 16px; }
+.sh .kicker { color: var(--teal); font-size: .7em; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+.sh h2 { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 1.55em; letter-spacing: -.3px; margin-top: 4px; }
+.sh p { color: var(--muted); font-size: .9em; margin-top: 4px; }
 
-/* ---------- Cards / categories ---------- */
+/* ========== Cards ========== */
 .card {
-  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
-  margin-bottom: 14px; overflow: hidden; box-shadow: var(--shadow);
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  margin-bottom: 14px; overflow: hidden;
+  box-shadow: 0 8px 32px -12px rgba(0,0,0,.4);
+  transition: border-color .2s ease;
 }
+.card:hover { border-color: var(--border2); }
 .card-header {
-  padding: 15px 18px; cursor: pointer; display: flex; align-items: center; gap: 12px;
-  font-weight: 600; font-size: 1em; user-select: none;
+  padding: 16px 20px; cursor: pointer; display: flex; align-items: center; gap: 12px;
+  font-weight: 600; font-size: .95em; user-select: none;
+  transition: background .15s ease;
 }
-.card-header:hover { background: var(--panel-2); }
-.card-header .arrow { transition: transform .25s ease; color: var(--faint); font-size: .8em; }
+.card-header:hover { background: var(--surface2); }
+.card-header .arrow { transition: transform .3s cubic-bezier(.4,0,.2,1); color: var(--faint); font-size: .75em; }
 .card.collapsed .items, .card.collapsed .body { display: none; }
 .card.collapsed .arrow { transform: rotate(-90deg); }
 .card-header .title { flex: 1; }
 .card-header .badge {
-  background: var(--teal-soft); color: var(--teal); padding: 3px 11px;
-  border-radius: 99px; font-size: .76em; font-weight: 700; white-space: nowrap;
+  background: var(--teal-glow); color: var(--teal); padding: 4px 12px;
+  border-radius: 99px; font-size: .72em; font-weight: 700; white-space: nowrap;
+  border: 1px solid rgba(56,201,181,.15);
 }
-.card.done .card-header .badge { background: #45c97f22; color: var(--green); }
-.card.urgent { border-color: #f0a04b55; }
-.card.urgent .card-header .badge { background: #f0a04b1f; color: var(--amber); }
+.card.done .card-header .badge { background: rgba(62,201,122,.1); color: var(--green); border-color: rgba(62,201,122,.15); }
+.card.urgent { border-color: rgba(232,154,60,.25); }
+.card.urgent .card-header .badge { background: rgba(232,154,60,.1); color: var(--amber); border-color: rgba(232,154,60,.15); }
 
-.items { padding: 4px 18px 12px; }
+/* ========== Items ========== */
+.items { padding: 4px 20px 14px; }
 .item {
-  display: flex; align-items: flex-start; gap: 13px; padding: 11px 0;
-  border-bottom: 1px solid var(--bg-soft);
+  display: flex; align-items: flex-start; gap: 14px; padding: 12px 0;
+  border-bottom: 1px solid rgba(30,48,85,.4);
+  transition: opacity .15s ease;
 }
 .item:last-child { border-bottom: none; }
 .item input[type="checkbox"] {
   appearance: none; -webkit-appearance: none; margin-top: 2px;
-  width: 21px; height: 21px; flex-shrink: 0; cursor: pointer;
-  border: 2px solid var(--line); border-radius: 7px; background: var(--bg-soft);
-  position: relative; transition: all .15s ease;
+  width: 22px; height: 22px; flex-shrink: 0; cursor: pointer;
+  border: 2px solid var(--border2); border-radius: 8px; background: var(--bg2);
+  position: relative; transition: all .2s cubic-bezier(.4,0,.2,1);
 }
-.item input[type="checkbox"]:hover { border-color: var(--teal); }
-.item input[type="checkbox"]:checked { background: linear-gradient(135deg, var(--teal), var(--green)); border-color: transparent; }
+.item input[type="checkbox"]:hover { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-glow); }
+.item input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, var(--teal), var(--green));
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(56,201,181,.25);
+}
 .item input[type="checkbox"]:checked::after {
-  content: ""; position: absolute; left: 6px; top: 2px; width: 5px; height: 10px;
-  border: solid #08231c; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg);
+  content: ""; position: absolute; left: 6px; top: 3px; width: 6px; height: 10px;
+  border: solid #05201a; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg);
 }
-.item label { flex: 1; font-size: .94em; cursor: pointer; transition: color .15s ease; }
-.item label strong { color: var(--gold); font-weight: 600; }
+.item label { flex: 1; font-size: .92em; cursor: pointer; transition: all .2s ease; line-height: 1.5; }
+.item label strong { color: var(--gold2); font-weight: 600; }
 .item .date {
-  color: var(--amber); font-size: .76em; font-weight: 600; white-space: nowrap;
-  background: #f0a04b14; padding: 3px 9px; border-radius: 7px; margin-top: 1px;
+  color: var(--amber); font-size: .72em; font-weight: 700; white-space: nowrap;
+  background: rgba(232,154,60,.08); padding: 4px 10px; border-radius: 8px; margin-top: 2px;
+  border: 1px solid rgba(232,154,60,.12); letter-spacing: .3px;
 }
 .item input:checked + label { text-decoration: line-through; color: var(--faint); }
 .item input:checked + label strong { color: var(--faint); }
+.item input:checked ~ .date { opacity: .4; }
 
-/* ---------- Tip cards ---------- */
+/* ========== Tips ========== */
 .tips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .tip {
-  background: var(--panel); border: 1px solid var(--line);
-  border-radius: 14px; padding: 15px 16px; font-size: .88em; color: var(--muted);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 18px 20px;
+  font-size: .86em; color: var(--ink2); line-height: 1.55;
+  transition: border-color .2s ease, transform .2s ease;
 }
-.tip strong { display: block; color: var(--gold); margin-bottom: 5px; font-size: 1.02em; }
+.tip:hover { border-color: var(--border2); transform: translateY(-2px); }
+.tip strong { display: flex; align-items: center; gap: 8px; color: var(--gold2); margin-bottom: 8px; font-size: 1em; }
 
-/* ---------- Research tables ---------- */
-.body { padding: 6px 18px 18px; font-size: .88em; color: var(--muted); }
-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-th { text-align: left; padding: 9px 8px; color: var(--faint); font-size: .82em; text-transform: uppercase; letter-spacing: .6px; border-bottom: 1px solid var(--line); }
-td { padding: 9px 8px; border-bottom: 1px solid var(--bg-soft); }
+/* ========== Research / Body ========== */
+.body { padding: 8px 20px 20px; font-size: .88em; color: var(--ink2); }
+table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+th {
+  text-align: left; padding: 10px 10px; color: var(--faint); font-size: .72em;
+  text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
+  border-bottom: 1px solid var(--border);
+}
+td { padding: 10px 10px; border-bottom: 1px solid rgba(30,48,85,.3); font-size: .94em; }
 tr:last-child td { border-bottom: none; }
-.val-up { color: var(--green); font-weight: 600; }
-.body p { margin: 8px 0; }
+.val-up { color: var(--green); font-weight: 700; }
+.body p { margin: 10px 0; }
 .body strong { color: var(--ink); }
-.body .hl { color: var(--gold); }
-.body .hl-green { color: var(--green); }
-.body ul { margin: 8px 0 8px 20px; }
-.body li { margin: 4px 0; }
+.body .hl { color: var(--gold2); font-weight: 600; }
+.body .hl-green { color: var(--green); font-weight: 600; }
+.body ul { margin: 10px 0 10px 20px; }
+.body li { margin: 5px 0; }
 
-/* ---------- Vehicle spotlight ---------- */
+/* ========== Vehicle Spotlight ========== */
 .vehicle {
   display: grid; grid-template-columns: 1.1fr 1fr; gap: 0;
-  background: linear-gradient(135deg, var(--panel-2), var(--panel)); overflow: hidden;
+  background: linear-gradient(135deg, var(--surface2), var(--surface)); overflow: hidden;
 }
-.vehicle .v-main { padding: 22px; }
-.vehicle .v-side { padding: 22px; background: rgba(0,0,0,.18); border-left: 1px solid var(--line); }
-.vehicle h3 { font-family: 'Fraunces', serif; font-size: 1.35em; font-weight: 600; }
-.vehicle .vin { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: .82em; color: var(--teal); background: var(--teal-soft); padding: 4px 9px; border-radius: 7px; display: inline-block; margin: 8px 0; letter-spacing: 1px; }
-.vehicle .price { font-family: 'Fraunces', serif; font-size: 2.2em; font-weight: 600; color: var(--green); line-height: 1; }
-.vehicle .price small { font-size: .4em; color: var(--muted); font-family: 'Inter'; display: block; font-weight: 500; margin-top: 4px; }
-.spec-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--bg-soft); font-size: .9em; }
+.vehicle .v-main { padding: 24px; }
+.vehicle .v-side { padding: 24px; background: rgba(0,0,0,.2); border-left: 1px solid var(--border); }
+.vehicle h3 { font-family: 'Playfair Display', serif; font-size: 1.4em; font-weight: 600; }
+.vehicle .vin {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: .8em;
+  color: var(--teal); background: var(--teal-glow); padding: 5px 11px;
+  border-radius: 8px; display: inline-block; margin: 10px 0; letter-spacing: 1.2px;
+  border: 1px solid rgba(56,201,181,.12);
+}
+.vehicle .price {
+  font-family: 'Playfair Display', serif; font-size: 2.4em; font-weight: 700;
+  background: linear-gradient(135deg, var(--green), var(--teal));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  line-height: 1;
+}
+.vehicle .price small { font-size: .36em; color: var(--muted); font-family: 'Inter'; display: block; font-weight: 500; margin-top: 6px; -webkit-text-fill-color: var(--muted); }
+.spec-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid rgba(30,48,85,.3); font-size: .88em; }
 .spec-row:last-child { border-bottom: none; }
 .spec-row span:first-child { color: var(--faint); }
 .spec-row span:last-child { color: var(--ink); font-weight: 600; }
-.badge-clean { display: inline-flex; align-items: center; gap: 6px; background: #45c97f1f; color: var(--green); font-size: .78em; font-weight: 600; padding: 5px 11px; border-radius: 99px; margin: 4px 6px 4px 0; }
+.badge-clean {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(62,201,122,.08); color: var(--green); font-size: .76em; font-weight: 700;
+  padding: 5px 12px; border-radius: 99px; margin: 4px 6px 4px 0;
+  border: 1px solid rgba(62,201,122,.12);
+}
 
-/* ---------- Footer ---------- */
-footer { text-align: center; color: var(--faint); font-size: .8em; margin-top: 50px; padding: 26px 0; border-top: 1px solid var(--line); }
+/* ========== Footer ========== */
+footer {
+  text-align: center; color: var(--faint); font-size: .78em;
+  margin-top: 60px; padding: 28px 0; border-top: 1px solid var(--border);
+}
 footer a { color: var(--teal); text-decoration: none; }
-footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.1em; margin-bottom: 8px; }
+footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-size: 1.15em; margin-bottom: 10px; }
 
-/* ---------- Install banner ---------- */
+/* ========== Install Banner ========== */
 .install-banner {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-  background: linear-gradient(135deg, var(--panel-2), var(--panel));
-  border-top: 1px solid var(--line);
-  padding: 14px 18px; display: flex; align-items: center; gap: 12px;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 -4px 20px rgba(0,0,0,.4);
-  transform: translateY(100%); transition: transform .3s ease;
+  background: rgba(17,29,50,.92);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  padding: 16px 20px; display: flex; align-items: center; gap: 14px;
+  box-shadow: 0 -8px 32px rgba(0,0,0,.5);
+  transform: translateY(100%); transition: transform .35s cubic-bezier(.4,0,.2,1);
 }
 .install-banner.show { transform: translateY(0); }
-.install-banner .ib-icon { font-size: 1.6em; }
-.install-banner .ib-text { flex: 1; font-size: .88em; }
-.install-banner .ib-text strong { display: block; color: var(--ink); }
-.install-banner .ib-text span { color: var(--muted); font-size: .9em; }
+.install-banner .ib-icon { font-size: 1.5em; }
+.install-banner .ib-text { flex: 1; }
+.install-banner .ib-text strong { display: block; font-size: .9em; color: var(--ink); }
+.install-banner .ib-text span { color: var(--muted); font-size: .82em; }
 .install-banner .ib-btn {
-  background: linear-gradient(135deg, var(--gold), var(--amber)); color: #2a1c00;
-  border: none; padding: 9px 16px; border-radius: 10px; font-weight: 700;
-  font-size: .85em; cursor: pointer; white-space: nowrap;
+  background: linear-gradient(135deg, var(--gold), var(--amber)); color: #1a0e00;
+  border: none; padding: 10px 18px; border-radius: var(--radius-sm); font-weight: 700;
+  font-size: .84em; cursor: pointer; white-space: nowrap;
 }
-.install-banner .ib-close {
-  background: none; border: none; color: var(--faint); font-size: 1.2em;
-  cursor: pointer; padding: 4px;
-}
+.install-banner .ib-close { background: none; border: none; color: var(--faint); font-size: 1.2em; cursor: pointer; padding: 4px; }
+
+/* Toast */
 .update-toast {
-  position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
-  background: var(--green); color: #0b1220; padding: 10px 20px;
-  border-radius: 12px; font-size: .88em; font-weight: 600;
-  box-shadow: 0 8px 24px rgba(0,0,0,.4); z-index: 200;
+  position: fixed; top: 72px; left: 50%; transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--teal), var(--green)); color: #05201a;
+  padding: 12px 24px; border-radius: var(--radius-sm); font-size: .88em; font-weight: 700;
+  box-shadow: 0 8px 32px rgba(0,0,0,.4); z-index: 200;
   animation: toastIn .4s ease, toastOut .4s ease 3.6s forwards;
 }
-@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
-@keyframes toastOut { to { opacity: 0; transform: translateX(-50%) translateY(-10px); } }
+@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-12px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+@keyframes toastOut { to { opacity: 0; transform: translateX(-50%) translateY(-12px); } }
 
-/* ---------- Calendar ---------- */
-.cal-wrap { margin-top: 28px; }
-.cal-nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 12px; }
-.cal-nav button { background: var(--panel); border: 1px solid var(--line); color: var(--ink); width: 34px; height: 34px; border-radius: 10px; cursor: pointer; font-size: 1em; display: grid; place-items: center; }
-.cal-nav button:hover { border-color: var(--gold); }
-.cal-nav .cal-month { font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.1em; min-width: 140px; text-align: center; }
-.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
-.cal-dow { text-align: center; font-size: .65em; font-weight: 700; color: var(--faint); text-transform: uppercase; letter-spacing: 1px; padding: 4px 0; }
-.cal-day {
-  text-align: center; padding: 7px 2px; border-radius: 10px; font-size: .82em;
-  color: var(--muted); position: relative; cursor: default; min-height: 38px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-.cal-day.empty { visibility: hidden; }
-.cal-day.today { background: var(--panel-2); border: 1px solid var(--teal); color: var(--ink); font-weight: 700; }
-.cal-day.has-event { font-weight: 700; color: var(--ink); }
-.cal-day.has-event::after {
-  content: ""; width: 5px; height: 5px; border-radius: 50%; position: absolute; bottom: 3px;
-}
-.cal-day.evt-urgent::after { background: var(--amber); }
-.cal-day.evt-move::after { background: #e76f51; }
-.cal-day.evt-hotel::after { background: var(--teal); }
-.cal-day.evt-flight::after { background: var(--gold); }
-.cal-day.evt-general::after { background: var(--green); }
-.cal-day.past { opacity: .4; }
-.cal-tooltip {
-  display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
-  background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px;
-  padding: 8px 12px; font-size: .78em; color: var(--ink); white-space: nowrap;
-  box-shadow: 0 8px 20px -6px rgba(0,0,0,.6); z-index: 10; text-align: left;
-  max-width: 220px; white-space: normal; line-height: 1.4;
-}
-.cal-day:hover .cal-tooltip, .cal-day:active .cal-tooltip { display: block; }
-.cal-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; justify-content: center; }
-.cal-legend span { display: flex; align-items: center; gap: 5px; font-size: .7em; color: var(--faint); }
-.cal-legend .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-
+/* ========== Responsive ========== */
 @media (max-width: 620px) {
+  .hero { padding-top: 28px; }
+  .hero h1 { font-size: 2em; }
   .countdown { grid-template-columns: repeat(2, 1fr); }
   .tips-grid { grid-template-columns: 1fr; }
   .vehicle { grid-template-columns: 1fr; }
-  .vehicle .v-side { border-left: none; border-top: 1px solid var(--line); }
-  .topbar .mini-progress .mlabel { display: none; }
-  .hero { padding-top: 28px; }
+  .vehicle .v-side { border-left: none; border-top: 1px solid var(--border); }
+  .topbar .prog .mlabel { display: none; }
   .cal-tooltip { left: 0; transform: none; }
+  .cal-wrap { padding: 14px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ===== Top bar ===== -->
+<!-- Top Bar -->
 <div class="topbar no-print">
   <div class="topbar-inner">
     <div class="brand">
       <div class="mark">PCS</div>
-      <div>Relocation Concierge<small>Hawaii → Georgia · 2026</small></div>
+      <div class="brand-text">Relocation Concierge<small>Hawaii → Georgia 2026</small></div>
     </div>
-    <div class="mini-progress">
-      <span class="mlabel">Plan complete</span>
-      <div class="mini-track"><div class="mini-fill" id="miniFill" style="width:0%"></div></div>
-      <span id="miniText">0%</span>
+    <div class="prog">
+      <span class="mlabel" style="font-size:.78em;color:var(--muted)">Progress</span>
+      <div class="prog-track"><div class="prog-fill" id="miniFill" style="width:0%"></div></div>
+      <span class="prog-pct" id="miniText">0%</span>
     </div>
   </div>
 </div>
 
 <div class="wrap">
 
-  <!-- ===== Hero ===== -->
+  <!-- Hero -->
   <header class="hero">
-    <span class="eyebrow">Your personalized move plan</span>
-    <h1>A calm, guided move from <span class="accent">Hawaii to Georgia</span>.</h1>
-    <p class="lede">Welcome back. We've organized every step of your PCS — from the first inspection to the keys of your new home — so your family of four (and one very important cat) can move with confidence.</p>
+    <span class="hero-eyebrow">Your personalized move plan</span>
+    <h1>A calm, guided move<br>from <span class="grad">Hawaii to Georgia</span>.</h1>
+    <p class="lede">Every step of your PCS — from the first inspection to the keys of your new home — organized so your family of four (and one very important cat) can move with confidence.</p>
 
     <div class="route">
       <span class="pin">🌺 Honolulu, HI</span>
-      <span class="arrow">✈</span>
-      <span class="pin">🪖 Fort Stewart / Hunter AAF, GA</span>
+      <span class="arrow">→</span>
+      <span class="pin">🪖 Fort Stewart, GA</span>
     </div>
 
-    <div class="meta-chips">
+    <div class="chips">
       <span class="chip">👨‍👩‍👧‍👦 <b>Family of 4</b></span>
       <span class="chip">🐈 <b>1 cat</b></span>
       <span class="chip">📦 HHG shipment</span>
@@ -362,37 +464,35 @@ footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.
       <span class="chip">🔑 BMW X5 sale</span>
     </div>
 
-    <!-- Countdown -->
-    <div class="countdown" id="countdown">
-      <div class="cd-box"><div class="num" id="cdDays">--</div><div class="lbl">Days to fly</div></div>
-      <div class="cd-box"><div class="num" id="cdMove">--</div><div class="lbl">Days to movers</div></div>
-      <div class="cd-box"><div class="num" id="cdDone">0</div><div class="lbl">Tasks done</div></div>
-      <div class="cd-box"><div class="num" id="cdLeft">0</div><div class="lbl">Tasks left</div></div>
+    <div class="countdown">
+      <div class="cd"><div class="num" id="cdDays">--</div><div class="lbl">Days to fly</div></div>
+      <div class="cd"><div class="num" id="cdMove">--</div><div class="lbl">Days to movers</div></div>
+      <div class="cd"><div class="num" id="cdDone">0</div><div class="lbl">Tasks done</div></div>
+      <div class="cd"><div class="num" id="cdLeft">0</div><div class="lbl">Tasks left</div></div>
     </div>
 
     <!-- Calendar -->
     <div class="cal-wrap" id="calWrap"></div>
 
-    <!-- Concierge note -->
+    <!-- Concierge -->
     <div class="concierge">
       <div class="ic">🤝</div>
       <div>
         <h3>You're not doing this alone.</h3>
-        <p>Tick items as you go — your progress saves automatically on this device. Tap any section to collapse it, and use <b>Save PDF</b> to keep a printed copy in your move binder.</p>
+        <p>Tick items as you go — progress saves automatically on this device. Tap any section to collapse it, and use <b>Save PDF</b> to keep a printed copy in your move binder.</p>
       </div>
     </div>
 
-    <!-- Toolbar -->
     <div class="toolbar no-print">
-      <button class="btn btn-primary" onclick="window.print()">🖨 Save as PDF</button>
+      <button class="btn btn-gold" onclick="window.print()">Save as PDF</button>
       <button class="btn" onclick="expandAll()">Expand all</button>
       <button class="btn" onclick="collapseAll()">Collapse all</button>
-      <button class="btn" onclick="uncheckAll()">Reset checklist</button>
+      <button class="btn" onclick="uncheckAll()">Reset</button>
     </div>
   </header>
 
-  <!-- ===== Checklist sections ===== -->
-  <div class="section-head">
+  <!-- Checklist -->
+  <div class="sh">
     <div class="kicker">Your timeline</div>
     <h2>Step-by-step checklist</h2>
     <p>Grouped by phase, in the order things need to happen.</p>
@@ -457,7 +557,7 @@ footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.
     </div>
   </div>
 
-  <!-- HOTEL TRANSITION -->
+  <!-- HOTEL -->
   <div class="card" id="cat-hotel">
     <div class="card-header" onclick="toggleCat(this)">
       <span class="arrow">▼</span>
@@ -474,11 +574,11 @@ footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.
       <div class="item"><input type="checkbox" id="h7" onchange="save()"><label for="h7">Close/update bank accounts, auto insurance address</label><span class="date">Jun 25</span></div>
       <div class="item"><input type="checkbox" id="h8" onchange="save()"><label for="h8">Return rental car</label><span class="date">Jun 30</span></div>
       <div class="item"><input type="checkbox" id="h9" onchange="save()"><label for="h9">Checkout Surfjack Hotel</label><span class="date">Jun 30</span></div>
-      <div class="item"><input type="checkbox" id="h10" onchange="save()"><label for="h10">Fly to Georgia! 🎉</label><span class="date">Jun 30</span></div>
+      <div class="item"><input type="checkbox" id="h10" onchange="save()"><label for="h10">Fly to Georgia!</label><span class="date">Jun 30</span></div>
     </div>
   </div>
 
-  <!-- GEORGIA ARRIVAL -->
+  <!-- GEORGIA -->
   <div class="card" id="cat-georgia">
     <div class="card-header" onclick="toggleCat(this)">
       <span class="arrow">▼</span>
@@ -503,25 +603,25 @@ footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.
     </div>
   </div>
 
-  <!-- ===== Tips ===== -->
-  <div class="section-head">
+  <!-- Tips -->
+  <div class="sh">
     <div class="kicker">Insider guidance</div>
     <h2>Concierge tips & tricks</h2>
     <p>Hard-won advice to make every step smoother.</p>
   </div>
   <div class="tips-grid">
-    <div class="tip"><strong>📦 Boxing strategy</strong>Color-code bins by room. Gallon Ziplocs for small items (screws, remotes, chargers). Photograph electronics wiring before unplugging. Heavy items → small boxes, light items → big boxes.</div>
-    <div class="tip"><strong>👀 Movers day</strong>Be present the entire time. Mark pre-existing furniture damage BEFORE movers note condition. Don't let them pack trash, cleaning supplies, or hazmat. Keep a cooler of snacks for the family.</div>
-    <div class="tip"><strong>🚗 Car shipment (Ford Focus)</strong>Only ¼ tank of gas max. Remove all personal items, EZ-Pass, garage openers. Document exterior with dated photos/video. Note mileage. Keep a copy of the condition report.</div>
-    <div class="tip"><strong>💰 Selling the BMW X5</strong>Cars sell 10–20% above mainland KBB in Hawaii thanks to shipping costs. Price slightly above KBB and negotiate. FB Marketplace + military swap pages get the most eyes.</div>
-    <div class="tip"><strong>🐈 Cat travel</strong>Health certificate within 10 days of travel. Airline-approved carrier — let your cat get used to it weeks ahead. Bring a familiar blanket. Confirm airline pet policy and book the pet spot early.</div>
-    <div class="tip"><strong>📝 DLA</strong>Submit advance ASAP — you're authorized DLA with dependents. Keep all receipts for lodging, meals, and incidentals. TLE covers up to 14 days of lodging.</div>
-    <div class="tip"><strong>🧽 House cleaning</strong>Book a professional deep clean after move-out ($200–400). Focus on appliances, bathrooms, baseboards, windows, garage floor. Photograph after cleaning for deposit protection.</div>
-    <div class="tip"><strong>🪖 In-processing Fort Stewart</strong>Bring 10+ copies of orders, marriage & birth certificates, POA. Process takes ~1 week. Housing, DEERS, Tricare, finance — all in the first week.</div>
+    <div class="tip"><strong>📦 Boxing strategy</strong>Color-code bins by room. Gallon Ziplocs for small items. Photograph electronics wiring before unplugging. Heavy items in small boxes, light items in big boxes.</div>
+    <div class="tip"><strong>👀 Movers day</strong>Be present the entire time. Mark pre-existing damage BEFORE movers note condition. Don't let them pack trash or hazmat. Keep a cooler of snacks.</div>
+    <div class="tip"><strong>🚗 Car shipment</strong>Only 1/4 tank gas. Remove all personal items, EZ-Pass, garage openers. Document exterior with dated photos. Note mileage. Keep condition report copy.</div>
+    <div class="tip"><strong>💰 Selling BMW X5</strong>Cars sell 10-20% above mainland KBB in Hawaii. Price slightly above KBB and negotiate. FB Marketplace + military swap pages get the most eyes.</div>
+    <div class="tip"><strong>🐈 Cat travel</strong>Health cert within 10 days of travel. Airline-approved carrier — let cat get used to it weeks ahead. Book airline pet spot early.</div>
+    <div class="tip"><strong>📝 DLA & TLE</strong>Submit advance ASAP. Keep all receipts for lodging, meals, incidentals. TLE covers up to 14 days of temporary lodging.</div>
+    <div class="tip"><strong>🧽 House cleaning</strong>Book professional deep clean after move-out ($200-400). Focus on appliances, bathrooms, baseboards, windows. Photograph for deposit protection.</div>
+    <div class="tip"><strong>🪖 In-processing</strong>Bring 10+ copies of orders, marriage & birth certs, POA. Takes ~1 week. Housing, DEERS, Tricare, finance — all first week.</div>
   </div>
 
-  <!-- ===== Packing list ===== -->
-  <div class="section-head">
+  <!-- Packing -->
+  <div class="sh">
     <div class="kicker">Don't forget</div>
     <h2>Hotel living packing list</h2>
     <p>Everything to keep with you during the hotel weeks.</p>
@@ -534,19 +634,19 @@ footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.
     </div>
     <div class="items">
       <div class="item"><input type="checkbox" id="b1" onchange="save()"><label for="b1"><strong>Documents:</strong> Orders (10 copies), IDs, passports, birth/marriage certs, medical records, school records, insurance cards, car titles, POA</label></div>
-      <div class="item"><input type="checkbox" id="b2" onchange="save()"><label for="b2"><strong>Electronics:</strong> Laptops, chargers, tablets/iPads for kids, phone chargers, power strip, small Bluetooth speaker</label></div>
-      <div class="item"><input type="checkbox" id="b3" onchange="save()"><label for="b3"><strong>Clothes:</strong> 10–14 days per person, swimsuits, light jackets, comfortable shoes, laundry bag, detergent pods</label></div>
-      <div class="item"><input type="checkbox" id="b4" onchange="save()"><label for="b4"><strong>Kids:</strong> Favorite toys/stuffed animals, books, coloring supplies, card games, headphones, snacks they like</label></div>
-      <div class="item"><input type="checkbox" id="b5" onchange="save()"><label for="b5"><strong>Kitchen/Food:</strong> Reusable water bottles, travel mugs, utensils, paper plates, Ziplocs, snack stash, instant coffee/tea</label></div>
-      <div class="item"><input type="checkbox" id="b6" onchange="save()"><label for="b6"><strong>Toiletries:</strong> Full-size shampoo/conditioner, toothbrushes, medications (30+ day supply), sunscreen, first aid kit</label></div>
+      <div class="item"><input type="checkbox" id="b2" onchange="save()"><label for="b2"><strong>Electronics:</strong> Laptops, chargers, tablets for kids, phone chargers, power strip, Bluetooth speaker</label></div>
+      <div class="item"><input type="checkbox" id="b3" onchange="save()"><label for="b3"><strong>Clothes:</strong> 10-14 days per person, swimsuits, light jackets, comfortable shoes, laundry bag, detergent pods</label></div>
+      <div class="item"><input type="checkbox" id="b4" onchange="save()"><label for="b4"><strong>Kids:</strong> Favorite toys/stuffed animals, books, coloring supplies, card games, headphones, snacks</label></div>
+      <div class="item"><input type="checkbox" id="b5" onchange="save()"><label for="b5"><strong>Kitchen:</strong> Water bottles, travel mugs, utensils, paper plates, Ziplocs, snack stash, instant coffee</label></div>
+      <div class="item"><input type="checkbox" id="b6" onchange="save()"><label for="b6"><strong>Toiletries:</strong> Full-size shampoo/conditioner, toothbrushes, medications (30+ day supply), sunscreen, first aid</label></div>
       <div class="item"><input type="checkbox" id="b7" onchange="save()"><label for="b7"><strong>Cat:</strong> Carrier, litter box + litter, food (2 weeks), bowls, favorite toys, medications, vet records</label></div>
-      <div class="item"><input type="checkbox" id="b8" onchange="save()"><label for="b8"><strong>Bedding:</strong> Pillows you love, small blankets for kids, pack-n-play if needed</label></div>
-      <div class="item"><input type="checkbox" id="b9" onchange="save()"><label for="b9"><strong>Misc:</strong> Trash bags, paper towels, cleaning spray, hangers, nightlights for kids, extension cord</label></div>
+      <div class="item"><input type="checkbox" id="b8" onchange="save()"><label for="b8"><strong>Bedding:</strong> Your pillows, small blankets for kids, pack-n-play if needed</label></div>
+      <div class="item"><input type="checkbox" id="b9" onchange="save()"><label for="b9"><strong>Misc:</strong> Trash bags, paper towels, cleaning spray, hangers, nightlights, extension cord</label></div>
     </div>
   </div>
 
-  <!-- ===== BMW Vehicle Spotlight ===== -->
-  <div class="section-head">
+  <!-- BMW -->
+  <div class="sh">
     <div class="kicker">Your vehicle</div>
     <h2>BMW X5 — sale valuation</h2>
     <p>VIN-specific estimate for your listing in Hawaii.</p>
@@ -555,123 +655,106 @@ footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.
     <div class="vehicle">
       <div class="v-main">
         <h3>2022 BMW X5 xDrive40i</h3>
-        <div class="vin">VIN · 5UXCR4C06N9M14147</div>
+        <div class="vin">5UXCR4C06N9M14147</div>
         <div>
           <span class="badge-clean">✓ No accidents</span>
           <span class="badge-clean">✓ Great condition</span>
-          <span class="badge-clean">✓ Island-kept (no rust)</span>
+          <span class="badge-clean">✓ Island-kept</span>
         </div>
         <div class="spec-row"><span>Model year</span><span>2022</span></div>
         <div class="spec-row"><span>Trim</span><span>xDrive40i (3.0L I6 turbo)</span></div>
         <div class="spec-row"><span>Mileage</span><span>31,699 mi</span></div>
-        <div class="spec-row"><span>Title / history</span><span>Clean · 0 accidents</span></div>
-        <div class="spec-row"><span>Built</span><span>Spartanburg, SC (USA)</span></div>
+        <div class="spec-row"><span>Title</span><span>Clean · 0 accidents</span></div>
       </div>
       <div class="v-side">
         <div class="price">$48K–$56K<small>Estimated Hawaii private-party range</small></div>
         <table>
           <tr><th>Market</th><th>Estimate</th></tr>
           <tr><td>Mainland trade-in</td><td>$40K–$44K</td></tr>
-          <tr><td>Mainland private party</td><td>$43K–$48K</td></tr>
-          <tr><td class="hl">Hawaii (15–20% premium)</td><td class="val-up">$48K–$56K</td></tr>
+          <tr><td>Mainland private</td><td>$43K–$48K</td></tr>
+          <tr><td class="hl">Hawaii (15-20% premium)</td><td class="val-up">$48K–$56K</td></tr>
         </table>
-        <p style="font-size:.82em;">At ~32K miles with a clean history, this X5 is well under the ~12K mi/yr average — a strong selling point. Pull a free VIN-specific KBB/Edmunds value to anchor your ask.</p>
       </div>
     </div>
     <div class="body">
-      <p><span class="hl">Where to sell:</span> Facebook Marketplace (most eyes), Craigslist Hawaii, military swap groups, CARMARK Hawaii (instant cash), Servco Buying Center.</p>
-      <p><span class="hl">Pro tips:</span> Detail first ($200–400 adds $1K+ perceived value). List 5–10% above target. Lead with "no accidents · clean title · 31,699 mi · island-kept, no road salt or rust." Keep service records handy for serious buyers.</p>
+      <p><span class="hl">Where to sell:</span> Facebook Marketplace, Craigslist Hawaii, military swap groups, CARMARK Hawaii, Servco Buying Center.</p>
+      <p><span class="hl">Pro tip:</span> Detail first ($200-400 adds $1K+ perceived value). Lead with "no accidents · clean title · 31,699 mi · island-kept, no road salt."</p>
     </div>
   </div>
 
-  <!-- ===== Rental Car Hawaii ===== -->
-  <div class="section-head">
+  <!-- Rental HI -->
+  <div class="sh">
     <div class="kicker">Logistics</div>
     <h2>Rental car — Hawaii (Jun 20–30)</h2>
-    <p>Best value for ~10 days before you fly out.</p>
   </div>
   <div class="card">
     <div class="card-header" onclick="toggleCat(this)">
-      <span class="arrow">▼</span>
-      <span class="title">🚙 Cheapest options (~10 days)</span>
-      <span class="badge">Research</span>
+      <span class="arrow">▼</span><span class="title">🚙 Cheapest options (~10 days)</span><span class="badge">Research</span>
     </div>
     <div class="body">
       <table>
-        <tr><th>Option</th><th>Est. 10-day total</th><th>Notes</th></tr>
-        <tr><td>Lucky Owl (local)</td><td class="val-up">$400–500</td><td>Good reviews, airport pickup, (808) 352-4890</td></tr>
+        <tr><th>Option</th><th>Est. Total</th><th>Notes</th></tr>
+        <tr><td>Lucky Owl</td><td class="val-up">$400–500</td><td>Good reviews, airport pickup</td></tr>
         <tr><td>Turo</td><td class="val-up">$400–600</td><td>Pick exact vehicle, 10-day discount</td></tr>
-        <tr><td>Costco Travel</td><td>$520–560</td><td>Free cancel, free 2nd driver, rebook if it drops</td></tr>
-        <tr><td>Economy Rent a Car</td><td>~$500</td><td>Minivan, mixed reviews</td></tr>
-        <tr><td>Budget (major brand)</td><td>$550–860</td><td>SUV cheaper, minivan expensive</td></tr>
+        <tr><td>Costco Travel</td><td>$520–560</td><td>Free cancel, rebook if drops</td></tr>
+        <tr><td>Economy Rent a Car</td><td>~$500</td><td>Minivan available</td></tr>
+        <tr><td>Budget</td><td>$550–860</td><td>SUV cheaper than minivan</td></tr>
       </table>
-      <p><span class="hl">Best move:</span> Book Costco Travel now (free cancel), check Lucky Owl + Turo for a better price, and use AutoSlash.com to track drops. Compact SUV is cheapest — minivans run $10–30/day more.</p>
+      <p><span class="hl">Best move:</span> Book Costco now (free cancel), check Lucky Owl + Turo, use AutoSlash.com to track drops.</p>
     </div>
   </div>
 
-  <!-- ===== GA Hotels ===== -->
-  <div class="section-head">
+  <!-- GA Hotels -->
+  <div class="sh">
     <div class="kicker">Logistics</div>
     <h2>Hotels — Georgia (extended stay)</h2>
-    <p>Pet-friendly options for your ~3 weeks of transition.</p>
   </div>
   <div class="card">
     <div class="card-header" onclick="toggleCat(this)">
-      <span class="arrow">▼</span>
-      <span class="title">🏨 Pet-friendly options (~3 weeks)</span>
-      <span class="badge">Research</span>
+      <span class="arrow">▼</span><span class="title">🏨 Pet-friendly options (~3 weeks)</span><span class="badge">Research</span>
     </div>
     <div class="body">
       <table>
-        <tr><th>Hotel</th><th>~21 nights</th><th>Cat OK?</th><th>Kitchen?</th></tr>
+        <tr><th>Hotel</th><th>~21 nights</th><th>Cat?</th><th>Kitchen</th></tr>
         <tr><td>IHG Army Hotel, Ft Stewart</td><td class="val-up">~$1,365</td><td>Yes</td><td>Kitchenette</td></tr>
         <tr><td>Studio 6 Hinesville</td><td class="val-up">~$1,260</td><td>Confirm</td><td>Basic</td></tr>
         <tr><td>Ext Stay America Pooler</td><td>~$1,890</td><td>Confirm</td><td>Kitchenette</td></tr>
         <tr><td>Candlewood Suites SAV</td><td>~$2,310</td><td>Yes</td><td>Full</td></tr>
         <tr><td>Home2 Suites Hinesville</td><td>~$2,415</td><td>Yes</td><td>Full</td></tr>
-        <tr><td>TownePlace Suites SAV</td><td>~$2,730</td><td>Yes</td><td>Full</td></tr>
       </table>
-      <p><span class="hl">Best move:</span> Call IHG Army Hotels FIRST: 877-711-TEAM. PCS families get priority, and it's the cheapest + on post. Backup: Home2 Suites Hinesville (full kitchen, confirmed cat-friendly). Remember TLE covers up to 14 days.</p>
+      <p><span class="hl">Best move:</span> Call IHG Army Hotels first: 877-711-TEAM. PCS families get priority. Backup: Home2 Suites Hinesville. TLE covers up to 14 days.</p>
     </div>
   </div>
 
-  <!-- ===== GA Rental Car ===== -->
-  <div class="section-head">
+  <!-- GA Rental -->
+  <div class="sh">
     <div class="kicker">Logistics</div>
     <h2>Rental car — Georgia (2–3 weeks)</h2>
-    <p>While you wait on your shipped car & new vehicle.</p>
   </div>
   <div class="card">
     <div class="card-header" onclick="toggleCat(this)">
-      <span class="arrow">▼</span>
-      <span class="title">🚗 SAV airport options</span>
-      <span class="badge">Research</span>
+      <span class="arrow">▼</span><span class="title">🚗 SAV airport options</span><span class="badge">Research</span>
     </div>
     <div class="body">
-      <p>June averages ~$84/day in Savannah. Estimated 2-week midsize SUV: <strong>$700–$1,200</strong>. 3 weeks: <strong>$1,050–$1,800</strong>.</p>
-      <p><span class="hl-green">Budget + WeSalute+ = 35% off</span> (free signup for military). Brings ~$84/day down to ~$55/day ≈ ~$385/week.</p>
-      <p><span class="hl">Action items:</span></p>
+      <p>June averages ~$84/day in Savannah. 2 weeks: <strong>$700–$1,200</strong>. 3 weeks: <strong>$1,050–$1,800</strong>.</p>
+      <p><span class="hl-green">Budget + WeSalute+ = 35% off</span> (free military signup). ~$84/day → ~$55/day.</p>
       <ul>
         <li>Sign up for WeSalute+ (free) for Budget 35% off</li>
         <li>Check Costco Travel for comparison</li>
-        <li>Submit to AutoSlash.com to track drops</li>
-        <li>Consider Enterprise off-airport (downtown Savannah) to skip airport surcharge</li>
-        <li>Book now with free cancel, rebook if price drops</li>
+        <li>Consider Enterprise off-airport to skip surcharge</li>
+        <li>Book now with free cancel, rebook if drops</li>
       </ul>
     </div>
   </div>
 
-  <!-- ===== Palisade ===== -->
-  <div class="section-head">
+  <!-- Palisade -->
+  <div class="sh">
     <div class="kicker">Your next vehicle</div>
     <h2>Hyundai Palisade Hybrid 2026</h2>
-    <p>Pricing, dealers & military discount.</p>
   </div>
   <div class="card">
     <div class="card-header" onclick="toggleCat(this)">
-      <span class="arrow">▼</span>
-      <span class="title">🚐 Pricing & military discount</span>
-      <span class="badge">Research</span>
+      <span class="arrow">▼</span><span class="title">🚐 Pricing & military discount</span><span class="badge">Research</span>
     </div>
     <div class="body">
       <table>
@@ -681,262 +764,55 @@ footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.
         <tr><td>Hybrid Limited</td><td>~$54,000</td></tr>
         <tr><td>Hybrid Calligraphy AWD</td><td>~$58,280</td></tr>
       </table>
-      <p><span class="hl-green">Military discount: $500 bonus</span> (active duty + spouse, show LES). Stacks with 3.99% APR + $2,000 finance bonus.</p>
-      <p><span class="hl">Nearest dealer:</span> AutoNation Hyundai Savannah, 7011 Abercorn St — (912) 421-8277</p>
-      <p><span class="hl">Family highlights:</span> 3 rows (7–8 seats), 329hp hybrid, 600+ mile range, rear occupant alert, LATCH in all positions. Brand-new hybrid for 2026 — no 2025 hybrid existed.</p>
-      <p><span class="hl">Lease vs buy:</span> Lease ~$479–519/mo. SCRA allows early termination with PCS orders — good insurance if you move again. Buying is better if you're staying 5+ years.</p>
+      <p><span class="hl-green">Military discount: $500 bonus</span> (show LES). Stacks with 3.99% APR + $2,000 finance bonus.</p>
+      <p><span class="hl">Dealer:</span> AutoNation Hyundai Savannah — (912) 421-8277</p>
+      <p><span class="hl">Family:</span> 3 rows, 329hp hybrid, 600+ mi range, rear occupant alert, LATCH everywhere.</p>
+      <p><span class="hl">Lease vs buy:</span> ~$479–519/mo. SCRA allows early out with PCS orders.</p>
     </div>
   </div>
 
   <footer>
     <div class="sig">Wishing your family a smooth landing in Georgia. 🍑</div>
-    Relocation Concierge · Hawaii → Georgia 2026 · Last updated <span id="lastUpdated"></span><br>
-    <a href="https://github.com/stephen-12345/Georgia-PCS-2026">View project repository</a>
+    Relocation Concierge · Hawaii → Georgia 2026 · Updated <span id="lastUpdated"></span><br>
+    <a href="https://github.com/stephen-12345/Georgia-PCS-2026">View on GitHub</a>
   </footer>
-
 </div>
 
 <script>
-function save() {
-  const checks = {};
-  document.querySelectorAll('input[type="checkbox"]').forEach(cb => { checks[cb.id] = cb.checked; });
-  localStorage.setItem('pcs2026', JSON.stringify(checks));
-  updateProgress();
-  updateBadges();
-}
-function load() {
-  try {
-    const data = JSON.parse(localStorage.getItem('pcs2026') || '{}');
-    Object.keys(data).forEach(id => { const el = document.getElementById(id); if (el) el.checked = data[id]; });
-  } catch(e) {}
-  updateProgress();
-  updateBadges();
-}
-function updateProgress() {
-  const all = document.querySelectorAll('input[type="checkbox"]');
-  const done = [...all].filter(c => c.checked).length;
-  const total = all.length;
-  const pct = total ? Math.round(done/total*100) : 0;
-  document.getElementById('miniText').textContent = pct + '%';
-  document.getElementById('miniFill').style.width = pct + '%';
-  document.getElementById('cdDone').textContent = done;
-  document.getElementById('cdLeft').textContent = total - done;
-}
-function updateBadges() {
-  document.querySelectorAll('.card').forEach(cat => {
-    const all = cat.querySelectorAll('input[type="checkbox"]');
-    if (!all.length) return;
-    const done = [...all].filter(c => c.checked).length;
-    const badge = cat.querySelector('.badge');
-    if (badge) badge.textContent = done + '/' + all.length;
-    cat.classList.toggle('done', done === all.length);
-  });
-}
-function toggleCat(header) { header.parentElement.classList.toggle('collapsed'); }
-function uncheckAll() {
-  if (!confirm('Reset every checkbox? Your progress on this device will be cleared.')) return;
-  document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-  save();
-}
-function expandAll() { document.querySelectorAll('.card').forEach(c => c.classList.remove('collapsed')); }
-function collapseAll() { document.querySelectorAll('.card').forEach(c => c.classList.add('collapsed')); }
+function save(){const c={};document.querySelectorAll('input[type="checkbox"]').forEach(e=>{c[e.id]=e.checked});localStorage.setItem('pcs2026',JSON.stringify(c));updateProgress();updateBadges()}
+function load(){try{const d=JSON.parse(localStorage.getItem('pcs2026')||'{}');Object.keys(d).forEach(id=>{const el=document.getElementById(id);if(el)el.checked=d[id]})}catch(e){}updateProgress();updateBadges()}
+function updateProgress(){const a=document.querySelectorAll('input[type="checkbox"]');const d=[...a].filter(c=>c.checked).length;const t=a.length;const p=t?Math.round(d/t*100):0;document.getElementById('miniText').textContent=p+'%';document.getElementById('miniFill').style.width=p+'%';document.getElementById('cdDone').textContent=d;document.getElementById('cdLeft').textContent=t-d}
+function updateBadges(){document.querySelectorAll('.card').forEach(c=>{const a=c.querySelectorAll('input[type="checkbox"]');if(!a.length)return;const d=[...a].filter(x=>x.checked).length;const b=c.querySelector('.badge');if(b)b.textContent=d+'/'+a.length;c.classList.toggle('done',d===a.length)})}
+function toggleCat(h){h.parentElement.classList.toggle('collapsed')}
+function uncheckAll(){if(!confirm('Reset every checkbox?'))return;document.querySelectorAll('input[type="checkbox"]').forEach(c=>c.checked=false);save()}
+function expandAll(){document.querySelectorAll('.card').forEach(c=>c.classList.remove('collapsed'))}
+function collapseAll(){document.querySelectorAll('.card').forEach(c=>c.classList.add('collapsed'))}
+function updateCountdown(){const t=new Date(),f=new Date(t.getFullYear(),5,30),m=new Date(t.getFullYear(),5,15),d=864e5;document.getElementById('cdDays').textContent=Math.max(0,Math.ceil((f-t)/d));document.getElementById('cdMove').textContent=Math.max(0,Math.ceil((m-t)/d))}
 
-function updateCountdown() {
-  const today = new Date();
-  const fly = new Date(today.getFullYear(), 5, 30);
-  const movers = new Date(today.getFullYear(), 5, 15);
-  const day = 1000*60*60*24;
-  const dFly = Math.max(0, Math.ceil((fly - today)/day));
-  const dMove = Math.max(0, Math.ceil((movers - today)/day));
-  document.getElementById('cdDays').textContent = dFly;
-  document.getElementById('cdMove').textContent = dMove;
-}
+const PCS_EVENTS=[[4,30,'urgent','Submit DLA advance'],[5,2,'urgent','SATO travel office'],[5,3,'urgent','Pre-move inspection @ 10:00'],[5,9,'move','Move-out pre-inspection @ 13:00'],[5,15,'move','Movers arrive — packing Day 1'],[5,16,'move','Packing Day 2'],[5,17,'move','Packing Day 3'],[5,18,'move','Moved out — final walkthrough'],[5,20,'hotel','Check into Surfjack + pickup rental'],[5,22,'general','Cat vet appointment'],[5,23,'urgent','Checkout rental home + walkthrough'],[5,30,'flight','Fly to Georgia!']];
+let calMonth=5,calYear=2026;
+function getEventsForDay(y,m,d){return PCS_EVENTS.filter(e=>e[0]===m&&e[1]===d)}
+function renderCalendar(){const w=document.getElementById('calWrap');const t=new Date();const f=new Date(calYear,calMonth,1).getDay();const n=new Date(calYear,calMonth+1,0).getDate();const mn=['January','February','March','April','May','June','July','August','September','October','November','December'];let h='<div class="cal-nav"><button onclick="calPrev()">‹</button><span class="cal-month">'+mn[calMonth]+' '+calYear+'</span><button onclick="calNext()">›</button></div><div class="cal-grid">';['S','M','T','W','T','F','S'].forEach(d=>{h+='<div class="cal-dow">'+d+'</div>'});for(let i=0;i<f;i++)h+='<div class="cal-day empty"></div>';for(let d=1;d<=n;d++){const ev=getEventsForDay(calYear,calMonth,d);const isT=t.getFullYear()===calYear&&t.getMonth()===calMonth&&t.getDate()===d;const isP=new Date(calYear,calMonth,d)<new Date(t.getFullYear(),t.getMonth(),t.getDate());let c='cal-day';if(isT)c+=' today';if(isP&&!isT)c+=' past';if(ev.length)c+=' has-event evt-'+ev[0][2];h+='<div class="'+c+'">'+d;if(ev.length){h+='<div class="cal-tooltip">';ev.forEach(e=>{h+='<div>'+e[3]+'</div>'});h+='</div>'}h+='</div>'}h+='</div><div class="cal-legend"><span><span class="dot" style="background:var(--amber)"></span>Urgent</span><span><span class="dot" style="background:var(--red)"></span>Move</span><span><span class="dot" style="background:var(--teal)"></span>Hotel</span><span><span class="dot" style="background:var(--gold)"></span>Flight</span><span><span class="dot" style="background:var(--green)"></span>General</span></div>';w.innerHTML=h}
+function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalendar()}
+function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()}
 
-// ===== Calendar =====
-const PCS_EVENTS = [
-  // [month(0-indexed), day, category, label]
-  [4, 30, 'urgent',  'Submit DLA advance'],
-  [5,  2, 'urgent',  'SATO travel office'],
-  [5,  3, 'urgent',  'Pre-move inspection @ 10:00'],
-  [5,  9, 'move',    'Move-out pre-inspection @ 13:00'],
-  [5, 15, 'move',    'Movers arrive — packing Day 1'],
-  [5, 16, 'move',    'Packing Day 2'],
-  [5, 17, 'move',    'Packing Day 3'],
-  [5, 18, 'move',    'Moved out — final walkthrough'],
-  [5, 20, 'hotel',   'Check into Surfjack Hotel + pickup rental car'],
-  [5, 22, 'general', 'Cat vet appointment for travel'],
-  [5, 23, 'urgent',  'Checkout main rental home + house walkthrough'],
-  [5, 30, 'flight',  'Fly to Georgia!'],
-  // Add more dates below:
-];
+document.getElementById('lastUpdated').textContent=new Date().toLocaleDateString();
+updateCountdown();renderCalendar();load();
 
-let calMonth = 5; // June (current focus)
-let calYear = 2026;
-
-function getEventsForDay(y, m, d) {
-  return PCS_EVENTS.filter(e => e[0] === m && e[1] === d);
-}
-
-function renderCalendar() {
-  const wrap = document.getElementById('calWrap');
-  const today = new Date();
-  const firstDay = new Date(calYear, calMonth, 1).getDay();
-  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
-  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
-  let html = '<div class="cal-nav">';
-  html += '<button onclick="calPrev()">‹</button>';
-  html += '<span class="cal-month">' + monthNames[calMonth] + ' ' + calYear + '</span>';
-  html += '<button onclick="calNext()">›</button>';
-  html += '</div>';
-  html += '<div class="cal-grid">';
-  ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => {
-    html += '<div class="cal-dow">' + d + '</div>';
-  });
-  for (let i = 0; i < firstDay; i++) {
-    html += '<div class="cal-day empty"></div>';
-  }
-  for (let d = 1; d <= daysInMonth; d++) {
-    const events = getEventsForDay(calYear, calMonth, d);
-    const isToday = today.getFullYear() === calYear && today.getMonth() === calMonth && today.getDate() === d;
-    const isPast = new Date(calYear, calMonth, d) < new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    let cls = 'cal-day';
-    if (isToday) cls += ' today';
-    if (isPast && !isToday) cls += ' past';
-    if (events.length) {
-      cls += ' has-event evt-' + events[0][2];
-    }
-    html += '<div class="' + cls + '">' + d;
-    if (events.length) {
-      html += '<div class="cal-tooltip">';
-      events.forEach(e => { html += '<div>' + e[3] + '</div>'; });
-      html += '</div>';
-    }
-    html += '</div>';
-  }
-  html += '</div>';
-  html += '<div class="cal-legend">';
-  html += '<span><span class="dot" style="background:var(--amber)"></span>Urgent</span>';
-  html += '<span><span class="dot" style="background:#e76f51"></span>Move</span>';
-  html += '<span><span class="dot" style="background:var(--teal)"></span>Hotel</span>';
-  html += '<span><span class="dot" style="background:var(--gold)"></span>Flight</span>';
-  html += '<span><span class="dot" style="background:var(--green)"></span>General</span>';
-  html += '</div>';
-  wrap.innerHTML = html;
-}
-
-function calPrev() {
-  calMonth--;
-  if (calMonth < 0) { calMonth = 11; calYear--; }
-  renderCalendar();
-}
-function calNext() {
-  calMonth++;
-  if (calMonth > 11) { calMonth = 0; calYear++; }
-  renderCalendar();
-}
-
-document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString();
-updateCountdown();
-renderCalendar();
-load();
-
-// ===== Service Worker + PWA =====
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').then(reg => {
-    // Check for updates every 5 minutes
-    setInterval(() => reg.update(), 5 * 60 * 1000);
-    reg.addEventListener('updatefound', () => {
-      const newSW = reg.installing;
-      newSW.addEventListener('statechange', () => {
-        if (newSW.state === 'activated') {
-          const toast = document.createElement('div');
-          toast.className = 'update-toast';
-          toast.textContent = 'Updated! Refreshing...';
-          document.body.appendChild(toast);
-          setTimeout(() => location.reload(), 1500);
-        }
-      });
-    });
-  });
-}
-
-// ===== Install Prompt (Android / Desktop) =====
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  showInstallBanner();
-});
-
-function showInstallBanner() {
-  if (localStorage.getItem('pcs-dismiss-install')) return;
-  const b = document.getElementById('installBanner');
-  if (b) setTimeout(() => b.classList.add('show'), 1000);
-}
-
-function doInstall() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(() => {
-      deferredPrompt = null;
-      document.getElementById('installBanner').classList.remove('show');
-    });
-  } else {
-    // iOS Safari fallback — show instructions
-    alert('Tap the Share button (box with arrow) at the bottom of Safari, then tap "Add to Home Screen"');
-    document.getElementById('installBanner').classList.remove('show');
-  }
-}
-
-function dismissInstall() {
-  document.getElementById('installBanner').classList.remove('show');
-  localStorage.setItem('pcs-dismiss-install', '1');
-}
-
-// Show iOS banner if not installed and not dismissed
-if (navigator.standalone === false && !localStorage.getItem('pcs-dismiss-install')) {
-  showInstallBanner();
-}
-// Also show if not in standalone mode on iOS
-if (window.matchMedia && !window.matchMedia('(display-mode: standalone)').matches) {
-  if (/iPhone|iPad/.test(navigator.userAgent) && !localStorage.getItem('pcs-dismiss-install')) {
-    setTimeout(() => {
-      const b = document.getElementById('installBanner');
-      if (b) b.classList.add('show');
-    }, 2000);
-  }
-}
-
-// ===== Auto-refresh: poll for changes every 10 min =====
-let lastEtag = null;
-async function checkForUpdates() {
-  try {
-    const resp = await fetch(location.href, { method: 'HEAD', cache: 'no-store' });
-    const etag = resp.headers.get('etag') || resp.headers.get('last-modified');
-    if (lastEtag && etag && etag !== lastEtag) {
-      const toast = document.createElement('div');
-      toast.className = 'update-toast';
-      toast.textContent = 'New update available! Refreshing...';
-      document.body.appendChild(toast);
-      setTimeout(() => location.reload(), 1500);
-    }
-    lastEtag = etag;
-  } catch(e) {}
-}
-setInterval(checkForUpdates, 10 * 60 * 1000);
-checkForUpdates();
+if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js').then(r=>{setInterval(()=>r.update(),3e5);r.addEventListener('updatefound',()=>{const s=r.installing;s.addEventListener('statechange',()=>{if(s.state==='activated'){const t=document.createElement('div');t.className='update-toast';t.textContent='Updated! Refreshing...';document.body.appendChild(t);setTimeout(()=>location.reload(),1500)}})})})}
+let dp;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;sib()});
+function sib(){if(localStorage.getItem('pcs-x'))return;const b=document.getElementById('ib');if(b)setTimeout(()=>b.classList.add('show'),1000)}
+function doi(){if(dp){dp.prompt();dp.userChoice.then(()=>{dp=null;document.getElementById('ib').classList.remove('show')})}else{alert('Tap Share ↗ then "Add to Home Screen"');document.getElementById('ib').classList.remove('show')}}
+function dii(){document.getElementById('ib').classList.remove('show');localStorage.setItem('pcs-x','1')}
+if(window.matchMedia&&!window.matchMedia('(display-mode:standalone)').matches&&/iPhone|iPad/.test(navigator.userAgent)&&!localStorage.getItem('pcs-x'))setTimeout(()=>{const b=document.getElementById('ib');if(b)b.classList.add('show')},2000);
+let le=null;async function cfu(){try{const r=await fetch(location.href,{method:'HEAD',cache:'no-store'});const e=r.headers.get('etag')||r.headers.get('last-modified');if(le&&e&&e!==le){const t=document.createElement('div');t.className='update-toast';t.textContent='New update! Refreshing...';document.body.appendChild(t);setTimeout(()=>location.reload(),1500)}le=e}catch(e){}}setInterval(cfu,6e5);cfu();
 </script>
 
-<!-- Install Banner -->
-<div class="install-banner" id="installBanner">
+<div class="install-banner" id="ib">
   <div class="ib-icon">📲</div>
-  <div class="ib-text">
-    <strong>Add to Home Screen</strong>
-    <span>Access your PCS checklist like an app</span>
-  </div>
-  <button class="ib-btn" onclick="doInstall()">Install</button>
-  <button class="ib-close" onclick="dismissInstall()">✕</button>
+  <div class="ib-text"><strong>Add to Home Screen</strong><span>Access your PCS checklist like an app</span></div>
+  <button class="ib-btn" onclick="doi()">Install</button>
+  <button class="ib-close" onclick="dii()">✕</button>
 </div>
 
 </body>

@@ -241,6 +241,51 @@ body::after {
 }
 .btn-gold:hover { box-shadow: 0 6px 24px -4px rgba(212,167,69,.4); }
 
+/* ========== Quick Add ========== */
+.quick-add {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px 18px; margin-top: 20px;
+  display: flex; gap: 8px; align-items: stretch; flex-wrap: wrap;
+}
+.quick-add input[type="text"] {
+  flex: 1; min-width: 0; font-family: inherit; font-size: .9em;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--ink); padding: 10px 14px; outline: none;
+  transition: border-color .2s ease;
+}
+.quick-add input[type="text"]::placeholder { color: var(--faint); }
+.quick-add input[type="text"]:focus { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-glow); }
+.quick-add select {
+  font-family: inherit; font-size: .82em; font-weight: 600;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--ink2); padding: 8px 12px; outline: none; cursor: pointer;
+  -webkit-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234a6490'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px;
+  min-width: 130px;
+}
+.quick-add select:focus { border-color: var(--teal); }
+.quick-add input[type="date"] {
+  font-family: inherit; font-size: .82em;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--ink2); padding: 8px 12px; outline: none;
+  color-scheme: dark;
+}
+.quick-add input[type="date"]:focus { border-color: var(--teal); }
+.quick-add .qa-btn {
+  background: linear-gradient(135deg, var(--teal), var(--green));
+  color: #05201a; border: none; border-radius: var(--radius-sm);
+  padding: 10px 18px; font-weight: 700; font-size: .88em; cursor: pointer;
+  font-family: inherit; white-space: nowrap;
+  transition: box-shadow .2s ease, transform .15s ease;
+}
+.quick-add .qa-btn:hover { box-shadow: 0 4px 16px rgba(56,201,181,.3); transform: translateY(-1px); }
+.quick-add .qa-btn:active { transform: translateY(0); }
+@media (max-width: 620px) {
+  .quick-add { flex-direction: column; }
+  .quick-add select, .quick-add input[type="date"] { width: 100%; }
+}
+
 /* ========== Section Headers ========== */
 .sh { margin: 48px 0 16px; }
 .sh .kicker { color: var(--teal); font-size: .7em; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
@@ -490,6 +535,21 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
       <button class="btn" onclick="uncheckAll()">Reset</button>
     </div>
   </header>
+
+  <!-- Quick Add -->
+  <div class="quick-add no-print" id="quickAdd">
+    <input type="text" id="qaText" placeholder="Add a new task..." onkeydown="if(event.key==='Enter')addTask()">
+    <select id="qaCat">
+      <option value="cat-urgent">🔥 Priority</option>
+      <option value="cat-premove">📋 Pre-Move</option>
+      <option value="cat-moveweek">📦 Move Week</option>
+      <option value="cat-hotel">🏨 Hotel Days</option>
+      <option value="cat-georgia">🍑 Georgia</option>
+      <option value="cat-bins">🧳 Packing</option>
+    </select>
+    <input type="date" id="qaDate" value="2026-06-15">
+    <button class="qa-btn" onclick="addTask()">+ Add</button>
+  </div>
 
   <!-- Checklist -->
   <div class="sh">
@@ -787,6 +847,87 @@ function toggleCat(h){h.parentElement.classList.toggle('collapsed')}
 function uncheckAll(){if(!confirm('Reset every checkbox?'))return;document.querySelectorAll('input[type="checkbox"]').forEach(c=>c.checked=false);save()}
 function expandAll(){document.querySelectorAll('.card').forEach(c=>c.classList.remove('collapsed'))}
 function collapseAll(){document.querySelectorAll('.card').forEach(c=>c.classList.add('collapsed'))}
+
+// Quick Add
+let qaCounter = parseInt(localStorage.getItem('pcs-qc')||'0');
+function addTask(){
+  const text=document.getElementById('qaText').value.trim();
+  if(!text)return;
+  const catId=document.getElementById('qaCat').value;
+  const dateVal=document.getElementById('qaDate').value;
+  const card=document.getElementById(catId);
+  if(!card)return;
+  const items=card.querySelector('.items');
+  if(!items)return;
+
+  qaCounter++;
+  const id='qa'+qaCounter;
+  const dateLabel=dateVal?formatDate(dateVal):'';
+
+  const div=document.createElement('div');
+  div.className='item';
+  div.innerHTML='<input type="checkbox" id="'+id+'" onchange="save()"><label for="'+id+'">'+escHtml(text)+'</label>'+(dateLabel?'<span class="date">'+dateLabel+'</span>':'')+'<button onclick="removeTask(this)" style="background:none;border:none;color:var(--faint);cursor:pointer;font-size:.9em;padding:2px 6px;flex-shrink:0" title="Remove">✕</button>';
+  items.appendChild(div);
+
+  // Expand the card if collapsed
+  card.classList.remove('collapsed');
+
+  // Save custom tasks
+  document.getElementById('qaText').value='';
+  localStorage.setItem('pcs-qc',qaCounter);
+  saveCustomTasks();
+  save();
+}
+
+function removeTask(btn){
+  const item=btn.closest('.item');
+  const id=item.querySelector('input[type="checkbox"]').id;
+  item.remove();
+  // Remove from saved custom tasks
+  let ct=JSON.parse(localStorage.getItem('pcs-custom')||'[]');
+  ct=ct.filter(t=>t.id!==id);
+  localStorage.setItem('pcs-custom',JSON.stringify(ct));
+  // Remove checkbox state
+  let checks=JSON.parse(localStorage.getItem('pcs2026')||'{}');
+  delete checks[id];
+  localStorage.setItem('pcs2026',JSON.stringify(checks));
+  save();
+}
+
+function saveCustomTasks(){
+  const customs=[];
+  document.querySelectorAll('[id^="qa"]').forEach(cb=>{
+    if(cb.tagName!=='INPUT'||cb.type!=='checkbox')return;
+    const item=cb.closest('.item');
+    const card=item.closest('.card');
+    const label=item.querySelector('label');
+    const date=item.querySelector('.date');
+    customs.push({id:cb.id,text:label.textContent,catId:card.id,date:date?date.textContent:''});
+  });
+  localStorage.setItem('pcs-custom',JSON.stringify(customs));
+}
+
+function loadCustomTasks(){
+  const ct=JSON.parse(localStorage.getItem('pcs-custom')||'[]');
+  ct.forEach(t=>{
+    const card=document.getElementById(t.catId);
+    if(!card)return;
+    const items=card.querySelector('.items');
+    if(!items)return;
+    if(document.getElementById(t.id))return;
+    const div=document.createElement('div');
+    div.className='item';
+    div.innerHTML='<input type="checkbox" id="'+t.id+'" onchange="save()"><label for="'+t.id+'">'+escHtml(t.text)+'</label>'+(t.date?'<span class="date">'+t.date+'</span>':'')+'<button onclick="removeTask(this)" style="background:none;border:none;color:var(--faint);cursor:pointer;font-size:.9em;padding:2px 6px;flex-shrink:0" title="Remove">✕</button>';
+    items.appendChild(div);
+  });
+}
+
+function formatDate(iso){
+  const d=new Date(iso+'T00:00:00');
+  const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return m[d.getMonth()]+' '+d.getDate();
+}
+function escHtml(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function updateCountdown(){const t=new Date(),f=new Date(t.getFullYear(),5,30),m=new Date(t.getFullYear(),5,15),d=864e5;document.getElementById('cdDays').textContent=Math.max(0,Math.ceil((f-t)/d));document.getElementById('cdMove').textContent=Math.max(0,Math.ceil((m-t)/d))}
 
 const PCS_EVENTS=[[4,30,'urgent','Submit DLA advance'],[5,2,'urgent','SATO travel office'],[5,3,'urgent','Pre-move inspection @ 10:00'],[5,9,'move','Move-out pre-inspection @ 13:00'],[5,15,'move','Movers arrive — packing Day 1'],[5,16,'move','Packing Day 2'],[5,17,'move','Packing Day 3'],[5,18,'move','Moved out — final walkthrough'],[5,20,'hotel','Check into Surfjack + pickup rental'],[5,22,'general','Cat vet appointment'],[5,23,'urgent','Checkout rental home + walkthrough'],[5,30,'flight','Fly to Georgia!']];
@@ -797,7 +938,7 @@ function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalenda
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()}
 
 document.getElementById('lastUpdated').textContent=new Date().toLocaleDateString();
-updateCountdown();renderCalendar();load();
+updateCountdown();renderCalendar();loadCustomTasks();load();
 
 if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js').then(r=>{setInterval(()=>r.update(),3e5);r.addEventListener('updatefound',()=>{const s=r.installing;s.addEventListener('statechange',()=>{if(s.state==='activated'){const t=document.createElement('div');t.className='update-toast';t.textContent='Updated! Refreshing...';document.body.appendChild(t);setTimeout(()=>location.reload(),1500)}})})})}
 let dp;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;sib()});

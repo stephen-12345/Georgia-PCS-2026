@@ -342,13 +342,13 @@ body::after {
 /* ========== Items ========== */
 .items { padding: 4px 20px 14px; }
 .item {
-  display: flex; align-items: flex-start; gap: 14px; padding: 12px 0;
+  display: flex; align-items: center; gap: 14px; padding: 12px 0;
   border-bottom: 1px solid rgba(30,48,85,.4);
   transition: opacity .15s ease;
 }
 .item:last-child { border-bottom: none; }
 .item input[type="checkbox"] {
-  appearance: none; -webkit-appearance: none; margin-top: 2px;
+  appearance: none; -webkit-appearance: none;
   width: 22px; height: 22px; flex-shrink: 0; cursor: pointer;
   border: 2px solid var(--border2); border-radius: 8px; background: var(--bg2);
   position: relative; transition: all .2s cubic-bezier(.4,0,.2,1);
@@ -363,13 +363,21 @@ body::after {
   content: ""; position: absolute; left: 6px; top: 3px; width: 6px; height: 10px;
   border: solid #05201a; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg);
 }
-.item label { flex: 1; font-size: .92em; cursor: pointer; transition: all .2s ease; line-height: 1.5; }
+.item label {
+  flex: 1; min-width: 0; font-size: .92em; cursor: pointer;
+  transition: all .2s ease; line-height: 1.5;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 .item label strong { color: var(--gold2); font-weight: 600; }
 .item .date {
-  color: var(--amber); font-size: .72em; font-weight: 700; white-space: nowrap;
-  background: rgba(232,154,60,.08); padding: 4px 10px; border-radius: 8px; margin-top: 2px;
+  color: var(--amber); font-size: .72em; font-weight: 700; white-space: nowrap; flex-shrink: 0;
+  background: rgba(232,154,60,.08); padding: 4px 10px; border-radius: 8px;
   border: 1px solid rgba(232,154,60,.12); letter-spacing: .3px;
 }
+/* Packing list entries are multi-part references — keep them readable */
+#cat-bins .item { align-items: flex-start; }
+#cat-bins .item input[type="checkbox"] { margin-top: 2px; }
+#cat-bins .item label { white-space: normal; overflow: visible; text-overflow: clip; }
 .item input:checked + label { text-decoration: line-through; color: var(--faint); }
 .item input:checked + label strong { color: var(--faint); }
 .item input:checked ~ .date { opacity: .4; }
@@ -976,7 +984,7 @@ function addTask(){
 
   const div=document.createElement('div');
   div.className='item';
-  div.innerHTML='<input type="checkbox" id="'+id+'" onchange="save()"><label for="'+id+'">'+escHtml(text)+'</label>'+(dateLabel?'<span class="date">'+dateLabel+'</span>':'')+'<button onclick="removeTask(this)" style="background:none;border:none;color:var(--faint);cursor:pointer;font-size:.9em;padding:2px 6px;flex-shrink:0" title="Remove">✕</button>';
+  div.innerHTML='<input type="checkbox" id="'+id+'" onchange="save()"><label for="'+id+'" title="'+escHtml(text)+'">'+escHtml(text)+'</label>'+(dateLabel?'<span class="date">'+dateLabel+'</span>':'')+'<button onclick="removeTask(this)" style="background:none;border:none;color:var(--faint);cursor:pointer;font-size:.9em;padding:2px 6px;flex-shrink:0" title="Remove">✕</button>';
   items.appendChild(div);
 
   // Expand the card if collapsed
@@ -1027,7 +1035,7 @@ function loadCustomTasks(){
     if(document.getElementById(t.id))return;
     const div=document.createElement('div');
     div.className='item';
-    div.innerHTML='<input type="checkbox" id="'+t.id+'" onchange="save()"><label for="'+t.id+'">'+escHtml(t.text)+'</label>'+(t.date?'<span class="date">'+t.date+'</span>':'')+'<button onclick="removeTask(this)" style="background:none;border:none;color:var(--faint);cursor:pointer;font-size:.9em;padding:2px 6px;flex-shrink:0" title="Remove">✕</button>';
+    div.innerHTML='<input type="checkbox" id="'+t.id+'" onchange="save()"><label for="'+t.id+'" title="'+escHtml(t.text)+'">'+escHtml(t.text)+'</label>'+(t.date?'<span class="date">'+t.date+'</span>':'')+'<button onclick="removeTask(this)" style="background:none;border:none;color:var(--faint);cursor:pointer;font-size:.9em;padding:2px 6px;flex-shrink:0" title="Remove">✕</button>';
     items.appendChild(div);
   });
 }
@@ -1048,7 +1056,7 @@ function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalenda
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()}
 
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-30T23:35:34Z';
+const LAST_UPDATED='2026-05-30T23:56:08Z';
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';
@@ -1075,6 +1083,8 @@ async function hardRefresh(){
 }
 renderUpdated();setInterval(renderUpdated,30000);
 updateCountdown();renderCalendar();loadCustomTasks();load();
+// Full text on hover for single-line (truncated) task labels
+document.querySelectorAll('.item label').forEach(l=>{if(!l.title)l.title=l.textContent.trim();});
 
 if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js').then(r=>{setInterval(()=>r.update(),3e5);r.addEventListener('updatefound',()=>{const s=r.installing;s.addEventListener('statechange',()=>{if(s.state==='activated'){const t=document.createElement('div');t.className='update-toast';t.textContent='Updated! Refreshing...';document.body.appendChild(t);setTimeout(()=>location.reload(),1500)}})})})}
 let dp;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;sib()});

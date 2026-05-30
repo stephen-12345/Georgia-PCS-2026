@@ -3,355 +3,620 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<title>Georgia PCS 2026 Checklist</title>
+<meta name="theme-color" content="#0b1220">
+<title>Hawaii → Georgia · Your PCS Concierge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 @media print {
-  body { background: #fff !important; color: #000 !important; }
-  .no-print { display: none !important; }
-  .category { break-inside: avoid; }
+  body { background: #fff !important; color: #111 !important; }
+  .no-print, .hero-bg, .topbar { display: none !important; }
+  .card { break-inside: avoid; border: 1px solid #ddd !important; box-shadow: none !important; background: #fff !important; }
+  .item label { color: #111 !important; }
   input[type="checkbox"]:checked + label { text-decoration: line-through; }
 }
+
+:root {
+  --bg: #0b1220;
+  --bg-soft: #111a2e;
+  --panel: #131d33;
+  --panel-2: #18233d;
+  --line: #243150;
+  --ink: #e8edf7;
+  --muted: #9fb0cf;
+  --faint: #64759a;
+  --gold: #e9c46a;
+  --gold-soft: #e9c46a22;
+  --teal: #4fd1c5;
+  --teal-soft: #4fd1c51f;
+  --green: #45c97f;
+  --amber: #f0a04b;
+  --radius: 16px;
+  --shadow: 0 10px 30px -12px rgba(0,0,0,.55);
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #0d1117; color: #c9d1d9;
-  max-width: 800px; margin: 0 auto; padding: 16px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, #1b2c52 0%, transparent 55%),
+    radial-gradient(900px 500px at -10% 0%, #14283f 0%, transparent 50%),
+    var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
   -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 60px;
 }
-h1 { color: #58a6ff; font-size: 1.5em; margin-bottom: 4px; }
-.subtitle { color: #8b949e; font-size: 0.85em; margin-bottom: 20px; }
-.category {
-  background: #161b22; border: 1px solid #30363d; border-radius: 8px;
-  margin-bottom: 12px; overflow: hidden;
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 18px; }
+
+/* ---------- Top bar ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  backdrop-filter: saturate(160%) blur(12px);
+  background: rgba(11,18,32,.72);
+  border-bottom: 1px solid var(--line);
 }
-.category-header {
-  background: #21262d; padding: 10px 14px; cursor: pointer;
-  display: flex; justify-content: space-between; align-items: center;
-  font-weight: 600; color: #f0f6fc; font-size: 0.95em;
+.topbar-inner {
+  max-width: 860px; margin: 0 auto; padding: 10px 18px;
+  display: flex; align-items: center; gap: 12px;
 }
-.category-header .badge {
-  background: #388bfd26; color: #58a6ff; padding: 2px 8px;
-  border-radius: 10px; font-size: 0.75em;
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .2px; }
+.brand .mark {
+  width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--gold), var(--amber));
+  display: grid; place-items: center; color: #2a1c00; font-weight: 800; font-size: .9em;
+  box-shadow: 0 6px 16px -6px var(--amber);
 }
-.category-header .arrow { transition: transform 0.2s; }
-.category.collapsed .items { display: none; }
-.category.collapsed .arrow { transform: rotate(-90deg); }
-.items { padding: 8px 14px 12px; }
+.brand small { color: var(--muted); font-weight: 500; font-size: .72em; display: block; letter-spacing: .4px; text-transform: uppercase; }
+.topbar .mini-progress { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: .8em; color: var(--muted); }
+.mini-track { width: 90px; height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.mini-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--green)); border-radius: 99px; transition: width .4s ease; }
+
+/* ---------- Hero ---------- */
+.hero { position: relative; padding: 40px 0 8px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--gold); font-size: .76em; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 1.6px; margin-bottom: 14px;
+}
+.eyebrow::before { content: ""; width: 22px; height: 1px; background: var(--gold); display: inline-block; }
+.hero h1 {
+  font-family: 'Fraunces', Georgia, serif; font-weight: 600;
+  font-size: clamp(2em, 6vw, 3.1em); line-height: 1.05; letter-spacing: -.5px;
+  margin-bottom: 14px;
+}
+.hero h1 .accent { background: linear-gradient(90deg, var(--gold), var(--teal)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero p.lede { color: var(--muted); font-size: 1.05em; max-width: 56ch; }
+.route {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
+  margin: 22px 0 6px; font-weight: 600;
+}
+.route .pin { background: var(--panel); border: 1px solid var(--line); padding: 7px 14px; border-radius: 99px; font-size: .9em; }
+.route .arrow { color: var(--gold); font-size: 1.1em; }
+.meta-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.chip { font-size: .8em; color: var(--muted); background: var(--bg-soft); border: 1px solid var(--line); padding: 5px 12px; border-radius: 99px; }
+.chip b { color: var(--ink); }
+
+/* ---------- Countdown ---------- */
+.countdown {
+  margin-top: 26px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+}
+.cd-box {
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line); border-radius: 14px; padding: 14px 8px; text-align: center;
+}
+.cd-box .num { font-family: 'Fraunces', serif; font-size: 1.7em; font-weight: 600; color: var(--gold); }
+.cd-box .lbl { font-size: .68em; text-transform: uppercase; letter-spacing: 1px; color: var(--faint); margin-top: 2px; }
+
+/* ---------- Concierge banner ---------- */
+.concierge {
+  margin-top: 26px; display: flex; gap: 14px; align-items: flex-start;
+  background: linear-gradient(135deg, var(--gold-soft), transparent 60%), var(--panel);
+  border: 1px solid var(--line); border-left: 3px solid var(--gold);
+  border-radius: var(--radius); padding: 16px 18px;
+}
+.concierge .ic { font-size: 1.4em; }
+.concierge h3 { font-size: 1em; margin-bottom: 3px; }
+.concierge p { color: var(--muted); font-size: .9em; }
+
+/* ---------- Toolbar ---------- */
+.toolbar { margin: 26px 0 18px; display: flex; flex-wrap: wrap; gap: 8px; }
+.btn {
+  font-family: inherit; font-size: .88em; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--line); color: var(--ink); background: var(--panel);
+  padding: 10px 16px; border-radius: 11px; transition: all .18s ease; display: inline-flex; align-items: center; gap: 7px;
+}
+.btn:hover { border-color: var(--gold); transform: translateY(-1px); }
+.btn-primary { background: linear-gradient(135deg, var(--gold), var(--amber)); color: #2a1c00; border: none; }
+.btn-primary:hover { box-shadow: 0 8px 22px -8px var(--amber); }
+
+/* ---------- Section heading ---------- */
+.section-head { margin: 40px 0 14px; }
+.section-head .kicker { color: var(--teal); font-size: .74em; font-weight: 700; text-transform: uppercase; letter-spacing: 1.4px; }
+.section-head h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.5em; letter-spacing: -.3px; margin-top: 2px; }
+.section-head p { color: var(--muted); font-size: .9em; margin-top: 4px; }
+
+/* ---------- Cards / categories ---------- */
+.card {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  margin-bottom: 14px; overflow: hidden; box-shadow: var(--shadow);
+}
+.card-header {
+  padding: 15px 18px; cursor: pointer; display: flex; align-items: center; gap: 12px;
+  font-weight: 600; font-size: 1em; user-select: none;
+}
+.card-header:hover { background: var(--panel-2); }
+.card-header .arrow { transition: transform .25s ease; color: var(--faint); font-size: .8em; }
+.card.collapsed .items, .card.collapsed .body { display: none; }
+.card.collapsed .arrow { transform: rotate(-90deg); }
+.card-header .title { flex: 1; }
+.card-header .badge {
+  background: var(--teal-soft); color: var(--teal); padding: 3px 11px;
+  border-radius: 99px; font-size: .76em; font-weight: 700; white-space: nowrap;
+}
+.card.done .card-header .badge { background: #45c97f22; color: var(--green); }
+.card.urgent { border-color: #f0a04b55; }
+.card.urgent .card-header .badge { background: #f0a04b1f; color: var(--amber); }
+
+.items { padding: 4px 18px 12px; }
 .item {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 6px 0; border-bottom: 1px solid #21262d;
+  display: flex; align-items: flex-start; gap: 13px; padding: 11px 0;
+  border-bottom: 1px solid var(--bg-soft);
 }
 .item:last-child { border-bottom: none; }
 .item input[type="checkbox"] {
-  margin-top: 3px; accent-color: #58a6ff; width: 18px; height: 18px; flex-shrink: 0;
+  appearance: none; -webkit-appearance: none; margin-top: 2px;
+  width: 21px; height: 21px; flex-shrink: 0; cursor: pointer;
+  border: 2px solid var(--line); border-radius: 7px; background: var(--bg-soft);
+  position: relative; transition: all .15s ease;
 }
-.item label { flex: 1; line-height: 1.4; font-size: 0.9em; }
-.item .date { color: #f0883e; font-size: 0.8em; white-space: nowrap; font-weight: 500; }
-.item input:checked + label { text-decoration: line-through; color: #484f58; }
+.item input[type="checkbox"]:hover { border-color: var(--teal); }
+.item input[type="checkbox"]:checked { background: linear-gradient(135deg, var(--teal), var(--green)); border-color: transparent; }
+.item input[type="checkbox"]:checked::after {
+  content: ""; position: absolute; left: 6px; top: 2px; width: 5px; height: 10px;
+  border: solid #08231c; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg);
+}
+.item label { flex: 1; font-size: .94em; cursor: pointer; transition: color .15s ease; }
+.item label strong { color: var(--gold); font-weight: 600; }
+.item .date {
+  color: var(--amber); font-size: .76em; font-weight: 600; white-space: nowrap;
+  background: #f0a04b14; padding: 3px 9px; border-radius: 7px; margin-top: 1px;
+}
+.item input:checked + label { text-decoration: line-through; color: var(--faint); }
+.item input:checked + label strong { color: var(--faint); }
+
+/* ---------- Tip cards ---------- */
+.tips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .tip {
-  background: #1c2128; border-left: 3px solid #f0883e;
-  padding: 10px 14px; margin-bottom: 12px; border-radius: 0 6px 6px 0;
-  font-size: 0.85em; line-height: 1.5;
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 14px; padding: 15px 16px; font-size: .88em; color: var(--muted);
 }
-.tip strong { color: #f0883e; }
-.section-title { color: #f0883e; font-size: 1.1em; margin: 20px 0 10px; font-weight: 600; }
-.btn {
-  background: #238636; color: #fff; border: none; padding: 10px 20px;
-  border-radius: 6px; font-size: 0.9em; cursor: pointer; margin: 4px;
+.tip strong { display: block; color: var(--gold); margin-bottom: 5px; font-size: 1.02em; }
+
+/* ---------- Research tables ---------- */
+.body { padding: 6px 18px 18px; font-size: .88em; color: var(--muted); }
+table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+th { text-align: left; padding: 9px 8px; color: var(--faint); font-size: .82em; text-transform: uppercase; letter-spacing: .6px; border-bottom: 1px solid var(--line); }
+td { padding: 9px 8px; border-bottom: 1px solid var(--bg-soft); }
+tr:last-child td { border-bottom: none; }
+.val-up { color: var(--green); font-weight: 600; }
+.body p { margin: 8px 0; }
+.body strong { color: var(--ink); }
+.body .hl { color: var(--gold); }
+.body .hl-green { color: var(--green); }
+.body ul { margin: 8px 0 8px 20px; }
+.body li { margin: 4px 0; }
+
+/* ---------- Vehicle spotlight ---------- */
+.vehicle {
+  display: grid; grid-template-columns: 1.1fr 1fr; gap: 0;
+  background: linear-gradient(135deg, var(--panel-2), var(--panel)); overflow: hidden;
 }
-.btn:hover { background: #2ea043; }
-.btn-outline {
-  background: transparent; border: 1px solid #30363d; color: #c9d1d9;
+.vehicle .v-main { padding: 22px; }
+.vehicle .v-side { padding: 22px; background: rgba(0,0,0,.18); border-left: 1px solid var(--line); }
+.vehicle h3 { font-family: 'Fraunces', serif; font-size: 1.35em; font-weight: 600; }
+.vehicle .vin { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: .82em; color: var(--teal); background: var(--teal-soft); padding: 4px 9px; border-radius: 7px; display: inline-block; margin: 8px 0; letter-spacing: 1px; }
+.vehicle .price { font-family: 'Fraunces', serif; font-size: 2.2em; font-weight: 600; color: var(--green); line-height: 1; }
+.vehicle .price small { font-size: .4em; color: var(--muted); font-family: 'Inter'; display: block; font-weight: 500; margin-top: 4px; }
+.spec-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--bg-soft); font-size: .9em; }
+.spec-row:last-child { border-bottom: none; }
+.spec-row span:first-child { color: var(--faint); }
+.spec-row span:last-child { color: var(--ink); font-weight: 600; }
+.badge-clean { display: inline-flex; align-items: center; gap: 6px; background: #45c97f1f; color: var(--green); font-size: .78em; font-weight: 600; padding: 5px 11px; border-radius: 99px; margin: 4px 6px 4px 0; }
+
+/* ---------- Footer ---------- */
+footer { text-align: center; color: var(--faint); font-size: .8em; margin-top: 50px; padding: 26px 0; border-top: 1px solid var(--line); }
+footer a { color: var(--teal); text-decoration: none; }
+footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.1em; margin-bottom: 8px; }
+
+@media (max-width: 620px) {
+  .countdown { grid-template-columns: repeat(2, 1fr); }
+  .tips-grid { grid-template-columns: 1fr; }
+  .vehicle { grid-template-columns: 1fr; }
+  .vehicle .v-side { border-left: none; border-top: 1px solid var(--line); }
+  .topbar .mini-progress .mlabel { display: none; }
+  .hero { padding-top: 28px; }
 }
-.btn-outline:hover { border-color: #58a6ff; color: #58a6ff; }
-.toolbar { margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 4px; }
-.progress-bar {
-  background: #21262d; border-radius: 6px; height: 8px; margin-bottom: 16px; overflow: hidden;
-}
-.progress-fill { background: #238636; height: 100%; transition: width 0.3s; border-radius: 6px; }
-.progress-text { color: #8b949e; font-size: 0.8em; margin-bottom: 6px; }
 </style>
 </head>
 <body>
-<h1>Georgia PCS 2026</h1>
-<p class="subtitle">Hawaii to Fort Stewart/Hunter AAF -- Family of 4 + Cat</p>
 
-<div class="toolbar no-print">
-  <button class="btn" onclick="window.print()">Print / Save PDF</button>
-  <button class="btn btn-outline" onclick="uncheckAll()">Reset All</button>
-  <button class="btn btn-outline" onclick="expandAll()">Expand All</button>
-  <button class="btn btn-outline" onclick="collapseAll()">Collapse All</button>
-</div>
-
-<div class="progress-text">Overall Progress: <span id="progressText">0/0</span></div>
-<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-
-<!-- TODAY / URGENT -->
-<div class="category" id="cat-urgent">
-  <div class="category-header" onclick="toggleCat(this)">
-    <span><span class="arrow">&#9660;</span> URGENT - Do Today/This Week</span>
-    <span class="badge" id="badge-urgent"></span>
-  </div>
-  <div class="items">
-    <div class="item"><input type="checkbox" id="u1" onchange="save()"><label for="u1">Submit DLA (Dislocation Allowance) advance</label><span class="date">May 30</span></div>
-    <div class="item"><input type="checkbox" id="u2" onchange="save()"><label for="u2">SATO travel office -- book flights for family + cat</label><span class="date">Mon Jun 2</span></div>
-    <div class="item"><input type="checkbox" id="u3" onchange="save()"><label for="u3">Pre-move inspection -- main house @ 1000</label><span class="date">Tue Jun 3</span></div>
-    <div class="item"><input type="checkbox" id="u4" onchange="save()"><label for="u4">Research BMW X5 fair value + Hawaii premium</label><span class="date">This week</span></div>
-    <div class="item"><input type="checkbox" id="u5" onchange="save()"><label for="u5">List BMW X5 for sale (FB Marketplace, Craigslist, MilMove groups)</label><span class="date">This week</span></div>
-    <div class="item"><input type="checkbox" id="u6" onchange="save()"><label for="u6">Schedule Ford Focus detailing before shipment</label><span class="date">This week</span></div>
-    <div class="item"><input type="checkbox" id="u7" onchange="save()"><label for="u7">Book rental car Hawaii 6/20-6/30 (SUV or minivan)</label><span class="date">ASAP</span></div>
+<!-- ===== Top bar ===== -->
+<div class="topbar no-print">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="mark">PCS</div>
+      <div>Relocation Concierge<small>Hawaii → Georgia · 2026</small></div>
+    </div>
+    <div class="mini-progress">
+      <span class="mlabel">Plan complete</span>
+      <div class="mini-track"><div class="mini-fill" id="miniFill" style="width:0%"></div></div>
+      <span id="miniText">0%</span>
+    </div>
   </div>
 </div>
 
-<!-- PRE-MOVE -->
-<div class="category" id="cat-premove">
-  <div class="category-header" onclick="toggleCat(this)">
-    <span><span class="arrow">&#9660;</span> Pre-Move (Jun 1-14)</span>
-    <span class="badge" id="badge-premove"></span>
-  </div>
-  <div class="items">
-    <div class="item"><input type="checkbox" id="p1" onchange="save()"><label for="p1">Move-out pre-inspection @ 1300</label><span class="date">Jun 9</span></div>
-    <div class="item"><input type="checkbox" id="p2" onchange="save()"><label for="p2">Start decluttering -- donate/trash items you won't ship</label><span class="date">Jun 1-10</span></div>
-    <div class="item"><input type="checkbox" id="p3" onchange="save()"><label for="p3">Separate "Do Not Pack" items (important docs, meds, valuables, kids' essentials)</label><span class="date">Jun 1-14</span></div>
-    <div class="item"><input type="checkbox" id="p4" onchange="save()"><label for="p4">Pack hotel living bins (see packing list below)</label><span class="date">Jun 10-14</span></div>
-    <div class="item"><input type="checkbox" id="p5" onchange="save()"><label for="p5">Transfer/cancel Hawaii utilities, internet, subscriptions</label><span class="date">Jun 1-14</span></div>
-    <div class="item"><input type="checkbox" id="p6" onchange="save()"><label for="p6">Forward mail via USPS (update to GA address or PO Box)</label><span class="date">Jun 1-14</span></div>
-    <div class="item"><input type="checkbox" id="p7" onchange="save()"><label for="p7">Get copies of kids' school records</label><span class="date">Jun 1-14</span></div>
-    <div class="item"><input type="checkbox" id="p8" onchange="save()"><label for="p8">Get copies of medical/dental records for family</label><span class="date">Jun 1-14</span></div>
-    <div class="item"><input type="checkbox" id="p9" onchange="save()"><label for="p9">Vet records + health certificate for cat</label><span class="date">Before Jun 22</span></div>
-    <div class="item"><input type="checkbox" id="p10" onchange="save()"><label for="p10">Notify landlord / housing office of move-out</label><span class="date">Done?</span></div>
-    <div class="item"><input type="checkbox" id="p11" onchange="save()"><label for="p11">Take photos of all high-value items for insurance</label><span class="date">Jun 1-14</span></div>
-    <div class="item"><input type="checkbox" id="p12" onchange="save()"><label for="p12">Arrange cleaning service for house (post move-out)</label><span class="date">Jun 18-22</span></div>
-    <div class="item"><input type="checkbox" id="p13" onchange="save()"><label for="p13">Ford Focus -- remove personal items, document condition with photos</label><span class="date">Before shipment</span></div>
-  </div>
-</div>
+<div class="wrap">
 
-<!-- MOVE WEEK -->
-<div class="category" id="cat-moveweek">
-  <div class="category-header" onclick="toggleCat(this)">
-    <span><span class="arrow">&#9660;</span> Move Week (Jun 15-18)</span>
-    <span class="badge" id="badge-moveweek"></span>
-  </div>
-  <div class="items">
-    <div class="item"><input type="checkbox" id="m1" onchange="save()"><label for="m1">Movers arrive -- packing begins</label><span class="date">Jun 15</span></div>
-    <div class="item"><input type="checkbox" id="m2" onchange="save()"><label for="m2">Supervise packing Day 1 -- label fragile items, mark boxes</label><span class="date">Jun 15</span></div>
-    <div class="item"><input type="checkbox" id="m3" onchange="save()"><label for="m3">Packing continues</label><span class="date">Jun 16-17</span></div>
-    <div class="item"><input type="checkbox" id="m4" onchange="save()"><label for="m4">Completely moved out -- final walkthrough</label><span class="date">Jun 18</span></div>
-    <div class="item"><input type="checkbox" id="m5" onchange="save()"><label for="m5">Verify inventory list -- check every item number, note damage</label><span class="date">Jun 18</span></div>
-    <div class="item"><input type="checkbox" id="m6" onchange="save()"><label for="m6">Keep copies of all move paperwork (BL, inventory, DD forms)</label><span class="date">Jun 18</span></div>
-  </div>
-</div>
+  <!-- ===== Hero ===== -->
+  <header class="hero">
+    <span class="eyebrow">Your personalized move plan</span>
+    <h1>A calm, guided move from <span class="accent">Hawaii to Georgia</span>.</h1>
+    <p class="lede">Welcome back. We've organized every step of your PCS — from the first inspection to the keys of your new home — so your family of four (and one very important cat) can move with confidence.</p>
 
-<!-- HOTEL TRANSITION -->
-<div class="category" id="cat-hotel">
-  <div class="category-header" onclick="toggleCat(this)">
-    <span><span class="arrow">&#9660;</span> Hotel & Final Hawaii Days (Jun 18-30)</span>
-    <span class="badge" id="badge-hotel"></span>
-  </div>
-  <div class="items">
-    <div class="item"><input type="checkbox" id="h1" onchange="save()"><label for="h1">Check into Surfjack Hotel</label><span class="date">Jun 20</span></div>
-    <div class="item"><input type="checkbox" id="h2" onchange="save()"><label for="h2">Pick up rental car (SUV/minivan)</label><span class="date">Jun 20</span></div>
-    <div class="item"><input type="checkbox" id="h3" onchange="save()"><label for="h3">Cat vet appointment for travel</label><span class="date">Jun 22</span></div>
-    <div class="item"><input type="checkbox" id="h4" onchange="save()"><label for="h4">Final checkout -- main rental home (keys, garage openers, etc.)</label><span class="date">Jun 23</span></div>
-    <div class="item"><input type="checkbox" id="h5" onchange="save()"><label for="h5">House cleaning complete / walkthrough with landlord</label><span class="date">Jun 23</span></div>
-    <div class="item"><input type="checkbox" id="h6" onchange="save()"><label for="h6">Complete outprocessing / clear post</label><span class="date">Jun 20-30</span></div>
-    <div class="item"><input type="checkbox" id="h7" onchange="save()"><label for="h7">Close/update bank accounts, auto insurance address</label><span class="date">Jun 20-30</span></div>
-    <div class="item"><input type="checkbox" id="h8" onchange="save()"><label for="h8">Return rental car</label><span class="date">Jun 30</span></div>
-    <div class="item"><input type="checkbox" id="h9" onchange="save()"><label for="h9">Checkout Surfjack Hotel</label><span class="date">Jun 30</span></div>
-    <div class="item"><input type="checkbox" id="h10" onchange="save()"><label for="h10">Fly to Georgia!</label><span class="date">Jun 30</span></div>
-  </div>
-</div>
+    <div class="route">
+      <span class="pin">🌺 Honolulu, HI</span>
+      <span class="arrow">✈</span>
+      <span class="pin">🪖 Fort Stewart / Hunter AAF, GA</span>
+    </div>
 
-<!-- GEORGIA ARRIVAL -->
-<div class="category" id="cat-georgia">
-  <div class="category-header" onclick="toggleCat(this)">
-    <span><span class="arrow">&#9660;</span> Georgia Arrival</span>
-    <span class="badge" id="badge-georgia"></span>
-  </div>
-  <div class="items">
-    <div class="item"><input type="checkbox" id="g1" onchange="save()"><label for="g1">Pick up rental car at SAV airport</label><span class="date">Arrival day</span></div>
-    <div class="item"><input type="checkbox" id="g2" onchange="save()"><label for="g2">Check into Georgia hotel (Richmond Hill / Savannah)</label><span class="date">Arrival day</span></div>
-    <div class="item"><input type="checkbox" id="g3" onchange="save()"><label for="g3">In-processing at Fort Stewart / Hunter AAF</label><span class="date">Week 1</span></div>
-    <div class="item"><input type="checkbox" id="g4" onchange="save()"><label for="g4">Enroll kids in school (register early!)</label><span class="date">Week 1-2</span></div>
-    <div class="item"><input type="checkbox" id="g5" onchange="save()"><label for="g5">House hunting / on-post housing application</label><span class="date">Week 1-2</span></div>
-    <div class="item"><input type="checkbox" id="g6" onchange="save()"><label for="g6">Set up Georgia utilities, internet</label><span class="date">Before move-in</span></div>
-    <div class="item"><input type="checkbox" id="g7" onchange="save()"><label for="g7">Get Georgia driver's license</label><span class="date">Within 30 days</span></div>
-    <div class="item"><input type="checkbox" id="g8" onchange="save()"><label for="g8">Register vehicles in Georgia</label><span class="date">Within 30 days</span></div>
-    <div class="item"><input type="checkbox" id="g9" onchange="save()"><label for="g9">Test drive / buy / lease Hyundai Palisade Hybrid</label><span class="date">Week 2-3</span></div>
-    <div class="item"><input type="checkbox" id="g10" onchange="save()"><label for="g10">Return rental car once personal vehicle secured</label><span class="date">ASAP</span></div>
-    <div class="item"><input type="checkbox" id="g11" onchange="save()"><label for="g11">Receive HHG shipment -- check inventory for damage</label><span class="date">TBD</span></div>
-    <div class="item"><input type="checkbox" id="g12" onchange="save()"><label for="g12">File any damage claims within 75 days of delivery</label><span class="date">After delivery</span></div>
-    <div class="item"><input type="checkbox" id="g13" onchange="save()"><label for="g13">Find pediatrician, dentist, vet for cat</label><span class="date">Week 2-3</span></div>
-    <div class="item"><input type="checkbox" id="g14" onchange="save()"><label for="g14">Update DEERS / Tricare to new region</label><span class="date">Week 1</span></div>
-  </div>
-</div>
+    <div class="meta-chips">
+      <span class="chip">👨‍👩‍👧‍👦 <b>Family of 4</b></span>
+      <span class="chip">🐈 <b>1 cat</b></span>
+      <span class="chip">📦 HHG shipment</span>
+      <span class="chip">🚗 Ford Focus shipped</span>
+      <span class="chip">🔑 BMW X5 sale</span>
+    </div>
 
-<!-- TIPS -->
-<div class="section-title">Tips & Tricks</div>
+    <!-- Countdown -->
+    <div class="countdown" id="countdown">
+      <div class="cd-box"><div class="num" id="cdDays">--</div><div class="lbl">Days to fly</div></div>
+      <div class="cd-box"><div class="num" id="cdMove">--</div><div class="lbl">Days to movers</div></div>
+      <div class="cd-box"><div class="num" id="cdDone">0</div><div class="lbl">Tasks done</div></div>
+      <div class="cd-box"><div class="num" id="cdLeft">0</div><div class="lbl">Tasks left</div></div>
+    </div>
 
-<div class="tip">
-  <strong>Boxing Strategy:</strong> Color-code bins by room. Use gallon Ziploc bags for small items (screws, remotes, chargers). Take photos of electronics wiring before unplugging. Put heavy items in small boxes, light items in big boxes.
-</div>
-<div class="tip">
-  <strong>Movers Day:</strong> Be present the entire time. Mark any pre-existing damage on furniture BEFORE movers note condition. Don't let them pack trash, cleaning supplies, or hazmat. Keep a cooler with snacks/drinks for the family.
-</div>
-<div class="tip">
-  <strong>Car Shipment (Ford Focus):</strong> Only 1/4 tank of gas max. Remove all personal items, EZ-Pass, garage openers. Document exterior with dated photos/video. Note mileage. Keep a copy of the vehicle condition report.
-</div>
-<div class="tip">
-  <strong>Selling BMW X5 in Hawaii:</strong> Cars sell for 10-20% above mainland KBB in Hawaii due to shipping costs. Price slightly above KBB and negotiate. Facebook Marketplace + military swap pages get the most eyes.
-</div>
-<div class="tip">
-  <strong>Cat Travel:</strong> Get health certificate within 10 days of travel. Airline-approved carrier -- let cat get used to it weeks before. Bring familiar blanket. Check airline pet policy and book pet spot early.
-</div>
-<div class="tip">
-  <strong>DLA:</strong> Submit advance ASAP -- you're authorized DLA with dependents. Keep all receipts for temporary lodging, meals, and incidentals. TLE covers up to 14 days of lodging.
-</div>
-<div class="tip">
-  <strong>House Cleaning:</strong> Schedule a professional deep clean after move-out ($200-400 for full house). Focus on: inside appliances, bathrooms, baseboards, windows, garage floor. Take photos after cleaning for deposit protection.
-</div>
-<div class="tip">
-  <strong>In-Processing Fort Stewart:</strong> Bring 10+ copies of orders, marriage certificate, birth certificates, power of attorney. Process takes ~1 week. Housing office, DEERS, Tricare, finance -- all in first week.
-</div>
+    <!-- Concierge note -->
+    <div class="concierge">
+      <div class="ic">🤝</div>
+      <div>
+        <h3>You're not doing this alone.</h3>
+        <p>Tick items as you go — your progress saves automatically on this device. Tap any section to collapse it, and use <b>Save PDF</b> to keep a printed copy in your move binder.</p>
+      </div>
+    </div>
 
-<!-- HOTEL PACKING LIST -->
-<div class="section-title">Hotel Living Packing List (Bins)</div>
-<div class="category" id="cat-bins">
-  <div class="category-header" onclick="toggleCat(this)">
-    <span><span class="arrow">&#9660;</span> What to Pack in Bins for Hotel Weeks</span>
-    <span class="badge" id="badge-bins"></span>
-  </div>
-  <div class="items">
-    <div class="item"><input type="checkbox" id="b1" onchange="save()"><label for="b1"><strong>Documents:</strong> Orders (10 copies), IDs, passports, birth/marriage certs, medical records, school records, insurance cards, car titles, POA</label></div>
-    <div class="item"><input type="checkbox" id="b2" onchange="save()"><label for="b2"><strong>Electronics:</strong> Laptops, chargers, tablets/iPads for kids, phone chargers, portable power strip, small Bluetooth speaker</label></div>
-    <div class="item"><input type="checkbox" id="b3" onchange="save()"><label for="b3"><strong>Clothes:</strong> 10-14 days of clothes per person, swimsuits, light jackets, comfortable shoes, laundry bag, detergent pods</label></div>
-    <div class="item"><input type="checkbox" id="b4" onchange="save()"><label for="b4"><strong>Kids:</strong> Favorite toys/stuffed animals, books, coloring supplies, card games, headphones, snacks they like</label></div>
-    <div class="item"><input type="checkbox" id="b5" onchange="save()"><label for="b5"><strong>Kitchen/Food:</strong> Reusable water bottles, travel mugs, plastic utensils, paper plates, Ziploc bags, snack stash, instant coffee/tea</label></div>
-    <div class="item"><input type="checkbox" id="b6" onchange="save()"><label for="b6"><strong>Toiletries:</strong> Full-size shampoo/conditioner, toothbrushes, medications (30+ day supply), sunscreen, first aid kit</label></div>
-    <div class="item"><input type="checkbox" id="b7" onchange="save()"><label for="b7"><strong>Cat:</strong> Carrier, litter box + litter, food (2 week supply), bowls, favorite toys, medications, vet records</label></div>
-    <div class="item"><input type="checkbox" id="b8" onchange="save()"><label for="b8"><strong>Bedding:</strong> Pillows you love, small blankets for kids, pack-n-play if needed</label></div>
-    <div class="item"><input type="checkbox" id="b9" onchange="save()"><label for="b9"><strong>Misc:</strong> Trash bags, paper towels, basic cleaning spray, hangers, nightlights for kids, extension cord</label></div>
-  </div>
-</div>
+    <!-- Toolbar -->
+    <div class="toolbar no-print">
+      <button class="btn btn-primary" onclick="window.print()">🖨 Save as PDF</button>
+      <button class="btn" onclick="expandAll()">Expand all</button>
+      <button class="btn" onclick="collapseAll()">Collapse all</button>
+      <button class="btn" onclick="uncheckAll()">Reset checklist</button>
+    </div>
+  </header>
 
-<!-- RESEARCH: BMW X5 -->
-<div class="section-title">BMW X5 -- Selling in Hawaii</div>
-<div class="category">
-  <div class="category-header" onclick="toggleCat(this)">
-    <span><span class="arrow">&#9660;</span> Fair Value + Hawaii Premium</span>
-    <span class="badge">Research</span>
+  <!-- ===== Checklist sections ===== -->
+  <div class="section-head">
+    <div class="kicker">Your timeline</div>
+    <h2>Step-by-step checklist</h2>
+    <p>Grouped by phase, in the order things need to happen.</p>
   </div>
-  <div class="items" style="font-size:0.85em; line-height:1.6;">
-    <table style="width:100%; border-collapse:collapse; margin:8px 0;">
-      <tr style="border-bottom:1px solid #30363d;"><th style="text-align:left; padding:4px; color:#8b949e;">Year</th><th style="text-align:left; padding:4px; color:#8b949e;">Mainland Value</th><th style="text-align:left; padding:4px; color:#8b949e;">Hawaii Est. (18-25% premium)</th></tr>
-      <tr style="border-bottom:1px solid #21262d;"><td style="padding:4px;">2020</td><td style="padding:4px;">$24K-$29K</td><td style="padding:4px; color:#3fb950;">$28K-$36K</td></tr>
-      <tr style="border-bottom:1px solid #21262d;"><td style="padding:4px;">2021</td><td style="padding:4px;">$29K-$32K</td><td style="padding:4px; color:#3fb950;">$34K-$40K</td></tr>
-      <tr style="border-bottom:1px solid #21262d;"><td style="padding:4px;">2022</td><td style="padding:4px;">$31K-$36K</td><td style="padding:4px; color:#3fb950;">$37K-$45K</td></tr>
-      <tr><td style="padding:4px;">2023</td><td style="padding:4px;">$35K-$44K</td><td style="padding:4px; color:#3fb950;">$41K-$55K</td></tr>
-    </table>
-    <p><strong style="color:#f0883e;">Where to sell:</strong> Facebook Marketplace (most eyes), Craigslist Hawaii, military swap groups, CARMARK Hawaii (instant cash), Servco Buying Center</p>
-    <p><strong style="color:#f0883e;">Tips:</strong> Get detail done first ($200-400 adds $1K+ perceived value). List 5-10% above target. Highlight "no road salt, no rust" island advantage. Get KBB/Edmunds VIN-specific value first.</p>
-  </div>
-</div>
 
-<!-- RESEARCH: RENTAL CARS HAWAII -->
-<div class="section-title">Rental Car -- Hawaii (Jun 20-30)</div>
-<div class="category">
-  <div class="category-header" onclick="toggleCat(this)">
-    <span><span class="arrow">&#9660;</span> Cheapest Options (~10 days)</span>
-    <span class="badge">Research</span>
+  <!-- URGENT -->
+  <div class="card urgent" id="cat-urgent">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span>
+      <span class="title">🔥 Priority — This Week</span>
+      <span class="badge" id="badge-urgent"></span>
+    </div>
+    <div class="items">
+      <div class="item"><input type="checkbox" id="u1" onchange="save()"><label for="u1">Submit DLA (Dislocation Allowance) advance</label><span class="date">May 30</span></div>
+      <div class="item"><input type="checkbox" id="u2" onchange="save()"><label for="u2">SATO travel office — book flights for family + cat</label><span class="date">Mon Jun 2</span></div>
+      <div class="item"><input type="checkbox" id="u3" onchange="save()"><label for="u3">Pre-move inspection — main house @ 1000</label><span class="date">Tue Jun 3</span></div>
+      <div class="item"><input type="checkbox" id="u4" onchange="save()"><label for="u4">Confirm BMW X5 fair value + Hawaii premium</label><span class="date">This week</span></div>
+      <div class="item"><input type="checkbox" id="u5" onchange="save()"><label for="u5">List BMW X5 for sale (FB Marketplace, Craigslist, MilMove groups)</label><span class="date">This week</span></div>
+      <div class="item"><input type="checkbox" id="u6" onchange="save()"><label for="u6">Schedule Ford Focus detailing before shipment</label><span class="date">This week</span></div>
+      <div class="item"><input type="checkbox" id="u7" onchange="save()"><label for="u7">Book rental car Hawaii 6/20–6/30 (SUV or minivan)</label><span class="date">ASAP</span></div>
+    </div>
   </div>
-  <div class="items" style="font-size:0.85em; line-height:1.6;">
-    <table style="width:100%; border-collapse:collapse; margin:8px 0;">
-      <tr style="border-bottom:1px solid #30363d;"><th style="text-align:left; padding:4px; color:#8b949e;">Option</th><th style="text-align:left; padding:4px; color:#8b949e;">Est. 10-Day Total</th><th style="text-align:left; padding:4px; color:#8b949e;">Notes</th></tr>
-      <tr style="border-bottom:1px solid #21262d;"><td style="padding:4px;">Lucky Owl (local)</td><td style="padding:4px; color:#3fb950;">$400-500</td><td style="padding:4px;">Good reviews, airport pickup, (808) 352-4890</td></tr>
-      <tr style="border-bottom:1px solid #21262d;"><td style="padding:4px;">Turo</td><td style="padding:4px; color:#3fb950;">$400-600</td><td style="padding:4px;">Pick exact vehicle, 10-day discount</td></tr>
-      <tr style="border-bottom:1px solid #21262d;"><td style="padding:4px;">Costco Travel</td><td style="padding:4px;">$520-560</td><td style="padding:4px;">Free cancel, free 2nd driver, rebook if drops</td></tr>
-      <tr style="border-bottom:1px solid #21262d;"><td style="padding:4px;">Economy Rent a Car</td><td style="padding:4px;">~$500</td><td style="padding:4px;">Minivan, mixed reviews</td></tr>
-      <tr><td style="padding:4px;">Budget (major brand)</td><td style="padding:4px;">$550-860</td><td style="padding:4px;">SUV cheaper, minivan expensive</td></tr>
-    </table>
-    <p><strong style="color:#f0883e;">Best move:</strong> Book Costco Travel now (free cancel), check Lucky Owl + Turo for better price, use AutoSlash.com to track drops. Compact SUV is cheapest -- minivans $10-30/day more.</p>
-  </div>
-</div>
 
-<!-- RESEARCH: GA HOTELS -->
-<div class="section-title">Hotels -- Georgia (Extended Stay)</div>
-<div class="category">
-  <div class="category-header" onclick="toggleCat(this)">
-    <span><span class="arrow">&#9660;</span> Pet-Friendly Options (~3 weeks)</span>
-    <span class="badge">Research</span>
+  <!-- PRE-MOVE -->
+  <div class="card" id="cat-premove">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span>
+      <span class="title">📋 Pre-Move (Jun 1–14)</span>
+      <span class="badge" id="badge-premove"></span>
+    </div>
+    <div class="items">
+      <div class="item"><input type="checkbox" id="p1" onchange="save()"><label for="p1">Move-out pre-inspection @ 1300</label><span class="date">Jun 9</span></div>
+      <div class="item"><input type="checkbox" id="p2" onchange="save()"><label for="p2">Start decluttering — donate/trash items you won't ship</label><span class="date">Jun 1–10</span></div>
+      <div class="item"><input type="checkbox" id="p3" onchange="save()"><label for="p3">Separate "Do Not Pack" items (docs, meds, valuables, kids' essentials)</label><span class="date">Jun 1–14</span></div>
+      <div class="item"><input type="checkbox" id="p4" onchange="save()"><label for="p4">Pack hotel living bins (see packing list below)</label><span class="date">Jun 10–14</span></div>
+      <div class="item"><input type="checkbox" id="p5" onchange="save()"><label for="p5">Transfer/cancel Hawaii utilities, internet, subscriptions</label><span class="date">Jun 1–14</span></div>
+      <div class="item"><input type="checkbox" id="p6" onchange="save()"><label for="p6">Forward mail via USPS (update to GA address or PO Box)</label><span class="date">Jun 1–14</span></div>
+      <div class="item"><input type="checkbox" id="p7" onchange="save()"><label for="p7">Get copies of kids' school records</label><span class="date">Jun 1–14</span></div>
+      <div class="item"><input type="checkbox" id="p8" onchange="save()"><label for="p8">Get copies of medical/dental records for family</label><span class="date">Jun 1–14</span></div>
+      <div class="item"><input type="checkbox" id="p9" onchange="save()"><label for="p9">Vet records + health certificate for cat</label><span class="date">Before Jun 22</span></div>
+      <div class="item"><input type="checkbox" id="p10" onchange="save()"><label for="p10">Notify landlord / housing office of move-out</label><span class="date">Done?</span></div>
+      <div class="item"><input type="checkbox" id="p11" onchange="save()"><label for="p11">Take photos of all high-value items for insurance</label><span class="date">Jun 1–14</span></div>
+      <div class="item"><input type="checkbox" id="p12" onchange="save()"><label for="p12">Arrange cleaning service for house (post move-out)</label><span class="date">Jun 18–22</span></div>
+      <div class="item"><input type="checkbox" id="p13" onchange="save()"><label for="p13">Ford Focus — remove personal items, document condition with photos</label><span class="date">Before shipment</span></div>
+    </div>
   </div>
-  <div class="items" style="font-size:0.85em; line-height:1.6;">
-    <table style="width:100%; border-collapse:collapse; margin:8px 0;">
-      <tr style="border-bottom:1px solid #30363d;"><th style="text-align:left; padding:4px; color:#8b949e;">Hotel</th><th style="text-align:left; padding:4px; color:#8b949e;">~21 Nights</th><th style="text-align:left; padding:4px; color:#8b949e;">Cat OK?</th><th style="text-align:left; padding:4px; color:#8b949e;">Kitchen?</th></tr>
-      <tr style="border-bottom:1px solid #21262d;"><td style="padding:4px;">IHG Army Hotel, Ft Stewart</td><td style="padding:4px; color:#3fb950;">~$1,365</td><td style="padding:4px;">Yes</td><td style="padding:4px;">Kitchenette</td></tr>
-      <tr style="border-bottom:1px solid #21262d;"><td style="padding:4px;">Studio 6 Hinesville</td><td style="padding:4px; color:#3fb950;">~$1,260</td><td style="padding:4px;">Confirm</td><td style="padding:4px;">Basic</td></tr>
-      <tr style="border-bottom:1px solid #21262d;"><td style="padding:4px;">Ext Stay America Pooler</td><td style="padding:4px;">~$1,890</td><td style="padding:4px;">Confirm</td><td style="padding:4px;">Kitchenette</td></tr>
-      <tr style="border-bottom:1px solid #21262d;"><td style="padding:4px;">Candlewood Suites SAV</td><td style="padding:4px;">~$2,310</td><td style="padding:4px;">Yes</td><td style="padding:4px;">Full</td></tr>
-      <tr style="border-bottom:1px solid #21262d;"><td style="padding:4px;">Home2 Suites Hinesville</td><td style="padding:4px;">~$2,415</td><td style="padding:4px;">Yes</td><td style="padding:4px;">Full</td></tr>
-      <tr><td style="padding:4px;">TownePlace Suites SAV</td><td style="padding:4px;">~$2,730</td><td style="padding:4px;">Yes</td><td style="padding:4px;">Full</td></tr>
-    </table>
-    <p><strong style="color:#f0883e;">Best move:</strong> Call IHG Army Hotels FIRST: 877-711-TEAM. PCS families get priority. Cheapest + on post. Backup: Home2 Suites Hinesville (full kitchen, confirmed cat-friendly). Remember TLE covers up to 14 days.</p>
-  </div>
-</div>
 
-<!-- RESEARCH: GA RENTAL CAR -->
-<div class="section-title">Rental Car -- Georgia (2-3 weeks)</div>
-<div class="category">
-  <div class="category-header" onclick="toggleCat(this)">
-    <span><span class="arrow">&#9660;</span> SAV Airport Options</span>
-    <span class="badge">Research</span>
+  <!-- MOVE WEEK -->
+  <div class="card" id="cat-moveweek">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span>
+      <span class="title">📦 Move Week (Jun 15–18)</span>
+      <span class="badge" id="badge-moveweek"></span>
+    </div>
+    <div class="items">
+      <div class="item"><input type="checkbox" id="m1" onchange="save()"><label for="m1">Movers arrive — packing begins</label><span class="date">Jun 15</span></div>
+      <div class="item"><input type="checkbox" id="m2" onchange="save()"><label for="m2">Supervise packing Day 1 — label fragile items, mark boxes</label><span class="date">Jun 15</span></div>
+      <div class="item"><input type="checkbox" id="m3" onchange="save()"><label for="m3">Packing continues</label><span class="date">Jun 16–17</span></div>
+      <div class="item"><input type="checkbox" id="m4" onchange="save()"><label for="m4">Completely moved out — final walkthrough</label><span class="date">Jun 18</span></div>
+      <div class="item"><input type="checkbox" id="m5" onchange="save()"><label for="m5">Verify inventory list — check every item number, note damage</label><span class="date">Jun 18</span></div>
+      <div class="item"><input type="checkbox" id="m6" onchange="save()"><label for="m6">Keep copies of all move paperwork (BL, inventory, DD forms)</label><span class="date">Jun 18</span></div>
+    </div>
   </div>
-  <div class="items" style="font-size:0.85em; line-height:1.6;">
-    <p>June averages ~$84/day in Savannah. Est. 2-week midsize SUV: <strong>$700-$1,200</strong>. 3 weeks: <strong>$1,050-$1,800</strong>.</p>
-    <p><strong style="color:#3fb950;">Budget + WeSalute+ = 35% off</strong> (free signup for military). Brings ~$84/day down to ~$55/day = ~$385/week.</p>
-    <p><strong style="color:#f0883e;">Action items:</strong></p>
-    <ul style="margin:8px 0 8px 20px;">
-      <li>Sign up for WeSalute+ (free) for Budget 35% off</li>
-      <li>Check Costco Travel for comparison</li>
-      <li>Submit to AutoSlash.com to track drops</li>
-      <li>Consider Enterprise off-airport (downtown Savannah) to skip airport surcharge</li>
-      <li>Book now with free cancel, rebook if price drops</li>
-    </ul>
-  </div>
-</div>
 
-<!-- RESEARCH: PALISADE HYBRID -->
-<div class="section-title">Hyundai Palisade Hybrid 2026</div>
-<div class="category">
-  <div class="category-header" onclick="toggleCat(this)">
-    <span><span class="arrow">&#9660;</span> Pricing, Dealers & Military Discount</span>
-    <span class="badge">Research</span>
+  <!-- HOTEL TRANSITION -->
+  <div class="card" id="cat-hotel">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span>
+      <span class="title">🏨 Hotel & Final Hawaii Days (Jun 18–30)</span>
+      <span class="badge" id="badge-hotel"></span>
+    </div>
+    <div class="items">
+      <div class="item"><input type="checkbox" id="h1" onchange="save()"><label for="h1">Check into Surfjack Hotel</label><span class="date">Jun 20</span></div>
+      <div class="item"><input type="checkbox" id="h2" onchange="save()"><label for="h2">Pick up rental car (SUV/minivan)</label><span class="date">Jun 20</span></div>
+      <div class="item"><input type="checkbox" id="h3" onchange="save()"><label for="h3">Cat vet appointment for travel</label><span class="date">Jun 22</span></div>
+      <div class="item"><input type="checkbox" id="h4" onchange="save()"><label for="h4">Final checkout — main rental home (keys, garage openers, etc.)</label><span class="date">Jun 23</span></div>
+      <div class="item"><input type="checkbox" id="h5" onchange="save()"><label for="h5">House cleaning complete / walkthrough with landlord</label><span class="date">Jun 23</span></div>
+      <div class="item"><input type="checkbox" id="h6" onchange="save()"><label for="h6">Complete outprocessing / clear post</label><span class="date">Jun 20–30</span></div>
+      <div class="item"><input type="checkbox" id="h7" onchange="save()"><label for="h7">Close/update bank accounts, auto insurance address</label><span class="date">Jun 20–30</span></div>
+      <div class="item"><input type="checkbox" id="h8" onchange="save()"><label for="h8">Return rental car</label><span class="date">Jun 30</span></div>
+      <div class="item"><input type="checkbox" id="h9" onchange="save()"><label for="h9">Checkout Surfjack Hotel</label><span class="date">Jun 30</span></div>
+      <div class="item"><input type="checkbox" id="h10" onchange="save()"><label for="h10">Fly to Georgia! 🎉</label><span class="date">Jun 30</span></div>
+    </div>
   </div>
-  <div class="items" style="font-size:0.85em; line-height:1.6;">
-    <table style="width:100%; border-collapse:collapse; margin:8px 0;">
-      <tr style="border-bottom:1px solid #30363d;"><th style="text-align:left; padding:4px; color:#8b949e;">Trim</th><th style="text-align:left; padding:4px; color:#8b949e;">MSRP</th></tr>
-      <tr style="border-bottom:1px solid #21262d;"><td style="padding:4px;">Hybrid Blue SEL</td><td style="padding:4px;">~$43,660</td></tr>
-      <tr style="border-bottom:1px solid #21262d;"><td style="padding:4px;">Hybrid SEL Premium</td><td style="padding:4px;">~$47,520</td></tr>
-      <tr style="border-bottom:1px solid #21262d;"><td style="padding:4px;">Hybrid Limited</td><td style="padding:4px;">~$54,000</td></tr>
-      <tr><td style="padding:4px;">Hybrid Calligraphy AWD</td><td style="padding:4px;">~$58,280</td></tr>
-    </table>
-    <p><strong style="color:#3fb950;">Military discount: $500 bonus</strong> (active duty + spouse, show LES). Stacks with 3.99% APR + $2,000 finance bonus.</p>
-    <p><strong style="color:#f0883e;">Nearest dealer:</strong> AutoNation Hyundai Savannah, 7011 Abercorn St -- (912) 421-8277</p>
-    <p><strong style="color:#f0883e;">Family highlights:</strong> 3 rows (7-8 seats), 329hp hybrid, 600+ mile range, rear occupant alert, LATCH in all positions. Brand new hybrid for 2026 -- no 2025 hybrid existed.</p>
-    <p><strong style="color:#f0883e;">Lease vs Buy:</strong> Lease ~$479-519/mo. SCRA allows early termination with PCS orders -- good insurance if you move again. Buying better if staying 5+ years.</p>
-  </div>
-</div>
 
-<div style="text-align:center; color:#484f58; font-size:0.75em; margin-top:30px; padding:20px 0;">
-  Georgia PCS 2026 -- Last updated <span id="lastUpdated"></span><br>
-  <a href="https://github.com/stephen-12345/Georgia-PCS-2026" style="color:#58a6ff;">GitHub Repo</a>
+  <!-- GEORGIA ARRIVAL -->
+  <div class="card" id="cat-georgia">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span>
+      <span class="title">🍑 Georgia Arrival</span>
+      <span class="badge" id="badge-georgia"></span>
+    </div>
+    <div class="items">
+      <div class="item"><input type="checkbox" id="g1" onchange="save()"><label for="g1">Pick up rental car at SAV airport</label><span class="date">Arrival day</span></div>
+      <div class="item"><input type="checkbox" id="g2" onchange="save()"><label for="g2">Check into Georgia hotel (Richmond Hill / Savannah)</label><span class="date">Arrival day</span></div>
+      <div class="item"><input type="checkbox" id="g3" onchange="save()"><label for="g3">In-processing at Fort Stewart / Hunter AAF</label><span class="date">Week 1</span></div>
+      <div class="item"><input type="checkbox" id="g4" onchange="save()"><label for="g4">Enroll kids in school (register early!)</label><span class="date">Week 1–2</span></div>
+      <div class="item"><input type="checkbox" id="g5" onchange="save()"><label for="g5">House hunting / on-post housing application</label><span class="date">Week 1–2</span></div>
+      <div class="item"><input type="checkbox" id="g6" onchange="save()"><label for="g6">Set up Georgia utilities, internet</label><span class="date">Before move-in</span></div>
+      <div class="item"><input type="checkbox" id="g7" onchange="save()"><label for="g7">Get Georgia driver's license</label><span class="date">Within 30 days</span></div>
+      <div class="item"><input type="checkbox" id="g8" onchange="save()"><label for="g8">Register vehicles in Georgia</label><span class="date">Within 30 days</span></div>
+      <div class="item"><input type="checkbox" id="g9" onchange="save()"><label for="g9">Test drive / buy / lease Hyundai Palisade Hybrid</label><span class="date">Week 2–3</span></div>
+      <div class="item"><input type="checkbox" id="g10" onchange="save()"><label for="g10">Return rental car once personal vehicle secured</label><span class="date">ASAP</span></div>
+      <div class="item"><input type="checkbox" id="g11" onchange="save()"><label for="g11">Receive HHG shipment — check inventory for damage</label><span class="date">TBD</span></div>
+      <div class="item"><input type="checkbox" id="g12" onchange="save()"><label for="g12">File any damage claims within 75 days of delivery</label><span class="date">After delivery</span></div>
+      <div class="item"><input type="checkbox" id="g13" onchange="save()"><label for="g13">Find pediatrician, dentist, vet for cat</label><span class="date">Week 2–3</span></div>
+      <div class="item"><input type="checkbox" id="g14" onchange="save()"><label for="g14">Update DEERS / Tricare to new region</label><span class="date">Week 1</span></div>
+    </div>
+  </div>
+
+  <!-- ===== Tips ===== -->
+  <div class="section-head">
+    <div class="kicker">Insider guidance</div>
+    <h2>Concierge tips & tricks</h2>
+    <p>Hard-won advice to make every step smoother.</p>
+  </div>
+  <div class="tips-grid">
+    <div class="tip"><strong>📦 Boxing strategy</strong>Color-code bins by room. Gallon Ziplocs for small items (screws, remotes, chargers). Photograph electronics wiring before unplugging. Heavy items → small boxes, light items → big boxes.</div>
+    <div class="tip"><strong>👀 Movers day</strong>Be present the entire time. Mark pre-existing furniture damage BEFORE movers note condition. Don't let them pack trash, cleaning supplies, or hazmat. Keep a cooler of snacks for the family.</div>
+    <div class="tip"><strong>🚗 Car shipment (Ford Focus)</strong>Only ¼ tank of gas max. Remove all personal items, EZ-Pass, garage openers. Document exterior with dated photos/video. Note mileage. Keep a copy of the condition report.</div>
+    <div class="tip"><strong>💰 Selling the BMW X5</strong>Cars sell 10–20% above mainland KBB in Hawaii thanks to shipping costs. Price slightly above KBB and negotiate. FB Marketplace + military swap pages get the most eyes.</div>
+    <div class="tip"><strong>🐈 Cat travel</strong>Health certificate within 10 days of travel. Airline-approved carrier — let your cat get used to it weeks ahead. Bring a familiar blanket. Confirm airline pet policy and book the pet spot early.</div>
+    <div class="tip"><strong>📝 DLA</strong>Submit advance ASAP — you're authorized DLA with dependents. Keep all receipts for lodging, meals, and incidentals. TLE covers up to 14 days of lodging.</div>
+    <div class="tip"><strong>🧽 House cleaning</strong>Book a professional deep clean after move-out ($200–400). Focus on appliances, bathrooms, baseboards, windows, garage floor. Photograph after cleaning for deposit protection.</div>
+    <div class="tip"><strong>🪖 In-processing Fort Stewart</strong>Bring 10+ copies of orders, marriage & birth certificates, POA. Process takes ~1 week. Housing, DEERS, Tricare, finance — all in the first week.</div>
+  </div>
+
+  <!-- ===== Packing list ===== -->
+  <div class="section-head">
+    <div class="kicker">Don't forget</div>
+    <h2>Hotel living packing list</h2>
+    <p>Everything to keep with you during the hotel weeks.</p>
+  </div>
+  <div class="card" id="cat-bins">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span>
+      <span class="title">🧳 What to pack in your bins</span>
+      <span class="badge" id="badge-bins"></span>
+    </div>
+    <div class="items">
+      <div class="item"><input type="checkbox" id="b1" onchange="save()"><label for="b1"><strong>Documents:</strong> Orders (10 copies), IDs, passports, birth/marriage certs, medical records, school records, insurance cards, car titles, POA</label></div>
+      <div class="item"><input type="checkbox" id="b2" onchange="save()"><label for="b2"><strong>Electronics:</strong> Laptops, chargers, tablets/iPads for kids, phone chargers, power strip, small Bluetooth speaker</label></div>
+      <div class="item"><input type="checkbox" id="b3" onchange="save()"><label for="b3"><strong>Clothes:</strong> 10–14 days per person, swimsuits, light jackets, comfortable shoes, laundry bag, detergent pods</label></div>
+      <div class="item"><input type="checkbox" id="b4" onchange="save()"><label for="b4"><strong>Kids:</strong> Favorite toys/stuffed animals, books, coloring supplies, card games, headphones, snacks they like</label></div>
+      <div class="item"><input type="checkbox" id="b5" onchange="save()"><label for="b5"><strong>Kitchen/Food:</strong> Reusable water bottles, travel mugs, utensils, paper plates, Ziplocs, snack stash, instant coffee/tea</label></div>
+      <div class="item"><input type="checkbox" id="b6" onchange="save()"><label for="b6"><strong>Toiletries:</strong> Full-size shampoo/conditioner, toothbrushes, medications (30+ day supply), sunscreen, first aid kit</label></div>
+      <div class="item"><input type="checkbox" id="b7" onchange="save()"><label for="b7"><strong>Cat:</strong> Carrier, litter box + litter, food (2 weeks), bowls, favorite toys, medications, vet records</label></div>
+      <div class="item"><input type="checkbox" id="b8" onchange="save()"><label for="b8"><strong>Bedding:</strong> Pillows you love, small blankets for kids, pack-n-play if needed</label></div>
+      <div class="item"><input type="checkbox" id="b9" onchange="save()"><label for="b9"><strong>Misc:</strong> Trash bags, paper towels, cleaning spray, hangers, nightlights for kids, extension cord</label></div>
+    </div>
+  </div>
+
+  <!-- ===== BMW Vehicle Spotlight ===== -->
+  <div class="section-head">
+    <div class="kicker">Your vehicle</div>
+    <h2>BMW X5 — sale valuation</h2>
+    <p>VIN-specific estimate for your listing in Hawaii.</p>
+  </div>
+  <div class="card">
+    <div class="vehicle">
+      <div class="v-main">
+        <h3>2022 BMW X5 xDrive40i</h3>
+        <div class="vin">VIN · 5UXCR4C06N9M14147</div>
+        <div>
+          <span class="badge-clean">✓ No accidents</span>
+          <span class="badge-clean">✓ Great condition</span>
+          <span class="badge-clean">✓ Island-kept (no rust)</span>
+        </div>
+        <div class="spec-row"><span>Model year</span><span>2022</span></div>
+        <div class="spec-row"><span>Trim</span><span>xDrive40i (3.0L I6 turbo)</span></div>
+        <div class="spec-row"><span>Mileage</span><span>31,699 mi</span></div>
+        <div class="spec-row"><span>Title / history</span><span>Clean · 0 accidents</span></div>
+        <div class="spec-row"><span>Built</span><span>Spartanburg, SC (USA)</span></div>
+      </div>
+      <div class="v-side">
+        <div class="price">$48K–$56K<small>Estimated Hawaii private-party range</small></div>
+        <table>
+          <tr><th>Market</th><th>Estimate</th></tr>
+          <tr><td>Mainland trade-in</td><td>$40K–$44K</td></tr>
+          <tr><td>Mainland private party</td><td>$43K–$48K</td></tr>
+          <tr><td class="hl">Hawaii (15–20% premium)</td><td class="val-up">$48K–$56K</td></tr>
+        </table>
+        <p style="font-size:.82em;">At ~32K miles with a clean history, this X5 is well under the ~12K mi/yr average — a strong selling point. Pull a free VIN-specific KBB/Edmunds value to anchor your ask.</p>
+      </div>
+    </div>
+    <div class="body">
+      <p><span class="hl">Where to sell:</span> Facebook Marketplace (most eyes), Craigslist Hawaii, military swap groups, CARMARK Hawaii (instant cash), Servco Buying Center.</p>
+      <p><span class="hl">Pro tips:</span> Detail first ($200–400 adds $1K+ perceived value). List 5–10% above target. Lead with "no accidents · clean title · 31,699 mi · island-kept, no road salt or rust." Keep service records handy for serious buyers.</p>
+    </div>
+  </div>
+
+  <!-- ===== Rental Car Hawaii ===== -->
+  <div class="section-head">
+    <div class="kicker">Logistics</div>
+    <h2>Rental car — Hawaii (Jun 20–30)</h2>
+    <p>Best value for ~10 days before you fly out.</p>
+  </div>
+  <div class="card">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span>
+      <span class="title">🚙 Cheapest options (~10 days)</span>
+      <span class="badge">Research</span>
+    </div>
+    <div class="body">
+      <table>
+        <tr><th>Option</th><th>Est. 10-day total</th><th>Notes</th></tr>
+        <tr><td>Lucky Owl (local)</td><td class="val-up">$400–500</td><td>Good reviews, airport pickup, (808) 352-4890</td></tr>
+        <tr><td>Turo</td><td class="val-up">$400–600</td><td>Pick exact vehicle, 10-day discount</td></tr>
+        <tr><td>Costco Travel</td><td>$520–560</td><td>Free cancel, free 2nd driver, rebook if it drops</td></tr>
+        <tr><td>Economy Rent a Car</td><td>~$500</td><td>Minivan, mixed reviews</td></tr>
+        <tr><td>Budget (major brand)</td><td>$550–860</td><td>SUV cheaper, minivan expensive</td></tr>
+      </table>
+      <p><span class="hl">Best move:</span> Book Costco Travel now (free cancel), check Lucky Owl + Turo for a better price, and use AutoSlash.com to track drops. Compact SUV is cheapest — minivans run $10–30/day more.</p>
+    </div>
+  </div>
+
+  <!-- ===== GA Hotels ===== -->
+  <div class="section-head">
+    <div class="kicker">Logistics</div>
+    <h2>Hotels — Georgia (extended stay)</h2>
+    <p>Pet-friendly options for your ~3 weeks of transition.</p>
+  </div>
+  <div class="card">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span>
+      <span class="title">🏨 Pet-friendly options (~3 weeks)</span>
+      <span class="badge">Research</span>
+    </div>
+    <div class="body">
+      <table>
+        <tr><th>Hotel</th><th>~21 nights</th><th>Cat OK?</th><th>Kitchen?</th></tr>
+        <tr><td>IHG Army Hotel, Ft Stewart</td><td class="val-up">~$1,365</td><td>Yes</td><td>Kitchenette</td></tr>
+        <tr><td>Studio 6 Hinesville</td><td class="val-up">~$1,260</td><td>Confirm</td><td>Basic</td></tr>
+        <tr><td>Ext Stay America Pooler</td><td>~$1,890</td><td>Confirm</td><td>Kitchenette</td></tr>
+        <tr><td>Candlewood Suites SAV</td><td>~$2,310</td><td>Yes</td><td>Full</td></tr>
+        <tr><td>Home2 Suites Hinesville</td><td>~$2,415</td><td>Yes</td><td>Full</td></tr>
+        <tr><td>TownePlace Suites SAV</td><td>~$2,730</td><td>Yes</td><td>Full</td></tr>
+      </table>
+      <p><span class="hl">Best move:</span> Call IHG Army Hotels FIRST: 877-711-TEAM. PCS families get priority, and it's the cheapest + on post. Backup: Home2 Suites Hinesville (full kitchen, confirmed cat-friendly). Remember TLE covers up to 14 days.</p>
+    </div>
+  </div>
+
+  <!-- ===== GA Rental Car ===== -->
+  <div class="section-head">
+    <div class="kicker">Logistics</div>
+    <h2>Rental car — Georgia (2–3 weeks)</h2>
+    <p>While you wait on your shipped car & new vehicle.</p>
+  </div>
+  <div class="card">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span>
+      <span class="title">🚗 SAV airport options</span>
+      <span class="badge">Research</span>
+    </div>
+    <div class="body">
+      <p>June averages ~$84/day in Savannah. Estimated 2-week midsize SUV: <strong>$700–$1,200</strong>. 3 weeks: <strong>$1,050–$1,800</strong>.</p>
+      <p><span class="hl-green">Budget + WeSalute+ = 35% off</span> (free signup for military). Brings ~$84/day down to ~$55/day ≈ ~$385/week.</p>
+      <p><span class="hl">Action items:</span></p>
+      <ul>
+        <li>Sign up for WeSalute+ (free) for Budget 35% off</li>
+        <li>Check Costco Travel for comparison</li>
+        <li>Submit to AutoSlash.com to track drops</li>
+        <li>Consider Enterprise off-airport (downtown Savannah) to skip airport surcharge</li>
+        <li>Book now with free cancel, rebook if price drops</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== Palisade ===== -->
+  <div class="section-head">
+    <div class="kicker">Your next vehicle</div>
+    <h2>Hyundai Palisade Hybrid 2026</h2>
+    <p>Pricing, dealers & military discount.</p>
+  </div>
+  <div class="card">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span>
+      <span class="title">🚐 Pricing & military discount</span>
+      <span class="badge">Research</span>
+    </div>
+    <div class="body">
+      <table>
+        <tr><th>Trim</th><th>MSRP</th></tr>
+        <tr><td>Hybrid Blue SEL</td><td>~$43,660</td></tr>
+        <tr><td>Hybrid SEL Premium</td><td>~$47,520</td></tr>
+        <tr><td>Hybrid Limited</td><td>~$54,000</td></tr>
+        <tr><td>Hybrid Calligraphy AWD</td><td>~$58,280</td></tr>
+      </table>
+      <p><span class="hl-green">Military discount: $500 bonus</span> (active duty + spouse, show LES). Stacks with 3.99% APR + $2,000 finance bonus.</p>
+      <p><span class="hl">Nearest dealer:</span> AutoNation Hyundai Savannah, 7011 Abercorn St — (912) 421-8277</p>
+      <p><span class="hl">Family highlights:</span> 3 rows (7–8 seats), 329hp hybrid, 600+ mile range, rear occupant alert, LATCH in all positions. Brand-new hybrid for 2026 — no 2025 hybrid existed.</p>
+      <p><span class="hl">Lease vs buy:</span> Lease ~$479–519/mo. SCRA allows early termination with PCS orders — good insurance if you move again. Buying is better if you're staying 5+ years.</p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="sig">Wishing your family a smooth landing in Georgia. 🍑</div>
+    Relocation Concierge · Hawaii → Georgia 2026 · Last updated <span id="lastUpdated"></span><br>
+    <a href="https://github.com/stephen-12345/Georgia-PCS-2026">View project repository</a>
+  </footer>
+
 </div>
 
 <script>
 function save() {
   const checks = {};
-  document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-    checks[cb.id] = cb.checked;
-  });
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => { checks[cb.id] = cb.checked; });
   localStorage.setItem('pcs2026', JSON.stringify(checks));
   updateProgress();
   updateBadges();
@@ -359,10 +624,7 @@ function save() {
 function load() {
   try {
     const data = JSON.parse(localStorage.getItem('pcs2026') || '{}');
-    Object.keys(data).forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.checked = data[id];
-    });
+    Object.keys(data).forEach(id => { const el = document.getElementById(id); if (el) el.checked = data[id]; });
   } catch(e) {}
   updateProgress();
   updateBadges();
@@ -370,31 +632,45 @@ function load() {
 function updateProgress() {
   const all = document.querySelectorAll('input[type="checkbox"]');
   const done = [...all].filter(c => c.checked).length;
-  document.getElementById('progressText').textContent = done + '/' + all.length;
-  document.getElementById('progressFill').style.width = (all.length ? (done/all.length*100) : 0) + '%';
+  const total = all.length;
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('miniText').textContent = pct + '%';
+  document.getElementById('miniFill').style.width = pct + '%';
+  document.getElementById('cdDone').textContent = done;
+  document.getElementById('cdLeft').textContent = total - done;
 }
 function updateBadges() {
-  document.querySelectorAll('.category').forEach(cat => {
+  document.querySelectorAll('.card').forEach(cat => {
     const all = cat.querySelectorAll('input[type="checkbox"]');
+    if (!all.length) return;
     const done = [...all].filter(c => c.checked).length;
     const badge = cat.querySelector('.badge');
     if (badge) badge.textContent = done + '/' + all.length;
+    cat.classList.toggle('done', done === all.length);
   });
 }
-function toggleCat(header) {
-  header.parentElement.classList.toggle('collapsed');
-}
+function toggleCat(header) { header.parentElement.classList.toggle('collapsed'); }
 function uncheckAll() {
+  if (!confirm('Reset every checkbox? Your progress on this device will be cleared.')) return;
   document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
   save();
 }
-function expandAll() {
-  document.querySelectorAll('.category').forEach(c => c.classList.remove('collapsed'));
+function expandAll() { document.querySelectorAll('.card').forEach(c => c.classList.remove('collapsed')); }
+function collapseAll() { document.querySelectorAll('.card').forEach(c => c.classList.add('collapsed')); }
+
+function updateCountdown() {
+  const today = new Date();
+  const fly = new Date(today.getFullYear(), 5, 30); // Jun 30
+  const movers = new Date(today.getFullYear(), 5, 15); // Jun 15
+  const day = 1000*60*60*24;
+  const dFly = Math.max(0, Math.ceil((fly - today)/day));
+  const dMove = Math.max(0, Math.ceil((movers - today)/day));
+  document.getElementById('cdDays').textContent = dFly;
+  document.getElementById('cdMove').textContent = dMove;
 }
-function collapseAll() {
-  document.querySelectorAll('.category').forEach(c => c.classList.add('collapsed'));
-}
+
 document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString();
+updateCountdown();
 load();
 </script>
 </body>

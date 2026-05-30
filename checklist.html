@@ -213,6 +213,7 @@ body::after {
 .cal-day.evt-hotel::after { background: var(--teal); color: var(--teal); }
 .cal-day.evt-flight::after { background: var(--gold); color: var(--gold); }
 .cal-day.evt-general::after { background: var(--green); color: var(--green); }
+.cal-day.evt-milestone::after { background: #a78bfa; color: #a78bfa; }
 .cal-day.past { opacity: .3; }
 .cal-tooltip {
   display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
@@ -570,6 +571,7 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
     <input type="text" id="qaText" placeholder="Add a new task..." onkeydown="if(event.key==='Enter')addTask()">
     <select id="qaCat">
       <option value="cat-urgent">🔥 Priority</option>
+      <option value="cat-dates">⭐ Important Dates</option>
       <option value="cat-premove">📋 Pre-Move</option>
       <option value="cat-moveweek">📦 Move Week</option>
       <option value="cat-hotel">🏨 Hotel Days</option>
@@ -585,6 +587,19 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
     <div class="kicker">Your timeline</div>
     <h2>Step-by-step checklist</h2>
     <p>Grouped by phase, in the order things need to happen.</p>
+  </div>
+
+  <!-- IMPORTANT DATES -->
+  <div class="card" id="cat-dates">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span>
+      <span class="title">⭐ Important Dates</span>
+      <span class="badge" id="badge-dates"></span>
+    </div>
+    <div class="items">
+      <div class="item"><input type="checkbox" id="d1" onchange="save()"><label for="d1">🏫 Kids' last day of school</label><span class="date">Jun 5</span></div>
+      <div class="item"><input type="checkbox" id="d2" onchange="save()"><label for="d2">🎓 Graduation</label><span class="date">Jun 12</span></div>
+    </div>
   </div>
 
   <!-- URGENT -->
@@ -1025,15 +1040,15 @@ function formatDate(iso){
 function escHtml(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function updateCountdown(){const t=new Date(),f=new Date(t.getFullYear(),5,30),m=new Date(t.getFullYear(),5,15),d=864e5;document.getElementById('cdDays').textContent=Math.max(0,Math.ceil((f-t)/d));document.getElementById('cdMove').textContent=Math.max(0,Math.ceil((m-t)/d))}
 
-const PCS_EVENTS=[[4,30,'urgent','Submit DLA advance'],[5,2,'urgent','SATO travel office'],[5,3,'urgent','Pre-move inspection @ 10:00'],[5,9,'move','Move-out pre-inspection @ 13:00'],[5,15,'move','Movers arrive — packing Day 1'],[5,16,'move','Packing Day 2'],[5,17,'move','Packing Day 3'],[5,18,'move','Moved out — final walkthrough'],[5,20,'hotel','Check into Surfjack + pickup rental'],[5,22,'general','Cat vet appointment'],[5,23,'urgent','Checkout rental home + walkthrough'],[5,30,'flight','Fly to Georgia!']];
+const PCS_EVENTS=[[4,30,'urgent','Submit DLA advance'],[5,2,'urgent','SATO travel office'],[5,3,'urgent','Pre-move inspection @ 10:00'],[5,9,'move','Move-out pre-inspection @ 13:00'],[5,15,'move','Movers arrive — packing Day 1'],[5,16,'move','Packing Day 2'],[5,17,'move','Packing Day 3'],[5,18,'move','Moved out — final walkthrough'],[5,20,'hotel','Check into Surfjack + pickup rental'],[5,22,'general','Cat vet appointment'],[5,23,'urgent','Checkout rental home + walkthrough'],[5,30,'flight','Fly to Georgia!'],[5,5,'milestone','🏫 Last day of school'],[5,12,'milestone','🎓 Graduation']];
 let calMonth=5,calYear=2026;
 function getEventsForDay(y,m,d){return PCS_EVENTS.filter(e=>e[0]===m&&e[1]===d)}
-function renderCalendar(){const w=document.getElementById('calWrap');const t=new Date();const f=new Date(calYear,calMonth,1).getDay();const n=new Date(calYear,calMonth+1,0).getDate();const mn=['January','February','March','April','May','June','July','August','September','October','November','December'];let h='<div class="cal-nav"><button onclick="calPrev()">‹</button><span class="cal-month">'+mn[calMonth]+' '+calYear+'</span><button onclick="calNext()">›</button></div><div class="cal-grid">';['S','M','T','W','T','F','S'].forEach(d=>{h+='<div class="cal-dow">'+d+'</div>'});for(let i=0;i<f;i++)h+='<div class="cal-day empty"></div>';for(let d=1;d<=n;d++){const ev=getEventsForDay(calYear,calMonth,d);const isT=t.getFullYear()===calYear&&t.getMonth()===calMonth&&t.getDate()===d;const isP=new Date(calYear,calMonth,d)<new Date(t.getFullYear(),t.getMonth(),t.getDate());let c='cal-day';if(isT)c+=' today';if(isP&&!isT)c+=' past';if(ev.length)c+=' has-event evt-'+ev[0][2];h+='<div class="'+c+'">'+d;if(ev.length){h+='<div class="cal-tooltip">';ev.forEach(e=>{h+='<div>'+e[3]+'</div>'});h+='</div>'}h+='</div>'}h+='</div><div class="cal-legend"><span><span class="dot" style="background:var(--amber)"></span>Urgent</span><span><span class="dot" style="background:var(--red)"></span>Move</span><span><span class="dot" style="background:var(--teal)"></span>Hotel</span><span><span class="dot" style="background:var(--gold)"></span>Flight</span><span><span class="dot" style="background:var(--green)"></span>General</span></div>';w.innerHTML=h}
+function renderCalendar(){const w=document.getElementById('calWrap');const t=new Date();const f=new Date(calYear,calMonth,1).getDay();const n=new Date(calYear,calMonth+1,0).getDate();const mn=['January','February','March','April','May','June','July','August','September','October','November','December'];let h='<div class="cal-nav"><button onclick="calPrev()">‹</button><span class="cal-month">'+mn[calMonth]+' '+calYear+'</span><button onclick="calNext()">›</button></div><div class="cal-grid">';['S','M','T','W','T','F','S'].forEach(d=>{h+='<div class="cal-dow">'+d+'</div>'});for(let i=0;i<f;i++)h+='<div class="cal-day empty"></div>';for(let d=1;d<=n;d++){const ev=getEventsForDay(calYear,calMonth,d);const isT=t.getFullYear()===calYear&&t.getMonth()===calMonth&&t.getDate()===d;const isP=new Date(calYear,calMonth,d)<new Date(t.getFullYear(),t.getMonth(),t.getDate());let c='cal-day';if(isT)c+=' today';if(isP&&!isT)c+=' past';if(ev.length)c+=' has-event evt-'+ev[0][2];h+='<div class="'+c+'">'+d;if(ev.length){h+='<div class="cal-tooltip">';ev.forEach(e=>{h+='<div>'+e[3]+'</div>'});h+='</div>'}h+='</div>'}h+='</div><div class="cal-legend"><span><span class="dot" style="background:var(--amber)"></span>Urgent</span><span><span class="dot" style="background:var(--red)"></span>Move</span><span><span class="dot" style="background:var(--teal)"></span>Hotel</span><span><span class="dot" style="background:var(--gold)"></span>Flight</span><span><span class="dot" style="background:var(--green)"></span>General</span><span><span class="dot" style="background:#a78bfa"></span>Milestone</span></div>';w.innerHTML=h}
 function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalendar()}
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()}
 
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-30T23:32:29Z';
+const LAST_UPDATED='2026-05-30T23:35:34Z';
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';

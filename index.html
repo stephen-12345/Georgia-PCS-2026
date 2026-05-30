@@ -236,6 +236,43 @@ footer { text-align: center; color: var(--faint); font-size: .8em; margin-top: 5
 footer a { color: var(--teal); text-decoration: none; }
 footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.1em; margin-bottom: 8px; }
 
+/* ---------- Calendar ---------- */
+.cal-wrap { margin-top: 28px; }
+.cal-nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 12px; }
+.cal-nav button { background: var(--panel); border: 1px solid var(--line); color: var(--ink); width: 34px; height: 34px; border-radius: 10px; cursor: pointer; font-size: 1em; display: grid; place-items: center; }
+.cal-nav button:hover { border-color: var(--gold); }
+.cal-nav .cal-month { font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.1em; min-width: 140px; text-align: center; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.cal-dow { text-align: center; font-size: .65em; font-weight: 700; color: var(--faint); text-transform: uppercase; letter-spacing: 1px; padding: 4px 0; }
+.cal-day {
+  text-align: center; padding: 7px 2px; border-radius: 10px; font-size: .82em;
+  color: var(--muted); position: relative; cursor: default; min-height: 38px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.cal-day.empty { visibility: hidden; }
+.cal-day.today { background: var(--panel-2); border: 1px solid var(--teal); color: var(--ink); font-weight: 700; }
+.cal-day.has-event { font-weight: 700; color: var(--ink); }
+.cal-day.has-event::after {
+  content: ""; width: 5px; height: 5px; border-radius: 50%; position: absolute; bottom: 3px;
+}
+.cal-day.evt-urgent::after { background: var(--amber); }
+.cal-day.evt-move::after { background: #e76f51; }
+.cal-day.evt-hotel::after { background: var(--teal); }
+.cal-day.evt-flight::after { background: var(--gold); }
+.cal-day.evt-general::after { background: var(--green); }
+.cal-day.past { opacity: .4; }
+.cal-tooltip {
+  display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px;
+  padding: 8px 12px; font-size: .78em; color: var(--ink); white-space: nowrap;
+  box-shadow: 0 8px 20px -6px rgba(0,0,0,.6); z-index: 10; text-align: left;
+  max-width: 220px; white-space: normal; line-height: 1.4;
+}
+.cal-day:hover .cal-tooltip, .cal-day:active .cal-tooltip { display: block; }
+.cal-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; justify-content: center; }
+.cal-legend span { display: flex; align-items: center; gap: 5px; font-size: .7em; color: var(--faint); }
+.cal-legend .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
 @media (max-width: 620px) {
   .countdown { grid-template-columns: repeat(2, 1fr); }
   .tips-grid { grid-template-columns: 1fr; }
@@ -243,6 +280,7 @@ footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.
   .vehicle .v-side { border-left: none; border-top: 1px solid var(--line); }
   .topbar .mini-progress .mlabel { display: none; }
   .hero { padding-top: 28px; }
+  .cal-tooltip { left: 0; transform: none; }
 }
 </style>
 </head>
@@ -293,6 +331,9 @@ footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.
       <div class="cd-box"><div class="num" id="cdLeft">0</div><div class="lbl">Tasks left</div></div>
     </div>
 
+    <!-- Calendar -->
+    <div class="cal-wrap" id="calWrap"></div>
+
     <!-- Concierge note -->
     <div class="concierge">
       <div class="ic">🤝</div>
@@ -329,10 +370,10 @@ footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.
       <div class="item"><input type="checkbox" id="u1" onchange="save()"><label for="u1">Submit DLA (Dislocation Allowance) advance</label><span class="date">May 30</span></div>
       <div class="item"><input type="checkbox" id="u2" onchange="save()"><label for="u2">SATO travel office — book flights for family + cat</label><span class="date">Mon Jun 2</span></div>
       <div class="item"><input type="checkbox" id="u3" onchange="save()"><label for="u3">Pre-move inspection — main house @ 1000</label><span class="date">Tue Jun 3</span></div>
-      <div class="item"><input type="checkbox" id="u4" onchange="save()"><label for="u4">Confirm BMW X5 fair value + Hawaii premium</label><span class="date">This week</span></div>
-      <div class="item"><input type="checkbox" id="u5" onchange="save()"><label for="u5">List BMW X5 for sale (FB Marketplace, Craigslist, MilMove groups)</label><span class="date">This week</span></div>
-      <div class="item"><input type="checkbox" id="u6" onchange="save()"><label for="u6">Schedule Ford Focus detailing before shipment</label><span class="date">This week</span></div>
-      <div class="item"><input type="checkbox" id="u7" onchange="save()"><label for="u7">Book rental car Hawaii 6/20–6/30 (SUV or minivan)</label><span class="date">ASAP</span></div>
+      <div class="item"><input type="checkbox" id="u4" onchange="save()"><label for="u4">Confirm BMW X5 fair value + Hawaii premium</label><span class="date">Jun 1</span></div>
+      <div class="item"><input type="checkbox" id="u5" onchange="save()"><label for="u5">List BMW X5 for sale (FB Marketplace, Craigslist, MilMove groups)</label><span class="date">Jun 2</span></div>
+      <div class="item"><input type="checkbox" id="u6" onchange="save()"><label for="u6">Schedule Ford Focus detailing before shipment</label><span class="date">Jun 2</span></div>
+      <div class="item"><input type="checkbox" id="u7" onchange="save()"><label for="u7">Book rental car Hawaii 6/20–6/30 (SUV or minivan)</label><span class="date">Jun 1</span></div>
     </div>
   </div>
 
@@ -345,18 +386,18 @@ footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.
     </div>
     <div class="items">
       <div class="item"><input type="checkbox" id="p1" onchange="save()"><label for="p1">Move-out pre-inspection @ 1300</label><span class="date">Jun 9</span></div>
-      <div class="item"><input type="checkbox" id="p2" onchange="save()"><label for="p2">Start decluttering — donate/trash items you won't ship</label><span class="date">Jun 1–10</span></div>
-      <div class="item"><input type="checkbox" id="p3" onchange="save()"><label for="p3">Separate "Do Not Pack" items (docs, meds, valuables, kids' essentials)</label><span class="date">Jun 1–14</span></div>
-      <div class="item"><input type="checkbox" id="p4" onchange="save()"><label for="p4">Pack hotel living bins (see packing list below)</label><span class="date">Jun 10–14</span></div>
-      <div class="item"><input type="checkbox" id="p5" onchange="save()"><label for="p5">Transfer/cancel Hawaii utilities, internet, subscriptions</label><span class="date">Jun 1–14</span></div>
-      <div class="item"><input type="checkbox" id="p6" onchange="save()"><label for="p6">Forward mail via USPS (update to GA address or PO Box)</label><span class="date">Jun 1–14</span></div>
-      <div class="item"><input type="checkbox" id="p7" onchange="save()"><label for="p7">Get copies of kids' school records</label><span class="date">Jun 1–14</span></div>
-      <div class="item"><input type="checkbox" id="p8" onchange="save()"><label for="p8">Get copies of medical/dental records for family</label><span class="date">Jun 1–14</span></div>
-      <div class="item"><input type="checkbox" id="p9" onchange="save()"><label for="p9">Vet records + health certificate for cat</label><span class="date">Before Jun 22</span></div>
-      <div class="item"><input type="checkbox" id="p10" onchange="save()"><label for="p10">Notify landlord / housing office of move-out</label><span class="date">Done?</span></div>
-      <div class="item"><input type="checkbox" id="p11" onchange="save()"><label for="p11">Take photos of all high-value items for insurance</label><span class="date">Jun 1–14</span></div>
-      <div class="item"><input type="checkbox" id="p12" onchange="save()"><label for="p12">Arrange cleaning service for house (post move-out)</label><span class="date">Jun 18–22</span></div>
-      <div class="item"><input type="checkbox" id="p13" onchange="save()"><label for="p13">Ford Focus — remove personal items, document condition with photos</label><span class="date">Before shipment</span></div>
+      <div class="item"><input type="checkbox" id="p2" onchange="save()"><label for="p2">Start decluttering — donate/trash items you won't ship</label><span class="date">Jun 1</span></div>
+      <div class="item"><input type="checkbox" id="p3" onchange="save()"><label for="p3">Separate "Do Not Pack" items (docs, meds, valuables, kids' essentials)</label><span class="date">Jun 7</span></div>
+      <div class="item"><input type="checkbox" id="p4" onchange="save()"><label for="p4">Pack hotel living bins (see packing list below)</label><span class="date">Jun 12</span></div>
+      <div class="item"><input type="checkbox" id="p5" onchange="save()"><label for="p5">Transfer/cancel Hawaii utilities, internet, subscriptions</label><span class="date">Jun 10</span></div>
+      <div class="item"><input type="checkbox" id="p6" onchange="save()"><label for="p6">Forward mail via USPS (update to GA address or PO Box)</label><span class="date">Jun 5</span></div>
+      <div class="item"><input type="checkbox" id="p7" onchange="save()"><label for="p7">Get copies of kids' school records</label><span class="date">Jun 6</span></div>
+      <div class="item"><input type="checkbox" id="p8" onchange="save()"><label for="p8">Get copies of medical/dental records for family</label><span class="date">Jun 6</span></div>
+      <div class="item"><input type="checkbox" id="p9" onchange="save()"><label for="p9">Vet records + health certificate for cat</label><span class="date">Jun 20</span></div>
+      <div class="item"><input type="checkbox" id="p10" onchange="save()"><label for="p10">Notify landlord / housing office of move-out</label><span class="date">Jun 1</span></div>
+      <div class="item"><input type="checkbox" id="p11" onchange="save()"><label for="p11">Take photos of all high-value items for insurance</label><span class="date">Jun 13</span></div>
+      <div class="item"><input type="checkbox" id="p12" onchange="save()"><label for="p12">Arrange cleaning service for house (post move-out)</label><span class="date">Jun 19</span></div>
+      <div class="item"><input type="checkbox" id="p13" onchange="save()"><label for="p13">Ford Focus — remove personal items, document condition with photos</label><span class="date">Jun 12</span></div>
     </div>
   </div>
 
@@ -390,8 +431,8 @@ footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.
       <div class="item"><input type="checkbox" id="h3" onchange="save()"><label for="h3">Cat vet appointment for travel</label><span class="date">Jun 22</span></div>
       <div class="item"><input type="checkbox" id="h4" onchange="save()"><label for="h4">Final checkout — main rental home (keys, garage openers, etc.)</label><span class="date">Jun 23</span></div>
       <div class="item"><input type="checkbox" id="h5" onchange="save()"><label for="h5">House cleaning complete / walkthrough with landlord</label><span class="date">Jun 23</span></div>
-      <div class="item"><input type="checkbox" id="h6" onchange="save()"><label for="h6">Complete outprocessing / clear post</label><span class="date">Jun 20–30</span></div>
-      <div class="item"><input type="checkbox" id="h7" onchange="save()"><label for="h7">Close/update bank accounts, auto insurance address</label><span class="date">Jun 20–30</span></div>
+      <div class="item"><input type="checkbox" id="h6" onchange="save()"><label for="h6">Complete outprocessing / clear post</label><span class="date">Jun 24</span></div>
+      <div class="item"><input type="checkbox" id="h7" onchange="save()"><label for="h7">Close/update bank accounts, auto insurance address</label><span class="date">Jun 25</span></div>
       <div class="item"><input type="checkbox" id="h8" onchange="save()"><label for="h8">Return rental car</label><span class="date">Jun 30</span></div>
       <div class="item"><input type="checkbox" id="h9" onchange="save()"><label for="h9">Checkout Surfjack Hotel</label><span class="date">Jun 30</span></div>
       <div class="item"><input type="checkbox" id="h10" onchange="save()"><label for="h10">Fly to Georgia! 🎉</label><span class="date">Jun 30</span></div>
@@ -406,20 +447,20 @@ footer .sig { font-family: 'Fraunces', serif; color: var(--muted); font-size: 1.
       <span class="badge" id="badge-georgia"></span>
     </div>
     <div class="items">
-      <div class="item"><input type="checkbox" id="g1" onchange="save()"><label for="g1">Pick up rental car at SAV airport</label><span class="date">Arrival day</span></div>
-      <div class="item"><input type="checkbox" id="g2" onchange="save()"><label for="g2">Check into Georgia hotel (Richmond Hill / Savannah)</label><span class="date">Arrival day</span></div>
-      <div class="item"><input type="checkbox" id="g3" onchange="save()"><label for="g3">In-processing at Fort Stewart / Hunter AAF</label><span class="date">Week 1</span></div>
-      <div class="item"><input type="checkbox" id="g4" onchange="save()"><label for="g4">Enroll kids in school (register early!)</label><span class="date">Week 1–2</span></div>
-      <div class="item"><input type="checkbox" id="g5" onchange="save()"><label for="g5">House hunting / on-post housing application</label><span class="date">Week 1–2</span></div>
-      <div class="item"><input type="checkbox" id="g6" onchange="save()"><label for="g6">Set up Georgia utilities, internet</label><span class="date">Before move-in</span></div>
-      <div class="item"><input type="checkbox" id="g7" onchange="save()"><label for="g7">Get Georgia driver's license</label><span class="date">Within 30 days</span></div>
-      <div class="item"><input type="checkbox" id="g8" onchange="save()"><label for="g8">Register vehicles in Georgia</label><span class="date">Within 30 days</span></div>
-      <div class="item"><input type="checkbox" id="g9" onchange="save()"><label for="g9">Test drive / buy / lease Hyundai Palisade Hybrid</label><span class="date">Week 2–3</span></div>
-      <div class="item"><input type="checkbox" id="g10" onchange="save()"><label for="g10">Return rental car once personal vehicle secured</label><span class="date">ASAP</span></div>
+      <div class="item"><input type="checkbox" id="g1" onchange="save()"><label for="g1">Pick up rental car at SAV airport</label><span class="date">Jun 30</span></div>
+      <div class="item"><input type="checkbox" id="g2" onchange="save()"><label for="g2">Check into Georgia hotel (Richmond Hill / Savannah)</label><span class="date">Jun 30</span></div>
+      <div class="item"><input type="checkbox" id="g3" onchange="save()"><label for="g3">In-processing at Fort Stewart / Hunter AAF</label><span class="date">Jul 1</span></div>
+      <div class="item"><input type="checkbox" id="g4" onchange="save()"><label for="g4">Enroll kids in school (register early!)</label><span class="date">Jul 7</span></div>
+      <div class="item"><input type="checkbox" id="g5" onchange="save()"><label for="g5">House hunting / on-post housing application</label><span class="date">Jul 7</span></div>
+      <div class="item"><input type="checkbox" id="g6" onchange="save()"><label for="g6">Set up Georgia utilities, internet</label><span class="date">Jul 14</span></div>
+      <div class="item"><input type="checkbox" id="g7" onchange="save()"><label for="g7">Get Georgia driver's license</label><span class="date">Jul 21</span></div>
+      <div class="item"><input type="checkbox" id="g8" onchange="save()"><label for="g8">Register vehicles in Georgia</label><span class="date">Jul 21</span></div>
+      <div class="item"><input type="checkbox" id="g9" onchange="save()"><label for="g9">Test drive / buy / lease Hyundai Palisade Hybrid</label><span class="date">Jul 14</span></div>
+      <div class="item"><input type="checkbox" id="g10" onchange="save()"><label for="g10">Return rental car once personal vehicle secured</label><span class="date">Jul 18</span></div>
       <div class="item"><input type="checkbox" id="g11" onchange="save()"><label for="g11">Receive HHG shipment — check inventory for damage</label><span class="date">TBD</span></div>
       <div class="item"><input type="checkbox" id="g12" onchange="save()"><label for="g12">File any damage claims within 75 days of delivery</label><span class="date">After delivery</span></div>
-      <div class="item"><input type="checkbox" id="g13" onchange="save()"><label for="g13">Find pediatrician, dentist, vet for cat</label><span class="date">Week 2–3</span></div>
-      <div class="item"><input type="checkbox" id="g14" onchange="save()"><label for="g14">Update DEERS / Tricare to new region</label><span class="date">Week 1</span></div>
+      <div class="item"><input type="checkbox" id="g13" onchange="save()"><label for="g13">Find pediatrician, dentist, vet for cat</label><span class="date">Jul 14</span></div>
+      <div class="item"><input type="checkbox" id="g14" onchange="save()"><label for="g14">Update DEERS / Tricare to new region</label><span class="date">Jul 1</span></div>
     </div>
   </div>
 
@@ -663,8 +704,8 @@ function collapseAll() { document.querySelectorAll('.card').forEach(c => c.class
 
 function updateCountdown() {
   const today = new Date();
-  const fly = new Date(today.getFullYear(), 5, 30); // Jun 30
-  const movers = new Date(today.getFullYear(), 5, 15); // Jun 15
+  const fly = new Date(today.getFullYear(), 5, 30);
+  const movers = new Date(today.getFullYear(), 5, 15);
   const day = 1000*60*60*24;
   const dFly = Math.max(0, Math.ceil((fly - today)/day));
   const dMove = Math.max(0, Math.ceil((movers - today)/day));
@@ -672,8 +713,93 @@ function updateCountdown() {
   document.getElementById('cdMove').textContent = dMove;
 }
 
+// ===== Calendar =====
+const PCS_EVENTS = [
+  // [month(0-indexed), day, category, label]
+  [4, 30, 'urgent',  'Submit DLA advance'],
+  [5,  2, 'urgent',  'SATO travel office'],
+  [5,  3, 'urgent',  'Pre-move inspection @ 10:00'],
+  [5,  9, 'move',    'Move-out pre-inspection @ 13:00'],
+  [5, 15, 'move',    'Movers arrive — packing Day 1'],
+  [5, 16, 'move',    'Packing Day 2'],
+  [5, 17, 'move',    'Packing Day 3'],
+  [5, 18, 'move',    'Moved out — final walkthrough'],
+  [5, 20, 'hotel',   'Check into Surfjack Hotel + pickup rental car'],
+  [5, 22, 'general', 'Cat vet appointment for travel'],
+  [5, 23, 'urgent',  'Checkout main rental home + house walkthrough'],
+  [5, 30, 'flight',  'Fly to Georgia!'],
+  // Add more dates below:
+];
+
+let calMonth = 5; // June (current focus)
+let calYear = 2026;
+
+function getEventsForDay(y, m, d) {
+  return PCS_EVENTS.filter(e => e[0] === m && e[1] === d);
+}
+
+function renderCalendar() {
+  const wrap = document.getElementById('calWrap');
+  const today = new Date();
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  let html = '<div class="cal-nav">';
+  html += '<button onclick="calPrev()">‹</button>';
+  html += '<span class="cal-month">' + monthNames[calMonth] + ' ' + calYear + '</span>';
+  html += '<button onclick="calNext()">›</button>';
+  html += '</div>';
+  html += '<div class="cal-grid">';
+  ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => {
+    html += '<div class="cal-dow">' + d + '</div>';
+  });
+  for (let i = 0; i < firstDay; i++) {
+    html += '<div class="cal-day empty"></div>';
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const events = getEventsForDay(calYear, calMonth, d);
+    const isToday = today.getFullYear() === calYear && today.getMonth() === calMonth && today.getDate() === d;
+    const isPast = new Date(calYear, calMonth, d) < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    let cls = 'cal-day';
+    if (isToday) cls += ' today';
+    if (isPast && !isToday) cls += ' past';
+    if (events.length) {
+      cls += ' has-event evt-' + events[0][2];
+    }
+    html += '<div class="' + cls + '">' + d;
+    if (events.length) {
+      html += '<div class="cal-tooltip">';
+      events.forEach(e => { html += '<div>' + e[3] + '</div>'; });
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+  html += '<div class="cal-legend">';
+  html += '<span><span class="dot" style="background:var(--amber)"></span>Urgent</span>';
+  html += '<span><span class="dot" style="background:#e76f51"></span>Move</span>';
+  html += '<span><span class="dot" style="background:var(--teal)"></span>Hotel</span>';
+  html += '<span><span class="dot" style="background:var(--gold)"></span>Flight</span>';
+  html += '<span><span class="dot" style="background:var(--green)"></span>General</span>';
+  html += '</div>';
+  wrap.innerHTML = html;
+}
+
+function calPrev() {
+  calMonth--;
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  renderCalendar();
+}
+function calNext() {
+  calMonth++;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  renderCalendar();
+}
+
 document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString();
 updateCountdown();
+renderCalendar();
 load();
 </script>
 </body>

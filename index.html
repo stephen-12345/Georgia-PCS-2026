@@ -269,8 +269,10 @@ body::after {
   font-family: inherit; font-size: .82em;
   background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-sm);
   color: var(--ink2); padding: 8px 12px; outline: none;
-  color-scheme: dark;
+  color-scheme: dark; text-align: left;
 }
+/* Left-align the date value (WebKit/iOS centers it by default when full-width) */
+.quick-add input[type="date"]::-webkit-date-and-time-value { text-align: left; }
 .quick-add input[type="date"]:focus { border-color: var(--teal); }
 .quick-add .qa-btn {
   background: linear-gradient(135deg, var(--teal), var(--green));

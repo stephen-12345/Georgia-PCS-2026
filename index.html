@@ -108,6 +108,20 @@ body::after {
 .prog-track { width: 80px; height: 5px; border-radius: 99px; background: var(--border); overflow: hidden; }
 .prog-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--green)); border-radius: 99px; transition: width .5s cubic-bezier(.4,0,.2,1); }
 .prog-pct { font-size: .78em; font-weight: 700; color: var(--teal); min-width: 30px; text-align: right; }
+.topbar .updated { display: flex; align-items: center; gap: 9px; margin-left: 14px; }
+.refresh-btn {
+  width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
+  border: 1px solid var(--border); background: var(--bg2); color: var(--muted);
+  cursor: pointer; font-size: 1.05em; line-height: 1; display: grid; place-items: center;
+  transition: color .2s ease, border-color .2s ease, transform .3s ease;
+}
+.refresh-btn:hover { color: var(--teal); border-color: var(--teal); transform: rotate(90deg); }
+.refresh-btn:active { transform: rotate(180deg) scale(.92); }
+.refresh-btn.spinning { animation: spin .7s linear infinite; color: var(--teal); border-color: var(--teal); }
+@keyframes spin { to { transform: rotate(360deg); } }
+.upd-text { display: flex; flex-direction: column; line-height: 1.2; }
+.upd-ago { font-size: .72em; font-weight: 700; color: var(--green); white-space: nowrap; }
+.upd-abs { font-size: .64em; color: var(--faint); white-space: nowrap; }
 
 /* ========== Hero ========== */
 .hero { padding: 44px 0 0; }
@@ -467,6 +481,9 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
   .vehicle { grid-template-columns: 1fr; }
   .vehicle .v-side { border-left: none; border-top: 1px solid var(--border); }
   .topbar .prog .mlabel { display: none; }
+  .topbar .prog .prog-track { width: 56px; }
+  .topbar .updated { margin-left: 10px; gap: 7px; }
+  .upd-abs { display: none; }
   .cal-tooltip { left: 0; transform: none; }
   .cal-wrap { padding: 14px; }
 }
@@ -485,6 +502,13 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
       <span class="mlabel" style="font-size:.78em;color:var(--muted)">Progress</span>
       <div class="prog-track"><div class="prog-fill" id="miniFill" style="width:0%"></div></div>
       <span class="prog-pct" id="miniText">0%</span>
+    </div>
+    <div class="updated" id="updatedWrap">
+      <button class="refresh-btn" id="refreshBtn" onclick="hardRefresh()" title="Hard refresh — clear cache &amp; reload" aria-label="Hard refresh">⟳</button>
+      <div class="upd-text">
+        <span class="upd-ago" id="updAgo">just now</span>
+        <span class="upd-abs" id="updAbs"></span>
+      </div>
     </div>
   </div>
 </div>
@@ -1005,7 +1029,33 @@ function renderCalendar(){const w=document.getElementById('calWrap');const t=new
 function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalendar()}
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()}
 
-document.getElementById('lastUpdated').textContent=new Date().toLocaleDateString();
+// Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
+const LAST_UPDATED='2026-05-30T23:19:39Z';
+function fmtAgo(ms){
+  const s=Math.floor(ms/1000);
+  if(s<45)return'just now';
+  const m=Math.round(s/60);if(m<60)return m+'m ago';
+  const h=Math.round(m/60);if(h<24)return h+'h ago';
+  const d=Math.round(h/24);if(d<7)return d+'d ago';
+  return Math.round(d/7)+'w ago';
+}
+function renderUpdated(){
+  const t=new Date(LAST_UPDATED);if(isNaN(t))return;
+  document.getElementById('updAgo').textContent=fmtAgo(Date.now()-t.getTime());
+  const abs=t.toLocaleString([], {month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+  document.getElementById('updAbs').textContent=abs;
+  document.getElementById('updatedWrap').title='Last updated '+t.toLocaleString();
+  const f=document.getElementById('lastUpdated');if(f)f.textContent=abs;
+}
+async function hardRefresh(){
+  const btn=document.getElementById('refreshBtn');if(btn)btn.classList.add('spinning');
+  try{
+    if('serviceWorker'in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()));}
+    if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)));}
+  }catch(e){}
+  const u=new URL(location.href);u.searchParams.set('_r',Date.now());location.replace(u.toString());
+}
+renderUpdated();setInterval(renderUpdated,30000);
 updateCountdown();renderCalendar();loadCustomTasks();load();
 
 if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js').then(r=>{setInterval(()=>r.update(),3e5);r.addEventListener('updatefound',()=>{const s=r.installing;s.addEventListener('statechange',()=>{if(s.state==='activated'){const t=document.createElement('div');t.className='update-toast';t.textContent='Updated! Refreshing...';document.body.appendChild(t);setTimeout(()=>location.reload(),1500)}})})})}

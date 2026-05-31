@@ -1737,7 +1737,9 @@ function loadCachedAI(){
 }
 
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-31T05:29:10Z';
+// Derive from the file's actual last-modified time so it's always accurate and self-maintaining.
+const _lm=new Date(document.lastModified);
+const LAST_UPDATED=isNaN(_lm.getTime())?new Date():_lm;
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';

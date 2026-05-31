@@ -1233,6 +1233,17 @@ function collectState(){
 }
 function syncPush(){if(__applyingRemote)return;if(window.__pcsSync){try{window.__pcsSync.push(collectState())}catch(e){}}}
 window.__pcsCollect=collectState;
+// One-off data fix: clear a stale saved edit that pinned the pre-move inspection (u3) to Jun 3.
+// The built-in is now correctly Tue Jun 2, so any override still on Jun 3 is wrong.
+function sanitizeStored(){
+  try{
+    const ov=JSON.parse(localStorage.getItem('pcs-overrides')||'{}');
+    if(ov.u3 && /jun\s*0?3\b/i.test(ov.u3.date||'')){
+      delete ov.u3;localStorage.setItem('pcs-overrides',JSON.stringify(ov));return true;
+    }
+  }catch(e){}
+  return false;
+}
 function captureOriginals(){
   document.querySelectorAll('.item').forEach(item=>{
     const cb=item.querySelector('input[type="checkbox"]');if(!cb)return;
@@ -1269,7 +1280,9 @@ function applyRemote(d){
   localStorage.setItem('pcs-overrides',JSON.stringify(d.overrides||{}));
   localStorage.setItem('pcs-deleted',JSON.stringify(d.deleted||[]));
   localStorage.setItem('pcs-qc',String(d.qc||0));
+  const cleaned=sanitizeStored();
   __applyingRemote=true;rebuildUI();__applyingRemote=false;
+  if(cleaned)syncPush(); // propagate the correction back to the cloud
 }
 window.__pcsApplyRemote=applyRemote;
 function formatDate(iso){
@@ -1386,7 +1399,7 @@ function loadCachedAI(){
 }
 
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-31T05:19:08Z';
+const LAST_UPDATED='2026-05-31T05:29:10Z';
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';
@@ -1412,7 +1425,7 @@ async function hardRefresh(){
   const u=new URL(location.href);u.searchParams.set('_r',Date.now());location.replace(u.toString());
 }
 renderUpdated();setInterval(renderUpdated,30000);
-updateCountdown();captureOriginals();applyOverrides();loadCustomTasks();applyDeletions();injectEditButtons();load();renderCalendar();loadCachedAI();
+updateCountdown();captureOriginals();sanitizeStored();applyOverrides();loadCustomTasks();applyDeletions();injectEditButtons();load();renderCalendar();loadCachedAI();
 // Full text on hover for single-line (truncated) task labels
 document.querySelectorAll('.item label').forEach(l=>{if(!l.title)l.title=l.textContent.trim();});
 

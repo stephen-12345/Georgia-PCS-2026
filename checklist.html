@@ -109,11 +109,14 @@ body::after {
 .prog-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--green)); border-radius: 99px; transition: width .5s cubic-bezier(.4,0,.2,1); }
 .prog-pct { font-size: .78em; font-weight: 700; color: var(--teal); min-width: 30px; text-align: right; }
 .topbar .updated { display: flex; align-items: center; gap: 9px; margin-left: 14px; }
+.sync-status { display: inline-flex; align-items: center; gap: 6px; }
 .sync-dot {
   width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
   background: var(--faint); box-shadow: 0 0 0 0 transparent; transition: background .3s ease, box-shadow .3s ease;
 }
 .sync-dot.on { background: var(--green); box-shadow: 0 0 8px var(--green); }
+.sync-label { font-size: .7em; font-weight: 700; color: var(--muted); letter-spacing: .3px; }
+.sync-status.on .sync-label { color: var(--green); }
 .refresh-btn {
   width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
   border: 1px solid var(--border); background: var(--bg2); color: var(--muted);
@@ -543,7 +546,7 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
       <span class="prog-pct" id="miniText">0%</span>
     </div>
     <div class="updated" id="updatedWrap">
-      <span class="sync-dot" id="syncDot" title="Connecting…"></span>
+      <span class="sync-status" id="syncStatus"><span class="sync-dot" id="syncDot" title="Connecting…"></span><span class="sync-label" id="syncLabel">…</span></span>
       <button class="refresh-btn" id="refreshBtn" onclick="hardRefresh()" title="Hard refresh — clear cache &amp; reload" aria-label="Hard refresh">⟳</button>
       <div class="upd-text">
         <span class="upd-ago" id="updAgo">just now</span>
@@ -1205,7 +1208,7 @@ function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalenda
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()}
 
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-31T02:52:06Z';
+const LAST_UPDATED='2026-05-31T03:12:47Z';
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';
@@ -1275,13 +1278,15 @@ let le=null;async function cfu(){try{const r=await fetch(location.href,{method:'
         if (d) { window.__pcsApplyRemote(d); }
         else if (!seeded && window.__pcsCollect) { seeded = true; window.__pcsSync.push(window.__pcsCollect()); }
       }, (err) => console.warn("sync read failed", err));
-      // connection status dot
+      // connection status dot + label
       const dot = document.getElementById("syncDot");
+      const wrap = document.getElementById("syncStatus");
+      const label = document.getElementById("syncLabel");
       onValue(ref(db, ".info/connected"), (snap) => {
-        if (!dot) return;
         const on = snap.val() === true;
-        dot.classList.toggle("on", on);
-        dot.title = on ? "Synced — changes shared live across devices" : "Offline — will sync when reconnected";
+        if (dot) { dot.classList.toggle("on", on); dot.title = on ? "Synced — changes shared live across devices" : "Offline — will sync when reconnected"; }
+        if (wrap) wrap.classList.toggle("on", on);
+        if (label) label.textContent = on ? "Synced" : "Offline";
       });
     } catch (e) { console.warn("Firebase sync unavailable:", e); }
   }

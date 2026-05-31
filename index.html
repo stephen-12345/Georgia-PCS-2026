@@ -850,6 +850,31 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
     </div>
   </div>
 
+  <!-- Packing -->
+  <div class="sh" id="sec-packing">
+    <div class="kicker">Don't forget</div>
+    <h2>Hotel living packing list</h2>
+    <p>Everything to keep with you during the hotel weeks.</p>
+  </div>
+  <div class="card" id="cat-bins">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span>
+      <span class="title">🧳 What to pack in your bins</span>
+      <span class="badge" id="badge-bins"></span>
+    </div>
+    <div class="items">
+      <div class="item"><input type="checkbox" id="b1" onchange="save()"><label for="b1"><strong>Documents:</strong> Orders (10 copies), IDs, passports, birth/marriage certs, medical records, school records, insurance cards, car titles, POA</label></div>
+      <div class="item"><input type="checkbox" id="b2" onchange="save()"><label for="b2"><strong>Electronics:</strong> Laptops, chargers, tablets for kids, phone chargers, power strip, Bluetooth speaker</label></div>
+      <div class="item"><input type="checkbox" id="b3" onchange="save()"><label for="b3"><strong>Clothes:</strong> 10-14 days per person, swimsuits, light jackets, comfortable shoes, laundry bag, detergent pods</label></div>
+      <div class="item"><input type="checkbox" id="b4" onchange="save()"><label for="b4"><strong>Kids:</strong> Favorite toys/stuffed animals, books, coloring supplies, card games, headphones, snacks</label></div>
+      <div class="item"><input type="checkbox" id="b5" onchange="save()"><label for="b5"><strong>Kitchen:</strong> Water bottles, travel mugs, utensils, paper plates, Ziplocs, snack stash, instant coffee</label></div>
+      <div class="item"><input type="checkbox" id="b6" onchange="save()"><label for="b6"><strong>Toiletries:</strong> Full-size shampoo/conditioner, toothbrushes, medications (30+ day supply), sunscreen, first aid</label></div>
+      <div class="item"><input type="checkbox" id="b7" onchange="save()"><label for="b7"><strong>Cat:</strong> Carrier, litter box + litter, food (2 weeks), bowls, favorite toys, medications, vet records</label></div>
+      <div class="item"><input type="checkbox" id="b8" onchange="save()"><label for="b8"><strong>Bedding:</strong> Your pillows, small blankets for kids, pack-n-play if needed</label></div>
+      <div class="item"><input type="checkbox" id="b9" onchange="save()"><label for="b9"><strong>Misc:</strong> Trash bags, paper towels, cleaning spray, hangers, nightlights, extension cord</label></div>
+    </div>
+  </div>
+
   <!-- Key links & resources -->
   <div class="sh" id="sec-resources">
     <div class="kicker">Your concierge desk</div>
@@ -1011,31 +1036,6 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
         <a href="https://www.reddit.com/r/MilitarySpouse/search/?q=PCS%20OCONUS&amp;restrict_sr=1&amp;sort=top&amp;t=all" target="_blank" rel="noopener"><span class="ri">👨‍👩‍👧‍👦</span><span>r/MilitarySpouse — PCS advice</span></a>
         <a href="https://www.reddit.com/r/Hawaii/search/?q=PCS%20leaving%20moving&amp;restrict_sr=1&amp;sort=top&amp;t=all" target="_blank" rel="noopener"><span class="ri">✈️</span><span>r/Hawaii — leaving the island</span></a>
       </div>
-    </div>
-  </div>
-
-  <!-- Packing -->
-  <div class="sh" id="sec-packing">
-    <div class="kicker">Don't forget</div>
-    <h2>Hotel living packing list</h2>
-    <p>Everything to keep with you during the hotel weeks.</p>
-  </div>
-  <div class="card" id="cat-bins">
-    <div class="card-header" onclick="toggleCat(this)">
-      <span class="arrow">▼</span>
-      <span class="title">🧳 What to pack in your bins</span>
-      <span class="badge" id="badge-bins"></span>
-    </div>
-    <div class="items">
-      <div class="item"><input type="checkbox" id="b1" onchange="save()"><label for="b1"><strong>Documents:</strong> Orders (10 copies), IDs, passports, birth/marriage certs, medical records, school records, insurance cards, car titles, POA</label></div>
-      <div class="item"><input type="checkbox" id="b2" onchange="save()"><label for="b2"><strong>Electronics:</strong> Laptops, chargers, tablets for kids, phone chargers, power strip, Bluetooth speaker</label></div>
-      <div class="item"><input type="checkbox" id="b3" onchange="save()"><label for="b3"><strong>Clothes:</strong> 10-14 days per person, swimsuits, light jackets, comfortable shoes, laundry bag, detergent pods</label></div>
-      <div class="item"><input type="checkbox" id="b4" onchange="save()"><label for="b4"><strong>Kids:</strong> Favorite toys/stuffed animals, books, coloring supplies, card games, headphones, snacks</label></div>
-      <div class="item"><input type="checkbox" id="b5" onchange="save()"><label for="b5"><strong>Kitchen:</strong> Water bottles, travel mugs, utensils, paper plates, Ziplocs, snack stash, instant coffee</label></div>
-      <div class="item"><input type="checkbox" id="b6" onchange="save()"><label for="b6"><strong>Toiletries:</strong> Full-size shampoo/conditioner, toothbrushes, medications (30+ day supply), sunscreen, first aid</label></div>
-      <div class="item"><input type="checkbox" id="b7" onchange="save()"><label for="b7"><strong>Cat:</strong> Carrier, litter box + litter, food (2 weeks), bowls, favorite toys, medications, vet records</label></div>
-      <div class="item"><input type="checkbox" id="b8" onchange="save()"><label for="b8"><strong>Bedding:</strong> Your pillows, small blankets for kids, pack-n-play if needed</label></div>
-      <div class="item"><input type="checkbox" id="b9" onchange="save()"><label for="b9"><strong>Misc:</strong> Trash bags, paper towels, cleaning spray, hangers, nightlights, extension cord</label></div>
     </div>
   </div>
 

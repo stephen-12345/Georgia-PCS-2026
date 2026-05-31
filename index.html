@@ -200,10 +200,12 @@ body::after {
 .cal-dow { text-align: center; font-size: .6em; font-weight: 700; color: var(--faint); text-transform: uppercase; letter-spacing: 1.2px; padding: 6px 0; }
 .cal-day {
   text-align: center; padding: 8px 2px; border-radius: var(--radius-sm); font-size: .82em;
-  color: var(--muted); position: relative; cursor: default; min-height: 42px;
+  color: var(--muted); position: relative; cursor: pointer; min-height: 42px;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   transition: background .15s ease;
 }
+.cal-day:not(.empty):hover { background: var(--surface2); }
+.cal-day.empty { cursor: default; }
 .cal-day.empty { visibility: hidden; }
 .cal-day.today {
   background: var(--teal-glow); border: 1.5px solid var(--teal);
@@ -517,6 +519,24 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
 }
 @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(-12px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
 @keyframes toastOut { to { opacity: 0; transform: translateX(-50%) translateY(-12px); } }
+
+/* Day detail popup */
+.day-modal { position: fixed; inset: 0; background: rgba(4,8,16,.7); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); z-index: 300; display: none; align-items: flex-end; justify-content: center; }
+.day-modal.show { display: flex; }
+.dm-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 22px 22px 0 0; width: 100%; max-width: 560px; max-height: 82vh; overflow-y: auto; box-shadow: 0 -12px 40px rgba(0,0,0,.5); animation: dmUp .25s ease; }
+@keyframes dmUp { from { transform: translateY(28px); opacity: .5; } to { transform: translateY(0); opacity: 1; } }
+.dm-head { position: sticky; top: 0; background: var(--surface); display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 20px; border-bottom: 1px solid var(--border); font-family: 'Playfair Display', Georgia, serif; font-size: 1.18em; font-weight: 600; color: var(--ink); }
+.dm-close { background: var(--bg2); border: 1px solid var(--border); color: var(--muted); width: 32px; height: 32px; border-radius: 9px; cursor: pointer; font-size: .9em; flex-shrink: 0; }
+.dm-close:hover { color: var(--teal); border-color: var(--teal); }
+.dm-body { padding: 8px 20px 24px; }
+.dm-empty { color: var(--muted); text-align: center; padding: 28px 0; font-size: .95em; }
+.dm-item { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid rgba(30,48,85,.4); cursor: pointer; }
+.dm-item:last-child { border-bottom: none; }
+.dm-item input { width: 20px; height: 20px; flex-shrink: 0; accent-color: var(--teal); cursor: pointer; }
+.dm-text { flex: 1; font-size: .92em; color: var(--ink); line-height: 1.45; }
+.dm-item.done .dm-text { text-decoration: line-through; color: var(--faint); }
+.dm-cat { font-size: .66em; color: var(--muted); background: var(--bg2); border: 1px solid var(--border); padding: 3px 9px; border-radius: 99px; white-space: nowrap; flex-shrink: 0; }
+@media (min-width: 560px) { .day-modal { align-items: center; } .dm-panel { border-radius: 20px; } }
 
 /* ========== Responsive ========== */
 @media (max-width: 620px) {
@@ -1207,12 +1227,48 @@ function updateCountdown(){const t=new Date(),f=new Date(t.getFullYear(),5,30),m
 const PCS_EVENTS=[[4,30,'urgent','Submit DLA advance'],[5,2,'urgent','SATO travel office'],[5,3,'urgent','Pre-move inspection @ 10:00'],[5,9,'move','Move-out pre-inspection @ 13:00'],[5,15,'move','Movers arrive — packing Day 1'],[5,16,'move','Packing Day 2'],[5,17,'move','Packing Day 3'],[5,18,'move','Moved out — final walkthrough'],[5,20,'hotel','Check into Surfjack + pickup rental'],[5,22,'general','Cat vet appointment'],[5,23,'urgent','Checkout rental home + walkthrough'],[5,30,'flight','Fly to Georgia!'],[5,5,'milestone','🏫 Last day of school'],[5,12,'milestone','🎓 Graduation']];
 let calMonth=5,calYear=2026;
 function getEventsForDay(y,m,d){return PCS_EVENTS.filter(e=>e[0]===m&&e[1]===d)}
-function renderCalendar(){const w=document.getElementById('calWrap');const t=new Date();const f=new Date(calYear,calMonth,1).getDay();const n=new Date(calYear,calMonth+1,0).getDate();const mn=['January','February','March','April','May','June','July','August','September','October','November','December'];let h='<div class="cal-nav"><button onclick="calPrev()">‹</button><span class="cal-month">'+mn[calMonth]+' '+calYear+'</span><button onclick="calNext()">›</button></div><div class="cal-grid">';['S','M','T','W','T','F','S'].forEach(d=>{h+='<div class="cal-dow">'+d+'</div>'});for(let i=0;i<f;i++)h+='<div class="cal-day empty"></div>';for(let d=1;d<=n;d++){const ev=getEventsForDay(calYear,calMonth,d);const isT=t.getFullYear()===calYear&&t.getMonth()===calMonth&&t.getDate()===d;const isP=new Date(calYear,calMonth,d)<new Date(t.getFullYear(),t.getMonth(),t.getDate());let c='cal-day';if(isT)c+=' today';if(isP&&!isT)c+=' past';if(ev.length)c+=' has-event evt-'+ev[0][2];h+='<div class="'+c+'">'+d;if(ev.length){h+='<div class="cal-tooltip">';ev.forEach(e=>{h+='<div>'+e[3]+'</div>'});h+='</div>'}h+='</div>'}h+='</div><div class="cal-legend"><span><span class="dot" style="background:var(--amber)"></span>Urgent</span><span><span class="dot" style="background:var(--red)"></span>Move</span><span><span class="dot" style="background:var(--teal)"></span>Hotel</span><span><span class="dot" style="background:var(--gold)"></span>Flight</span><span><span class="dot" style="background:var(--green)"></span>General</span><span><span class="dot" style="background:#a78bfa"></span>Milestone</span></div>';w.innerHTML=h}
+function renderCalendar(){const w=document.getElementById('calWrap');const t=new Date();const f=new Date(calYear,calMonth,1).getDay();const n=new Date(calYear,calMonth+1,0).getDate();const mn=['January','February','March','April','May','June','July','August','September','October','November','December'];let h='<div class="cal-nav"><button onclick="calPrev()">‹</button><span class="cal-month">'+mn[calMonth]+' '+calYear+'</span><button onclick="calNext()">›</button></div><div class="cal-grid">';['S','M','T','W','T','F','S'].forEach(d=>{h+='<div class="cal-dow">'+d+'</div>'});for(let i=0;i<f;i++)h+='<div class="cal-day empty"></div>';for(let d=1;d<=n;d++){const ev=getEventsForDay(calYear,calMonth,d);const isT=t.getFullYear()===calYear&&t.getMonth()===calMonth&&t.getDate()===d;const isP=new Date(calYear,calMonth,d)<new Date(t.getFullYear(),t.getMonth(),t.getDate());let c='cal-day';if(isT)c+=' today';if(isP&&!isT)c+=' past';if(ev.length)c+=' has-event evt-'+ev[0][2];h+='<div class="'+c+'" onclick="openDayModal('+calYear+','+calMonth+','+d+')">'+d;if(ev.length){h+='<div class="cal-tooltip">';ev.forEach(e=>{h+='<div>'+e[3]+'</div>'});h+='</div>'}h+='</div>'}h+='</div><div class="cal-legend"><span><span class="dot" style="background:var(--amber)"></span>Urgent</span><span><span class="dot" style="background:var(--red)"></span>Move</span><span><span class="dot" style="background:var(--teal)"></span>Hotel</span><span><span class="dot" style="background:var(--gold)"></span>Flight</span><span><span class="dot" style="background:var(--green)"></span>General</span><span><span class="dot" style="background:#a78bfa"></span>Milestone</span></div>';w.innerHTML=h}
 function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalendar()}
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()}
 
+// ---- Day detail popup: everything due on a tapped date ----
+function parseItemDate(text){
+  if(!text)return[];
+  const M={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+  const m=text.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})(?:\s*[–-]\s*(\d{1,2}))?/);
+  if(!m)return[];
+  const mo=M[m[1]],d1=parseInt(m[2]),d2=m[3]?parseInt(m[3]):d1,out=[];
+  for(let d=d1;d<=d2;d++)out.push({m:mo,d:d});
+  return out;
+}
+function openDayModal(y,mo,d){
+  const items=[];
+  document.querySelectorAll('.item').forEach(item=>{
+    const dateEl=item.querySelector('.date');if(!dateEl)return;
+    if(!parseItemDate(dateEl.textContent).some(x=>x.m===mo&&x.d===d))return;
+    const cb=item.querySelector('input[type="checkbox"]');
+    const label=item.querySelector('label');
+    const card=item.closest('.card');
+    const title=card?card.querySelector('.title'):null;
+    items.push({id:cb?cb.id:'',text:label?label.textContent:'',checked:cb?cb.checked:false,cat:title?title.textContent:''});
+  });
+  const mn=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('dmDate').textContent=mn[mo]+' '+d+', '+y;
+  const body=document.getElementById('dmBody');
+  if(!items.length){body.innerHTML='<p class="dm-empty">Nothing scheduled for this day. 🌴</p>'}
+  else{body.innerHTML=items.map(it=>'<label class="dm-item'+(it.checked?' done':'')+'"><input type="checkbox" data-tid="'+it.id+'"'+(it.checked?' checked':'')+' onchange="toggleFromModal(this)"><span class="dm-text">'+escHtml(it.text)+'</span><span class="dm-cat">'+escHtml(it.cat)+'</span></label>').join('')}
+  document.getElementById('dayModal').classList.add('show');
+}
+function toggleFromModal(cb){
+  const real=document.getElementById(cb.getAttribute('data-tid'));
+  if(real){real.checked=cb.checked;save()}
+  const row=cb.closest('.dm-item');if(row)row.classList.toggle('done',cb.checked);
+}
+function closeDayModal(){document.getElementById('dayModal').classList.remove('show')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDayModal()});
+
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-31T03:47:06Z';
+const LAST_UPDATED='2026-05-31T04:44:01Z';
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';
@@ -1301,6 +1357,14 @@ let le=null;async function cfu(){try{const r=await fetch(location.href,{method:'
   <div class="ib-text"><strong>Add to Home Screen</strong><span>Access your PCS checklist like an app</span></div>
   <button class="ib-btn" onclick="doi()">Install</button>
   <button class="ib-close" onclick="dii()">✕</button>
+</div>
+
+<!-- Day detail popup -->
+<div class="day-modal" id="dayModal" onclick="if(event.target===this)closeDayModal()">
+  <div class="dm-panel">
+    <div class="dm-head"><span id="dmDate"></span><button class="dm-close" onclick="closeDayModal()" aria-label="Close">✕</button></div>
+    <div class="dm-body" id="dmBody"></div>
+  </div>
 </div>
 
 </body>

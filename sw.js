@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pcs2026-v5';
+const CACHE_NAME = 'pcs2026-v6';
 const ASSETS = [
   '/Georgia-PCS-2026/',
   '/Georgia-PCS-2026/index.html',

@@ -380,6 +380,23 @@ body::after {
 #cat-bins .item label { white-space: normal; overflow: visible; text-overflow: clip; }
 .item input:checked + label { text-decoration: line-through; color: var(--faint); }
 .item input:checked + label strong { color: var(--faint); }
+/* Edit / inline-edit affordances */
+.edit-btn { background: none; border: none; color: var(--faint); cursor: pointer; font-size: .82em; padding: 2px 6px; flex-shrink: 0; opacity: .55; transition: opacity .15s ease, color .15s ease; }
+.edit-btn:hover { opacity: 1; color: var(--teal); }
+.item.editing > label, .item.editing > .date, .item.editing > button { display: none; }
+.item-edit { display: flex; gap: 8px; flex: 1; align-items: center; min-width: 0; }
+.item-edit input { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; color: var(--ink); font-family: inherit; outline: none; transition: border-color .2s ease; }
+.item-edit .ed-text { flex: 1; min-width: 0; padding: 7px 10px; font-size: .88em; }
+.item-edit .ed-date { width: 130px; flex-shrink: 0; padding: 7px 10px; font-size: .82em; color: var(--ink2); }
+.item-edit input:focus { border-color: var(--teal); }
+.item-edit button { border: none; border-radius: 8px; cursor: pointer; font-size: .9em; padding: 7px 11px; flex-shrink: 0; font-weight: 700; font-family: inherit; }
+.item-edit .ed-ok { background: linear-gradient(135deg, var(--teal), var(--green)); color: #05201a; }
+.item-edit .ed-cancel { background: var(--bg2); color: var(--muted); border: 1px solid var(--border); }
+@media (max-width: 620px) {
+  .item-edit { flex-wrap: wrap; }
+  .item-edit .ed-text { flex: 1 1 100%; }
+  .item-edit .ed-date { flex: 1 1 auto; width: auto; }
+}
 .item input:checked ~ .date { opacity: .4; }
 
 /* ========== Tips ========== */
@@ -993,6 +1010,7 @@ function addTask(){
   // Save custom tasks
   document.getElementById('qaText').value='';
   localStorage.setItem('pcs-qc',qaCounter);
+  injectEditButtons();
   saveCustomTasks();
   save();
 }
@@ -1040,6 +1058,74 @@ function loadCustomTasks(){
   });
 }
 
+// ---- Edit existing tasks (built-in or custom) ----
+function injectEditButtons(){
+  document.querySelectorAll('.item').forEach(item=>{
+    if(item.querySelector('.edit-btn'))return;
+    if(!item.querySelector('input[type="checkbox"]'))return;
+    const b=document.createElement('button');
+    b.type='button';b.className='edit-btn';b.title='Edit';b.textContent='✎';
+    b.setAttribute('onclick','startEdit(this)');
+    const rm=item.querySelector('button[title="Remove"]');
+    if(rm)item.insertBefore(b,rm);else item.appendChild(b);
+  });
+}
+function startEdit(btn){
+  const item=btn.closest('.item');
+  if(item.classList.contains('editing'))return;
+  const label=item.querySelector('label');
+  const dateEl=item.querySelector('.date');
+  const ed=document.createElement('div');ed.className='item-edit';
+  const t=document.createElement('input');t.type='text';t.className='ed-text';t.value=label?label.textContent:'';
+  const d=document.createElement('input');d.type='text';d.className='ed-date';d.placeholder='date (e.g. Jun 12)';d.value=dateEl?dateEl.textContent:'';
+  const ok=document.createElement('button');ok.type='button';ok.className='ed-ok';ok.title='Save';ok.textContent='✓';ok.onclick=()=>commitEdit(item);
+  const cx=document.createElement('button');cx.type='button';cx.className='ed-cancel';cx.title='Cancel';cx.textContent='✕';cx.onclick=()=>cancelEdit(item);
+  ed.appendChild(t);ed.appendChild(d);ed.appendChild(ok);ed.appendChild(cx);
+  item.appendChild(ed);item.classList.add('editing');
+  [t,d].forEach(i=>i.addEventListener('keydown',e=>{if(e.key==='Enter')commitEdit(item);if(e.key==='Escape')cancelEdit(item)}));
+  t.focus();t.select();
+}
+function cancelEdit(item){const ed=item.querySelector('.item-edit');if(ed)ed.remove();item.classList.remove('editing')}
+function commitEdit(item){
+  const ed=item.querySelector('.item-edit');if(!ed)return;
+  const newText=ed.querySelector('.ed-text').value.trim();
+  const newDate=ed.querySelector('.ed-date').value.trim();
+  if(!newText){cancelEdit(item);return}
+  const label=item.querySelector('label');
+  label.textContent=newText;label.title=newText;
+  let dateEl=item.querySelector('.date');
+  if(newDate){
+    if(!dateEl){dateEl=document.createElement('span');dateEl.className='date';label.insertAdjacentElement('afterend',dateEl)}
+    dateEl.textContent=newDate;
+  }else if(dateEl){dateEl.remove()}
+  ed.remove();item.classList.remove('editing');
+  persistEdit(item);
+}
+function persistEdit(item){
+  const id=item.querySelector('input[type="checkbox"]').id;
+  const label=item.querySelector('label');
+  const dateEl=item.querySelector('.date');
+  if(id.indexOf('qa')===0){saveCustomTasks()}
+  else{
+    const ov=JSON.parse(localStorage.getItem('pcs-overrides')||'{}');
+    ov[id]={text:label.textContent,date:dateEl?dateEl.textContent:''};
+    localStorage.setItem('pcs-overrides',JSON.stringify(ov));
+  }
+}
+function applyOverrides(){
+  let ov;try{ov=JSON.parse(localStorage.getItem('pcs-overrides')||'{}')}catch(e){return}
+  Object.keys(ov).forEach(id=>{
+    const cb=document.getElementById(id);if(!cb)return;
+    const item=cb.closest('.item');if(!item)return;
+    const label=item.querySelector('label');
+    if(label){label.textContent=ov[id].text;label.title=ov[id].text}
+    let dateEl=item.querySelector('.date');
+    if(ov[id].date){
+      if(!dateEl){dateEl=document.createElement('span');dateEl.className='date';label.insertAdjacentElement('afterend',dateEl)}
+      dateEl.textContent=ov[id].date;
+    }else if(dateEl){dateEl.remove()}
+  });
+}
 function formatDate(iso){
   const d=new Date(iso+'T00:00:00');
   const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -1056,7 +1142,7 @@ function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalenda
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()}
 
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-30T23:56:08Z';
+const LAST_UPDATED='2026-05-31T00:53:56Z';
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';
@@ -1082,7 +1168,7 @@ async function hardRefresh(){
   const u=new URL(location.href);u.searchParams.set('_r',Date.now());location.replace(u.toString());
 }
 renderUpdated();setInterval(renderUpdated,30000);
-updateCountdown();renderCalendar();loadCustomTasks();load();
+updateCountdown();renderCalendar();loadCustomTasks();applyOverrides();injectEditButtons();load();
 // Full text on hover for single-line (truncated) task labels
 document.querySelectorAll('.item label').forEach(l=>{if(!l.title)l.title=l.textContent.trim();});
 

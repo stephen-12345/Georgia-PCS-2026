@@ -109,6 +109,11 @@ body::after {
 .prog-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--green)); border-radius: 99px; transition: width .5s cubic-bezier(.4,0,.2,1); }
 .prog-pct { font-size: .78em; font-weight: 700; color: var(--teal); min-width: 30px; text-align: right; }
 .topbar .updated { display: flex; align-items: center; gap: 9px; margin-left: 14px; }
+.sync-dot {
+  width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
+  background: var(--faint); box-shadow: 0 0 0 0 transparent; transition: background .3s ease, box-shadow .3s ease;
+}
+.sync-dot.on { background: var(--green); box-shadow: 0 0 8px var(--green); }
 .refresh-btn {
   width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
   border: 1px solid var(--border); background: var(--bg2); color: var(--muted);
@@ -538,6 +543,7 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
       <span class="prog-pct" id="miniText">0%</span>
     </div>
     <div class="updated" id="updatedWrap">
+      <span class="sync-dot" id="syncDot" title="Connecting…"></span>
       <button class="refresh-btn" id="refreshBtn" onclick="hardRefresh()" title="Hard refresh — clear cache &amp; reload" aria-label="Hard refresh">⟳</button>
       <div class="upd-text">
         <span class="upd-ago" id="updAgo">just now</span>
@@ -1199,7 +1205,7 @@ function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalenda
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()}
 
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-31T01:12:24Z';
+const LAST_UPDATED='2026-05-31T02:52:06Z';
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';
@@ -1243,11 +1249,13 @@ let le=null;async function cfu(){try{const r=await fetch(location.href,{method:'
      Until it's filled in, the app works exactly as before (per-device only). -->
 <script type="module">
   const FIREBASE_CONFIG = {
-    // apiKey: "...",
-    // authDomain: "...",
-    // databaseURL: "https://YOUR-PROJECT-default-rtdb.firebaseio.com",
-    // projectId: "...",
-    // appId: "..."
+    apiKey: "AIzaSyBWYoeME3Cg99ammAkivmGh2Bw7YfwzPMk",
+    authDomain: "pcs-2026-georgia.firebaseapp.com",
+    databaseURL: "https://pcs-2026-georgia-default-rtdb.firebaseio.com",
+    projectId: "pcs-2026-georgia",
+    storageBucket: "pcs-2026-georgia.firebasestorage.app",
+    messagingSenderId: "414756042443",
+    appId: "1:414756042443:web:53baf023c7cb567d05cd4e"
   };
   const BOARD_ID = "georgia-pcs-2026"; // shared board key — same on every device
 
@@ -1267,6 +1275,14 @@ let le=null;async function cfu(){try{const r=await fetch(location.href,{method:'
         if (d) { window.__pcsApplyRemote(d); }
         else if (!seeded && window.__pcsCollect) { seeded = true; window.__pcsSync.push(window.__pcsCollect()); }
       }, (err) => console.warn("sync read failed", err));
+      // connection status dot
+      const dot = document.getElementById("syncDot");
+      onValue(ref(db, ".info/connected"), (snap) => {
+        if (!dot) return;
+        const on = snap.val() === true;
+        dot.classList.toggle("on", on);
+        dot.title = on ? "Synced — changes shared live across devices" : "Offline — will sync when reconnected";
+      });
     } catch (e) { console.warn("Firebase sync unavailable:", e); }
   }
 </script>

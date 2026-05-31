@@ -1280,7 +1280,7 @@ function formatDate(iso){
 function escHtml(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function updateCountdown(){const t=new Date(),f=new Date(t.getFullYear(),5,30),m=new Date(t.getFullYear(),5,15),d=864e5;document.getElementById('cdDays').textContent=Math.max(0,Math.ceil((f-t)/d));document.getElementById('cdMove').textContent=Math.max(0,Math.ceil((m-t)/d))}
 
-const PCS_EVENTS=[[4,30,'urgent','Submit DLA advance'],[5,2,'urgent','SATO travel office'],[5,3,'urgent','Pre-move inspection @ 10:00'],[5,9,'move','Move-out pre-inspection @ 13:00'],[5,15,'move','Movers arrive — packing Day 1'],[5,16,'move','Packing Day 2'],[5,17,'move','Packing Day 3'],[5,18,'move','Moved out — final walkthrough'],[5,20,'hotel','Check into Surfjack + pickup rental'],[5,22,'general','Cat vet appointment'],[5,23,'urgent','Checkout rental home + walkthrough'],[5,30,'flight','Fly to Georgia!'],[5,5,'milestone','🏫 Last day of school'],[5,12,'milestone','🎓 Graduation']];
+// Calendar markers are derived live from the task list (see buildCalEvents), not a hardcoded array.
 let calMonth=5,calYear=2026;
 const CAT_TYPE={'cat-urgent':'urgent','cat-premove':'general','cat-moveweek':'move','cat-hotel':'hotel','cat-georgia':'general','cat-dates':'milestone','cat-bins':'general'};
 let __calEvents={};
@@ -1386,7 +1386,7 @@ function loadCachedAI(){
 }
 
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-31T05:16:20Z';
+const LAST_UPDATED='2026-05-31T05:19:08Z';
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';

@@ -268,7 +268,7 @@ body::after {
 .quick-add {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
   padding: 14px; margin-top: 20px;
-  display: flex; gap: 10px; align-items: center; flex-wrap: nowrap;
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
   box-shadow: 0 10px 30px -18px rgba(0,0,0,.65);
 }
 .quick-add > * { height: 44px; box-sizing: border-box; }
@@ -310,13 +310,10 @@ body::after {
 .quick-add .qa-btn:hover { box-shadow: 0 4px 16px rgba(56,201,181,.3); transform: translateY(-1px); }
 .quick-add .qa-btn:active { transform: translateY(0); }
 @media (max-width: 620px) {
-  /* Keep the adder on a single line — compact each control to fit */
-  .quick-add { gap: 6px; padding: 10px; }
-  .quick-add > * { height: 42px; }
-  .quick-add input[type="text"] { flex: 1 1 40px; min-width: 0; padding: 0 10px; font-size: .85em; }
-  .quick-add select { width: 52px; min-width: 0; flex: 0 0 auto; padding: 0 18px 0 8px; font-size: .82em; background-position: right 5px center; }
-  .quick-add input[type="date"] { flex: 0 1 auto; min-width: 0; padding: 0 6px; font-size: .72em; }
-  .quick-add .qa-btn { flex: 0 0 auto; padding: 0 14px; font-size: .82em; }
+  /* Roomy stacked layout on phones — full-width controls, ~4 comfortable rows */
+  .quick-add { flex-direction: column; align-items: stretch; gap: 10px; }
+  .quick-add > * { width: 100%; flex: 0 0 46px; height: 46px; }
+  .quick-add select { background-position: right 12px center; }
 }
 
 /* ========== Section Headers ========== */
@@ -1208,7 +1205,7 @@ function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalenda
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()}
 
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-31T03:12:47Z';
+const LAST_UPDATED='2026-05-31T03:13:53Z';
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';

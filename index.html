@@ -390,6 +390,13 @@ body::after {
 #cat-bins .item label { white-space: normal; overflow: visible; text-overflow: clip; }
 .item input:checked + label { text-decoration: line-through; color: var(--faint); }
 .item input:checked + label strong { color: var(--faint); }
+/* On narrow/portrait phones let task text wrap fully instead of truncating */
+@media (max-width: 620px) {
+  .item { align-items: flex-start; }
+  .item input[type="checkbox"] { margin-top: 2px; }
+  .item label { white-space: normal; overflow: visible; text-overflow: clip; }
+  .item .date { margin-top: 1px; }
+}
 /* Edit / inline-edit affordances */
 .edit-btn { background: none; border: none; color: var(--faint); cursor: pointer; font-size: .82em; padding: 2px 6px; flex-shrink: 0; opacity: .55; transition: opacity .15s ease, color .15s ease; }
 .edit-btn:hover { opacity: 1; color: var(--teal); }
@@ -1205,7 +1212,7 @@ function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalenda
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()}
 
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-31T03:13:53Z';
+const LAST_UPDATED='2026-05-31T03:47:06Z';
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';

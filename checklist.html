@@ -979,7 +979,7 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
 </div>
 
 <script>
-function save(){const c={};document.querySelectorAll('input[type="checkbox"]').forEach(e=>{c[e.id]=e.checked});localStorage.setItem('pcs2026',JSON.stringify(c));updateProgress();updateBadges()}
+function save(){const c={};document.querySelectorAll('input[type="checkbox"]').forEach(e=>{c[e.id]=e.checked});localStorage.setItem('pcs2026',JSON.stringify(c));updateProgress();updateBadges();syncPush()}
 function load(){try{const d=JSON.parse(localStorage.getItem('pcs2026')||'{}');Object.keys(d).forEach(id=>{const el=document.getElementById(id);if(el)el.checked=d[id]})}catch(e){}updateProgress();updateBadges()}
 function updateProgress(){const a=document.querySelectorAll('input[type="checkbox"]');const d=[...a].filter(c=>c.checked).length;const t=a.length;const p=t?Math.round(d/t*100):0;document.getElementById('miniText').textContent=p+'%';document.getElementById('miniFill').style.width=p+'%';document.getElementById('cdDone').textContent=d;document.getElementById('cdLeft').textContent=t-d}
 function updateBadges(){document.querySelectorAll('.card').forEach(c=>{const a=c.querySelectorAll('input[type="checkbox"]');if(!a.length)return;const d=[...a].filter(x=>x.checked).length;const b=c.querySelector('.badge');if(b)b.textContent=d+'/'+a.length;c.classList.toggle('done',d===a.length)})}
@@ -1046,6 +1046,7 @@ function saveCustomTasks(){
     customs.push({id:cb.id,text:label.textContent,catId:card.id,date:date?date.textContent:''});
   });
   localStorage.setItem('pcs-custom',JSON.stringify(customs));
+  syncPush();
 }
 
 function loadCustomTasks(){
@@ -1115,6 +1116,7 @@ function persistEdit(item){
     const ov=JSON.parse(localStorage.getItem('pcs-overrides')||'{}');
     ov[id]={text:label.textContent,date:dateEl?dateEl.textContent:''};
     localStorage.setItem('pcs-overrides',JSON.stringify(ov));
+    syncPush();
   }
 }
 function applyOverrides(){
@@ -1131,6 +1133,56 @@ function applyOverrides(){
     }else if(dateEl){dateEl.remove()}
   });
 }
+// ---- Cross-device sync (Firebase, optional) ----
+let __applyingRemote=false;
+function collectState(){
+  return {
+    checks:JSON.parse(localStorage.getItem('pcs2026')||'{}'),
+    custom:JSON.parse(localStorage.getItem('pcs-custom')||'[]'),
+    overrides:JSON.parse(localStorage.getItem('pcs-overrides')||'{}'),
+    qc:parseInt(localStorage.getItem('pcs-qc')||'0')
+  };
+}
+function syncPush(){if(__applyingRemote)return;if(window.__pcsSync){try{window.__pcsSync.push(collectState())}catch(e){}}}
+window.__pcsCollect=collectState;
+function captureOriginals(){
+  document.querySelectorAll('.item').forEach(item=>{
+    const cb=item.querySelector('input[type="checkbox"]');if(!cb)return;
+    if(cb.id.indexOf('qa')===0)return;
+    if(item.dataset.captured)return;
+    const label=item.querySelector('label');const dateEl=item.querySelector('.date');
+    item.dataset.otext=label?label.textContent:'';
+    item.dataset.odate=dateEl?dateEl.textContent:'';
+    item.dataset.captured='1';
+  });
+}
+function rebuildUI(){
+  document.querySelectorAll('.item').forEach(item=>{
+    const cb=item.querySelector('input[type="checkbox"]');
+    if(cb&&cb.id.indexOf('qa')===0)item.remove();
+  });
+  document.querySelectorAll('.item').forEach(item=>{
+    const cb=item.querySelector('input[type="checkbox"]');if(!cb||!item.dataset.captured)return;
+    const label=item.querySelector('label');
+    if(label){label.textContent=item.dataset.otext;label.title=item.dataset.otext}
+    let dateEl=item.querySelector('.date');const od=item.dataset.odate;
+    if(od){if(!dateEl){dateEl=document.createElement('span');dateEl.className='date';label.insertAdjacentElement('afterend',dateEl)}dateEl.textContent=od}
+    else if(dateEl){dateEl.remove()}
+  });
+  qaCounter=parseInt(localStorage.getItem('pcs-qc')||'0');
+  applyOverrides();loadCustomTasks();injectEditButtons();load();
+}
+function applyRemote(d){
+  if(!d)return;
+  try{if(JSON.stringify(collectState())===JSON.stringify({checks:d.checks||{},custom:d.custom||[],overrides:d.overrides||{},qc:d.qc||0}))return}catch(e){}
+  if(document.querySelector('.item.editing'))return; // don't clobber an in-progress edit
+  localStorage.setItem('pcs2026',JSON.stringify(d.checks||{}));
+  localStorage.setItem('pcs-custom',JSON.stringify(d.custom||[]));
+  localStorage.setItem('pcs-overrides',JSON.stringify(d.overrides||{}));
+  localStorage.setItem('pcs-qc',String(d.qc||0));
+  __applyingRemote=true;rebuildUI();__applyingRemote=false;
+}
+window.__pcsApplyRemote=applyRemote;
 function formatDate(iso){
   const d=new Date(iso+'T00:00:00');
   const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -1147,7 +1199,7 @@ function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalenda
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()}
 
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-31T01:03:43Z';
+const LAST_UPDATED='2026-05-31T01:12:24Z';
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';
@@ -1173,7 +1225,7 @@ async function hardRefresh(){
   const u=new URL(location.href);u.searchParams.set('_r',Date.now());location.replace(u.toString());
 }
 renderUpdated();setInterval(renderUpdated,30000);
-updateCountdown();renderCalendar();loadCustomTasks();applyOverrides();injectEditButtons();load();
+updateCountdown();renderCalendar();captureOriginals();applyOverrides();loadCustomTasks();injectEditButtons();load();
 // Full text on hover for single-line (truncated) task labels
 document.querySelectorAll('.item label').forEach(l=>{if(!l.title)l.title=l.textContent.trim();});
 
@@ -1184,6 +1236,39 @@ function doi(){if(dp){dp.prompt();dp.userChoice.then(()=>{dp=null;document.getEl
 function dii(){document.getElementById('ib').classList.remove('show');localStorage.setItem('pcs-x','1')}
 if(window.matchMedia&&!window.matchMedia('(display-mode:standalone)').matches&&/iPhone|iPad/.test(navigator.userAgent)&&!localStorage.getItem('pcs-x'))setTimeout(()=>{const b=document.getElementById('ib');if(b)b.classList.add('show')},2000);
 let le=null;async function cfu(){try{const r=await fetch(location.href,{method:'HEAD',cache:'no-store'});const e=r.headers.get('etag')||r.headers.get('last-modified');if(le&&e&&e!==le){const t=document.createElement('div');t.className='update-toast';t.textContent='New update! Refreshing...';document.body.appendChild(t);setTimeout(()=>location.reload(),1500)}le=e}catch(e){}}setInterval(cfu,6e5);cfu();
+</script>
+
+<!-- ===== Cross-device sync (Firebase Realtime Database) =====
+     Paste your Firebase web config below to enable live sync between devices.
+     Until it's filled in, the app works exactly as before (per-device only). -->
+<script type="module">
+  const FIREBASE_CONFIG = {
+    // apiKey: "...",
+    // authDomain: "...",
+    // databaseURL: "https://YOUR-PROJECT-default-rtdb.firebaseio.com",
+    // projectId: "...",
+    // appId: "..."
+  };
+  const BOARD_ID = "georgia-pcs-2026"; // shared board key — same on every device
+
+  if (FIREBASE_CONFIG && FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.databaseURL) {
+    try {
+      const [{ initializeApp }, { getDatabase, ref, onValue, set }] = await Promise.all([
+        import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"),
+        import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js")
+      ]);
+      const app = initializeApp(FIREBASE_CONFIG);
+      const db = getDatabase(app);
+      const boardRef = ref(db, "boards/" + BOARD_ID);
+      let seeded = false;
+      window.__pcsSync = { push: (data) => set(boardRef, data).catch(e => console.warn("sync push failed", e)) };
+      onValue(boardRef, (snap) => {
+        const d = snap.val();
+        if (d) { window.__pcsApplyRemote(d); }
+        else if (!seeded && window.__pcsCollect) { seeded = true; window.__pcsSync.push(window.__pcsCollect()); }
+      }, (err) => console.warn("sync read failed", err));
+    } catch (e) { console.warn("Firebase sync unavailable:", e); }
+  }
 </script>
 
 <div class="install-banner" id="ib">

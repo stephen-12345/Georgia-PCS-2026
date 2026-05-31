@@ -1085,6 +1085,7 @@ function addTask(){
   injectEditButtons();
   saveCustomTasks();
   save();
+  renderCalendar();
 }
 
 function removeTask(btn){
@@ -1100,6 +1101,7 @@ function removeTask(btn){
   delete checks[id];
   localStorage.setItem('pcs2026',JSON.stringify(checks));
   save();
+  renderCalendar();
 }
 
 function saveCustomTasks(){
@@ -1173,6 +1175,7 @@ function commitEdit(item){
   }else if(dateEl){dateEl.remove()}
   ed.remove();item.classList.remove('editing');
   persistEdit(item);
+  renderCalendar();
 }
 function persistEdit(item){
   const id=item.querySelector('input[type="checkbox"]').id;
@@ -1237,7 +1240,7 @@ function rebuildUI(){
     else if(dateEl){dateEl.remove()}
   });
   qaCounter=parseInt(localStorage.getItem('pcs-qc')||'0');
-  applyOverrides();loadCustomTasks();injectEditButtons();load();
+  applyOverrides();loadCustomTasks();injectEditButtons();load();renderCalendar();
 }
 function applyRemote(d){
   if(!d)return;
@@ -1260,8 +1263,21 @@ function updateCountdown(){const t=new Date(),f=new Date(t.getFullYear(),5,30),m
 
 const PCS_EVENTS=[[4,30,'urgent','Submit DLA advance'],[5,2,'urgent','SATO travel office'],[5,3,'urgent','Pre-move inspection @ 10:00'],[5,9,'move','Move-out pre-inspection @ 13:00'],[5,15,'move','Movers arrive — packing Day 1'],[5,16,'move','Packing Day 2'],[5,17,'move','Packing Day 3'],[5,18,'move','Moved out — final walkthrough'],[5,20,'hotel','Check into Surfjack + pickup rental'],[5,22,'general','Cat vet appointment'],[5,23,'urgent','Checkout rental home + walkthrough'],[5,30,'flight','Fly to Georgia!'],[5,5,'milestone','🏫 Last day of school'],[5,12,'milestone','🎓 Graduation']];
 let calMonth=5,calYear=2026;
-function getEventsForDay(y,m,d){return PCS_EVENTS.filter(e=>e[0]===m&&e[1]===d)}
-function renderCalendar(){const w=document.getElementById('calWrap');const t=new Date();const f=new Date(calYear,calMonth,1).getDay();const n=new Date(calYear,calMonth+1,0).getDate();const mn=['January','February','March','April','May','June','July','August','September','October','November','December'];let h='<div class="cal-nav"><button onclick="calPrev()">‹</button><span class="cal-month">'+mn[calMonth]+' '+calYear+'</span><button onclick="calNext()">›</button></div><div class="cal-grid">';['S','M','T','W','T','F','S'].forEach(d=>{h+='<div class="cal-dow">'+d+'</div>'});for(let i=0;i<f;i++)h+='<div class="cal-day empty"></div>';for(let d=1;d<=n;d++){const ev=getEventsForDay(calYear,calMonth,d);const isT=t.getFullYear()===calYear&&t.getMonth()===calMonth&&t.getDate()===d;const isP=new Date(calYear,calMonth,d)<new Date(t.getFullYear(),t.getMonth(),t.getDate());let c='cal-day';if(isT)c+=' today';if(isP&&!isT)c+=' past';if(ev.length)c+=' has-event evt-'+ev[0][2];h+='<div class="'+c+'" onclick="openDayModal('+calYear+','+calMonth+','+d+')">'+d;if(ev.length){h+='<div class="cal-tooltip">';ev.forEach(e=>{h+='<div>'+e[3]+'</div>'});h+='</div>'}h+='</div>'}h+='</div><div class="cal-legend"><span><span class="dot" style="background:var(--amber)"></span>Urgent</span><span><span class="dot" style="background:var(--red)"></span>Move</span><span><span class="dot" style="background:var(--teal)"></span>Hotel</span><span><span class="dot" style="background:var(--gold)"></span>Flight</span><span><span class="dot" style="background:var(--green)"></span>General</span><span><span class="dot" style="background:#a78bfa"></span>Milestone</span></div>';w.innerHTML=h}
+const CAT_TYPE={'cat-urgent':'urgent','cat-premove':'general','cat-moveweek':'move','cat-hotel':'hotel','cat-georgia':'general','cat-dates':'milestone','cat-bins':'general'};
+let __calEvents={};
+function buildCalEvents(){
+  const map={};
+  document.querySelectorAll('.item').forEach(item=>{
+    const dateEl=item.querySelector('.date');if(!dateEl)return;
+    const dates=parseItemDate(dateEl.textContent);if(!dates.length)return;
+    const label=item.querySelector('label');const txt=label?label.textContent.trim():'';
+    const card=item.closest('.card');const type=CAT_TYPE[card?card.id:'']||'general';
+    dates.forEach(o=>{const k=o.m+'-'+o.d;(map[k]=map[k]||[]).push({type:type,label:txt})});
+  });
+  return map;
+}
+function getEventsForDay(y,m,d){return __calEvents[m+'-'+d]||[]}
+function renderCalendar(){__calEvents=buildCalEvents();const w=document.getElementById('calWrap');const t=new Date();const f=new Date(calYear,calMonth,1).getDay();const n=new Date(calYear,calMonth+1,0).getDate();const mn=['January','February','March','April','May','June','July','August','September','October','November','December'];let h='<div class="cal-nav"><button onclick="calPrev()">‹</button><span class="cal-month">'+mn[calMonth]+' '+calYear+'</span><button onclick="calNext()">›</button></div><div class="cal-grid">';['S','M','T','W','T','F','S'].forEach(d=>{h+='<div class="cal-dow">'+d+'</div>'});for(let i=0;i<f;i++)h+='<div class="cal-day empty"></div>';for(let d=1;d<=n;d++){const ev=getEventsForDay(calYear,calMonth,d);const isT=t.getFullYear()===calYear&&t.getMonth()===calMonth&&t.getDate()===d;const isP=new Date(calYear,calMonth,d)<new Date(t.getFullYear(),t.getMonth(),t.getDate());let c='cal-day';if(isT)c+=' today';if(isP&&!isT)c+=' past';if(ev.length)c+=' has-event evt-'+ev[0].type;h+='<div class="'+c+'" onclick="openDayModal('+calYear+','+calMonth+','+d+')">'+d;if(ev.length){h+='<div class="cal-tooltip">';ev.forEach(e=>{h+='<div>'+escHtml(e.label)+'</div>'});h+='</div>'}h+='</div>'}h+='</div><div class="cal-legend"><span><span class="dot" style="background:var(--amber)"></span>Urgent</span><span><span class="dot" style="background:var(--red)"></span>Move</span><span><span class="dot" style="background:var(--teal)"></span>Hotel</span><span><span class="dot" style="background:var(--gold)"></span>Flight</span><span><span class="dot" style="background:var(--green)"></span>General</span><span><span class="dot" style="background:#a78bfa"></span>Milestone</span></div>';w.innerHTML=h}
 function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCalendar()}
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCalendar()}
 
@@ -1351,7 +1367,7 @@ function loadCachedAI(){
 }
 
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-31T04:51:21Z';
+const LAST_UPDATED='2026-05-31T05:01:37Z';
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';
@@ -1377,7 +1393,7 @@ async function hardRefresh(){
   const u=new URL(location.href);u.searchParams.set('_r',Date.now());location.replace(u.toString());
 }
 renderUpdated();setInterval(renderUpdated,30000);
-updateCountdown();renderCalendar();captureOriginals();applyOverrides();loadCustomTasks();injectEditButtons();load();loadCachedAI();
+updateCountdown();captureOriginals();applyOverrides();loadCustomTasks();injectEditButtons();load();renderCalendar();loadCachedAI();
 // Full text on hover for single-line (truncated) task labels
 document.querySelectorAll('.item label').forEach(l=>{if(!l.title)l.title=l.textContent.trim();});
 

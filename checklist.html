@@ -266,6 +266,31 @@ body::after {
 }
 .btn-gold:hover { box-shadow: 0 6px 24px -4px rgba(212,167,69,.4); }
 
+/* ========== AI Move Coach ========== */
+.ai-coach {
+  background: linear-gradient(135deg, rgba(79,209,197,.10), rgba(167,139,250,.08)), var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-top: 20px;
+  box-shadow: 0 10px 30px -18px rgba(0,0,0,.65);
+}
+.ai-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ai-title { font-weight: 700; font-size: .98em; display: flex; align-items: center; gap: 8px; }
+.ai-btn {
+  background: linear-gradient(135deg, var(--teal), #a78bfa); color: #06121f; border: none;
+  border-radius: var(--radius-sm); padding: 9px 16px; font-weight: 700; font-size: .84em;
+  cursor: pointer; font-family: inherit; white-space: nowrap; transition: box-shadow .2s ease, transform .15s ease;
+}
+.ai-btn:hover { box-shadow: 0 6px 18px rgba(167,139,250,.35); transform: translateY(-1px); }
+.ai-btn:disabled { opacity: .6; cursor: default; transform: none; box-shadow: none; }
+.ai-body { margin-top: 12px; font-size: .9em; color: var(--ink2); line-height: 1.55; }
+.ai-body p { margin: 6px 0; }
+.ai-body ul { margin: 8px 0; list-style: none; padding: 0; }
+.ai-body li { position: relative; padding-left: 20px; margin: 6px 0; }
+.ai-body li::before { content: "→"; position: absolute; left: 0; color: var(--teal); font-weight: 700; }
+.ai-body strong { color: var(--gold2); }
+.ai-hint { color: var(--muted); }
+.ai-time { font-size: .76em; color: var(--faint); margin-top: 10px !important; }
+@media (max-width: 620px) { .ai-head { flex-wrap: wrap; } .ai-btn { flex: 1 1 100%; } }
+
 /* ========== Quick Add ========== */
 .quick-add {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
@@ -628,6 +653,15 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
       <button class="btn" onclick="uncheckAll()">Reset</button>
     </div>
   </header>
+
+  <!-- AI Move Coach -->
+  <div class="ai-coach no-print" id="aiCoach">
+    <div class="ai-head">
+      <div class="ai-title">✨ AI Move Coach</div>
+      <button class="ai-btn" id="aiBtn" onclick="aiSuggest()">Suggest priorities</button>
+    </div>
+    <div class="ai-body" id="aiBody"><p class="ai-hint">Get a quick read on what to focus on next, based on your remaining tasks and their dates. Suggestions are AI-generated — always double-check important dates.</p></div>
+  </div>
 
   <!-- Quick Add -->
   <div class="quick-add no-print" id="quickAdd">
@@ -1267,8 +1301,57 @@ function toggleFromModal(cb){
 function closeDayModal(){document.getElementById('dayModal').classList.remove('show')}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDayModal()});
 
+// ---- AI Move Coach ----
+function collectIncompleteForAI(){
+  const cats={};
+  document.querySelectorAll('.item').forEach(item=>{
+    const cb=item.querySelector('input[type="checkbox"]');if(!cb||cb.checked)return;
+    const label=item.querySelector('label');if(!label)return;
+    const dateEl=item.querySelector('.date');
+    const card=item.closest('.card');const title=card?card.querySelector('.title'):null;
+    const cat=title?title.textContent.replace(/\s+/g,' ').trim():'Other';
+    (cats[cat]=cats[cat]||[]).push((dateEl?('['+dateEl.textContent+'] '):'')+label.textContent.trim());
+  });
+  let s='';Object.keys(cats).forEach(c=>{s+='\n'+c+':\n'+cats[c].map(x=>'- '+x).join('\n')+'\n'});
+  return s.trim();
+}
+function renderAI(t){
+  let h=escHtml(t).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  const lines=h.split(/\n+/).map(l=>l.trim()).filter(Boolean);
+  let out='',inList=false;
+  lines.forEach(l=>{
+    if(/^[-*•]\s+/.test(l)){if(!inList){out+='<ul>';inList=true}out+='<li>'+l.replace(/^[-*•]\s+/,'')+'</li>'}
+    else{if(inList){out+='</ul>';inList=false}out+='<p>'+l+'</p>'}
+  });
+  if(inList)out+='</ul>';
+  return out;
+}
+async function aiSuggest(){
+  const body=document.getElementById('aiBody'),btn=document.getElementById('aiBtn');
+  if(!window.__pcsAI){body.innerHTML='<p class="ai-hint">AI isn\'t enabled yet. Turn on Firebase AI Logic in your Firebase console, then tap the refresh icon and try again.</p>';return}
+  const tasks=collectIncompleteForAI();
+  if(!tasks){body.innerHTML='<p class="ai-hint">Everything\'s checked off — nothing to prioritize! 🎉</p>';return}
+  const old=btn.textContent;btn.disabled=true;btn.textContent='Thinking…';
+  body.innerHTML='<p class="ai-hint">Analyzing your remaining tasks…</p>';
+  const today=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const prompt='You are a calm, encouraging relocation concierge helping a U.S. military family PCS (permanent change of station) from Hawaii to Fort Stewart, Georgia. Today is '+today+'. Here are their REMAINING (unchecked) tasks, grouped by section, with [due dates] where known:\n'+tasks+'\n\nGive a short, friendly briefing: (1) the top 3-5 things to tackle first and why, considering due dates and dependencies; (2) anything time-sensitive that is easy to forget. Use brief bullet points, plain language, under ~150 words. Do not invent tasks that are not listed.';
+  try{
+    const out=await window.__pcsAI.suggest(prompt);
+    body.innerHTML=renderAI(out)+'<p class="ai-time">Suggested just now</p>';
+    localStorage.setItem('pcs-ai-last',JSON.stringify({text:out,t:Date.now()}));
+  }catch(e){
+    console.warn('AI error',e);
+    body.innerHTML='<p class="ai-hint">Couldn\'t reach the AI just now. Make sure Firebase AI Logic is enabled (and App Check is set up), then try again.</p>';
+  }finally{btn.disabled=false;btn.textContent=old}
+}
+function loadCachedAI(){
+  try{const c=JSON.parse(localStorage.getItem('pcs-ai-last')||'null');const body=document.getElementById('aiBody');
+    if(c&&c.text&&body)body.innerHTML=renderAI(c.text)+'<p class="ai-time">Suggested '+fmtAgo(Date.now()-c.t)+'</p>';
+  }catch(e){}
+}
+
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-31T04:44:01Z';
+const LAST_UPDATED='2026-05-31T04:51:21Z';
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';
@@ -1294,7 +1377,7 @@ async function hardRefresh(){
   const u=new URL(location.href);u.searchParams.set('_r',Date.now());location.replace(u.toString());
 }
 renderUpdated();setInterval(renderUpdated,30000);
-updateCountdown();renderCalendar();captureOriginals();applyOverrides();loadCustomTasks();injectEditButtons();load();
+updateCountdown();renderCalendar();captureOriginals();applyOverrides();loadCustomTasks();injectEditButtons();load();loadCachedAI();
 // Full text on hover for single-line (truncated) task labels
 document.querySelectorAll('.item label').forEach(l=>{if(!l.title)l.title=l.textContent.trim();});
 
@@ -1321,14 +1404,32 @@ let le=null;async function cfu(){try{const r=await fetch(location.href,{method:'
     appId: "1:414756042443:web:53baf023c7cb567d05cd4e"
   };
   const BOARD_ID = "georgia-pcs-2026"; // shared board key — same on every device
+  const APPCHECK_SITE_KEY = ""; // <-- paste your reCAPTCHA v3 site key (Firebase App Check) to protect AI calls
+  const SDK = "https://www.gstatic.com/firebasejs/11.10.0";
 
   if (FIREBASE_CONFIG && FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.databaseURL) {
     try {
       const [{ initializeApp }, { getDatabase, ref, onValue, set }] = await Promise.all([
-        import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"),
-        import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js")
+        import(SDK + "/firebase-app.js"),
+        import(SDK + "/firebase-database.js")
       ]);
       const app = initializeApp(FIREBASE_CONFIG);
+
+      // App Check — protects AI (and DB) from abuse on a public site
+      if (APPCHECK_SITE_KEY) {
+        try {
+          const { initializeAppCheck, ReCaptchaV3Provider } = await import(SDK + "/firebase-app-check.js");
+          initializeAppCheck(app, { provider: new ReCaptchaV3Provider(APPCHECK_SITE_KEY), isTokenAutoRefreshEnabled: true });
+        } catch (e) { console.warn("App Check init failed:", e); }
+      }
+
+      // AI Move Coach — Firebase AI Logic (Gemini)
+      try {
+        const { getAI, getGenerativeModel, GoogleAIBackend } = await import(SDK + "/firebase-ai.js");
+        const aiModel = getGenerativeModel(getAI(app, { backend: new GoogleAIBackend() }), { model: "gemini-2.5-flash" });
+        window.__pcsAI = { suggest: async (prompt) => (await aiModel.generateContent(prompt)).response.text() };
+      } catch (e) { console.warn("AI unavailable:", e); }
+
       const db = getDatabase(app);
       const boardRef = ref(db, "boards/" + BOARD_ID);
       let seeded = false;

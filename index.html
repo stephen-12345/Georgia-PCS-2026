@@ -169,6 +169,21 @@ a.chip { text-decoration: none; cursor: pointer; transition: background .15s, bo
 a.chip:hover { background: var(--ink2); border-color: var(--ink2); color: #fff; }
 .sh[id], .card[id] { scroll-margin-top: 18px; }
 
+/* Inline resource links */
+.lnk { color: var(--teal); text-decoration: none; border-bottom: 1px solid rgba(56,201,181,.32); transition: border-color .15s, color .15s; }
+.lnk:hover { color: var(--teal2); border-bottom-color: var(--teal2); }
+.links-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.lbtn { display: inline-flex; align-items: center; gap: 6px; font-size: .8em; font-weight: 600; text-decoration: none;
+  color: var(--ink2); background: var(--bg2); border: 1px solid var(--border2); padding: 7px 13px; border-radius: 10px;
+  transition: background .15s, border-color .15s, color .15s; }
+.lbtn:hover { color: var(--teal2); border-color: var(--teal); background: var(--teal-glow); }
+.res-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.res-grid a { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink2);
+  background: var(--bg2); border: 1px solid var(--border); padding: 11px 13px; border-radius: 12px;
+  font-size: .86em; transition: background .15s, border-color .15s, transform .15s; }
+.res-grid a:hover { color: var(--teal2); border-color: var(--teal); background: var(--teal-glow); transform: translateY(-1px); }
+.res-grid a .ri { font-size: 1.15em; }
+
 /* ========== Countdown ========== */
 .countdown { margin-top: 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 .cd {
@@ -522,9 +537,9 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
   position: fixed; left: 18px; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); z-index: 200;
   width: 52px; height: 52px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.4em; color: #fff; cursor: pointer;
-  background: var(--gold, #c9a24b); border: 1px solid rgba(255,255,255,.25);
-  box-shadow: 0 6px 20px rgba(0,0,0,.45);
+  font-size: 1.4em; color: #6fe3ad; cursor: pointer;
+  background: var(--surface2, #152240); border: 1px solid rgba(111,227,173,.4);
+  box-shadow: 0 6px 20px rgba(0,0,0,.45), 0 0 14px rgba(111,227,173,.18);
   opacity: 0; visibility: hidden; transform: translateY(12px) scale(.9);
   transition: opacity .25s, transform .25s, visibility .25s;
 }
@@ -641,6 +656,7 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
 
     <nav class="chips no-print" aria-label="Jump to section">
       <a class="chip" href="#sec-checklist">📋 Checklist</a>
+      <a class="chip" href="#sec-resources">🔗 Key links</a>
       <a class="chip" href="#sec-tips">💡 Tips & tricks</a>
       <a class="chip" href="#sec-packing">🧳 Packing list</a>
       <a class="chip" href="#sec-bmw">🚙 BMW X5 sale</a>
@@ -826,6 +842,40 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
     </div>
   </div>
 
+  <!-- Key links & resources -->
+  <div class="sh" id="sec-resources">
+    <div class="kicker">Your concierge desk</div>
+    <h2>Key links & resources</h2>
+    <p>Every official site you'll need — bookmarked in one place.</p>
+  </div>
+  <div class="card">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span><span class="title">🔗 Official sites & accounts</span><span class="badge">One-stop</span>
+    </div>
+    <div class="body">
+      <p style="margin-bottom:6px"><span class="hl">📦 Your move (HHG)</span></p>
+      <div class="res-grid" style="margin-bottom:16px">
+        <a href="https://dps.move.mil/" target="_blank" rel="noopener"><span class="ri">📦</span><span>DPS — schedule & track HHG (CAC login)</span></a>
+        <a href="https://www.militaryonesource.mil/moving-pcs/moving-personal-property/" target="_blank" rel="noopener"><span class="ri">🚚</span><span>Military OneSource — moving & property</span></a>
+        <a href="https://www.militaryonesource.mil/moving-pcs/" target="_blank" rel="noopener"><span class="ri">💵</span><span>PCS entitlements — DLA, TLE, per diem</span></a>
+      </div>
+      <p style="margin-bottom:6px"><span class="hl">🪖 Fort Stewart & benefits</span></p>
+      <div class="res-grid" style="margin-bottom:16px">
+        <a href="https://home.army.mil/stewart/" target="_blank" rel="noopener"><span class="ri">🪖</span><span>Fort Stewart — official garrison site</span></a>
+        <a href="https://home.army.mil/stewart/my-fort/newcomers-1/housing" target="_blank" rel="noopener"><span class="ri">🏠</span><span>Fort Stewart Housing Services Office</span></a>
+        <a href="https://milconnect.dmdc.osd.mil/" target="_blank" rel="noopener"><span class="ri">🪪</span><span>milConnect / DEERS — update record</span></a>
+        <a href="https://www.tricare.mil/" target="_blank" rel="noopener"><span class="ri">⚕️</span><span>Tricare — transfer to East region</span></a>
+      </div>
+      <p style="margin-bottom:6px"><span class="hl">🍑 Settling in Georgia</span></p>
+      <div class="res-grid">
+        <a href="https://dds.georgia.gov/" target="_blank" rel="noopener"><span class="ri">🚗</span><span>Georgia DDS — driver's license</span></a>
+        <a href="https://mvd.dor.ga.gov/" target="_blank" rel="noopener"><span class="ri">🚙</span><span>Georgia MVD — register & title vehicle</span></a>
+        <a href="https://www.bryancountyschools.org/" target="_blank" rel="noopener"><span class="ri">🎒</span><span>Bryan County Schools (Richmond Hill)</span></a>
+        <a href="https://www.liberty.k12.ga.us/" target="_blank" rel="noopener"><span class="ri">🎒</span><span>Liberty County Schools (Hinesville)</span></a>
+      </div>
+    </div>
+  </div>
+
   <!-- Tips -->
   <div class="sh" id="sec-tips">
     <div class="kicker">Insider guidance</div>
@@ -902,6 +952,14 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
     <div class="body">
       <p><span class="hl">Where to sell:</span> Facebook Marketplace, Craigslist Hawaii, military swap groups, CARMARK Hawaii, Servco Buying Center.</p>
       <p><span class="hl">Pro tip:</span> Detail first ($200-400 adds $1K+ perceived value). Lead with "no accidents · clean title · 31,699 mi · island-kept, no road salt."</p>
+      <div class="links-row">
+        <a class="lbtn" href="https://www.kbb.com/bmw/x5/2022/" target="_blank" rel="noopener">💰 KBB X5 value</a>
+        <a class="lbtn" href="https://www.facebook.com/marketplace/honolulu/vehicles" target="_blank" rel="noopener">🛒 FB Marketplace (Honolulu)</a>
+        <a class="lbtn" href="https://honolulu.craigslist.org/search/cto" target="_blank" rel="noopener">📋 Craigslist Hawaii</a>
+        <a class="lbtn" href="https://www.google.com/search?q=CARMARK+Hawaii+sell+my+car" target="_blank" rel="noopener">🏷️ CARMARK Hawaii</a>
+        <a class="lbtn" href="https://www.servco.com/" target="_blank" rel="noopener">🤝 Servco</a>
+        <a class="lbtn" href="https://www.carvana.com/sell-my-car" target="_blank" rel="noopener">⚡ Carvana instant offer</a>
+      </div>
     </div>
   </div>
 
@@ -917,13 +975,19 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
     <div class="body">
       <table>
         <tr><th>Option</th><th>Est. Total</th><th>Notes</th></tr>
-        <tr><td>Lucky Owl</td><td class="val-up">$400–500</td><td>Good reviews, airport pickup</td></tr>
-        <tr><td>Turo</td><td class="val-up">$400–600</td><td>Pick exact vehicle, 10-day discount</td></tr>
-        <tr><td>Costco Travel</td><td>$520–560</td><td>Free cancel, rebook if drops</td></tr>
+        <tr><td><a class="lnk" href="https://www.luckyowl.com/hnl-airport-car-rentals/" target="_blank" rel="noopener">Lucky Owl</a></td><td class="val-up">$400–500</td><td>Good reviews, airport pickup</td></tr>
+        <tr><td><a class="lnk" href="https://turo.com/us/en/search?country=US&location=Honolulu%2C%20HI" target="_blank" rel="noopener">Turo</a></td><td class="val-up">$400–600</td><td>Pick exact vehicle, 10-day discount</td></tr>
+        <tr><td><a class="lnk" href="https://www.costcotravel.com/Rental-Cars" target="_blank" rel="noopener">Costco Travel</a></td><td>$520–560</td><td>Free cancel, rebook if drops</td></tr>
         <tr><td>Economy Rent a Car</td><td>~$500</td><td>Minivan available</td></tr>
-        <tr><td>Budget</td><td>$550–860</td><td>SUV cheaper than minivan</td></tr>
+        <tr><td><a class="lnk" href="https://www.budget.com/" target="_blank" rel="noopener">Budget</a></td><td>$550–860</td><td>SUV cheaper than minivan</td></tr>
       </table>
-      <p><span class="hl">Best move:</span> Book Costco now (free cancel), check Lucky Owl + Turo, use AutoSlash.com to track drops.</p>
+      <p><span class="hl">Best move:</span> Book Costco now (free cancel), check Lucky Owl + Turo, use <a class="lnk" href="https://www.autoslash.com/" target="_blank" rel="noopener">AutoSlash</a> to track drops.</p>
+      <div class="links-row">
+        <a class="lbtn" href="https://www.luckyowl.com/hnl-airport-car-rentals/" target="_blank" rel="noopener">🚙 Lucky Owl</a>
+        <a class="lbtn" href="https://turo.com/us/en/search?country=US&location=Honolulu%2C%20HI" target="_blank" rel="noopener">🔑 Turo Honolulu</a>
+        <a class="lbtn" href="https://www.costcotravel.com/Rental-Cars" target="_blank" rel="noopener">🛒 Costco Travel</a>
+        <a class="lbtn" href="https://www.autoslash.com/" target="_blank" rel="noopener">📉 AutoSlash</a>
+      </div>
     </div>
   </div>
 
@@ -942,7 +1006,12 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
       <span class="badge" style="background:rgba(62,201,122,.1);color:var(--green);border-color:rgba(62,201,122,.15)">Best Value</span>
     </div>
     <div class="body">
-      <p style="margin-bottom:14px;font-size:.82em;color:var(--faint)">4784 US Hwy 17, Richmond Hill, GA 31324 · (912) 445-4480</p>
+      <p style="margin-bottom:14px;font-size:.82em;color:var(--faint)"><a class="lnk" href="https://www.google.com/maps/search/?api=1&query=Home2+Suites+by+Hilton+Richmond+Hill+Savannah+I-95%2C+4784+US-17%2C+Richmond+Hill%2C+GA+31324" target="_blank" rel="noopener">4784 US Hwy 17, Richmond Hill, GA 31324</a> · <a class="lnk" href="tel:+19124454480">(912) 445-4480</a></p>
+      <div class="links-row">
+        <a class="lbtn" href="https://www.hilton.com/en/hotels/richlht-home2-suites-richmond-hill-savannah-i-95/" target="_blank" rel="noopener">🏨 Book on Hilton</a>
+        <a class="lbtn" href="https://www.google.com/maps/search/?api=1&query=Home2+Suites+by+Hilton+Richmond+Hill+Savannah+I-95%2C+4784+US-17%2C+Richmond+Hill%2C+GA+31324" target="_blank" rel="noopener">📍 Google Maps</a>
+        <a class="lbtn" href="tel:+19124454480">📞 Call hotel</a>
+      </div>
       <table>
         <tr><th>Detail</th><th></th></tr>
         <tr><td>Regular rate</td><td><strong>$114–$144/night</strong></td></tr>
@@ -966,7 +1035,12 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
       <span class="badge">Best All-Around</span>
     </div>
     <div class="body">
-      <p style="margin-bottom:14px;font-size:.82em;color:var(--faint)">149 W Mulberry Blvd, Pooler, GA 31407 · (912) 450-5555</p>
+      <p style="margin-bottom:14px;font-size:.82em;color:var(--faint)"><a class="lnk" href="https://www.google.com/maps/search/?api=1&query=Homewood+Suites+by+Hilton+Savannah+Airport%2C+149+W+Mulberry+Blvd%2C+Pooler%2C+GA+31407" target="_blank" rel="noopener">149 W Mulberry Blvd, Pooler, GA 31407</a> · <a class="lnk" href="tel:+19124505555">(912) 450-5555</a></p>
+      <div class="links-row">
+        <a class="lbtn" href="https://www.hilton.com/en/hotels/savpohw-homewood-suites-savannah-airport/" target="_blank" rel="noopener">🏨 Book on Hilton</a>
+        <a class="lbtn" href="https://www.google.com/maps/search/?api=1&query=Homewood+Suites+by+Hilton+Savannah+Airport%2C+149+W+Mulberry+Blvd%2C+Pooler%2C+GA+31407" target="_blank" rel="noopener">📍 Google Maps</a>
+        <a class="lbtn" href="tel:+19124505555">📞 Call hotel</a>
+      </div>
       <table>
         <tr><th>Detail</th><th></th></tr>
         <tr><td>Regular rate</td><td><strong>$150–$180/night</strong></td></tr>
@@ -992,7 +1066,12 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
       <span class="badge" style="background:var(--gold-glow);color:var(--gold);border-color:rgba(212,167,69,.15)">Premium Pick</span>
     </div>
     <div class="body">
-      <p style="margin-bottom:14px;font-size:.82em;color:var(--faint)">500 W Charlton St, Savannah, GA 31401 · (912) 233-9996</p>
+      <p style="margin-bottom:14px;font-size:.82em;color:var(--faint)"><a class="lnk" href="https://www.google.com/maps/search/?api=1&query=Residence+Inn+Savannah+Downtown+Historic+District%2C+500+W+Charlton+St%2C+Savannah%2C+GA+31401" target="_blank" rel="noopener">500 W Charlton St, Savannah, GA 31401</a> · <a class="lnk" href="tel:+19122339996">(912) 233-9996</a></p>
+      <div class="links-row">
+        <a class="lbtn" href="https://www.marriott.com/en-us/hotels/savdv-residence-inn-savannah-downtown-historic-district/overview/" target="_blank" rel="noopener">🏨 Book on Marriott</a>
+        <a class="lbtn" href="https://www.google.com/maps/search/?api=1&query=Residence+Inn+Savannah+Downtown+Historic+District%2C+500+W+Charlton+St%2C+Savannah%2C+GA+31401" target="_blank" rel="noopener">📍 Google Maps</a>
+        <a class="lbtn" href="tel:+19122339996">📞 Call hotel</a>
+      </div>
       <table>
         <tr><th>Detail</th><th></th></tr>
         <tr><td>Regular rate</td><td><strong>$170–$335/night</strong> (peak summer)</td></tr>
@@ -1028,11 +1107,17 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
       <p>June averages ~$84/day in Savannah. 2 weeks: <strong>$700–$1,200</strong>. 3 weeks: <strong>$1,050–$1,800</strong>.</p>
       <p><span class="hl-green">Budget + WeSalute+ = 35% off</span> (free military signup). ~$84/day → ~$55/day.</p>
       <ul>
-        <li>Sign up for WeSalute+ (free) for Budget 35% off</li>
-        <li>Check Costco Travel for comparison</li>
-        <li>Consider Enterprise off-airport to skip surcharge</li>
+        <li>Sign up for <a class="lnk" href="https://www.wesalute.com/" target="_blank" rel="noopener">WeSalute+</a> (free) for Budget 35% off</li>
+        <li>Check <a class="lnk" href="https://www.costcotravel.com/Rental-Cars" target="_blank" rel="noopener">Costco Travel</a> for comparison</li>
+        <li>Consider <a class="lnk" href="https://www.enterprise.com/en/car-rental-locations/us/ga/savannah.html" target="_blank" rel="noopener">Enterprise off-airport</a> to skip surcharge</li>
         <li>Book now with free cancel, rebook if drops</li>
       </ul>
+      <div class="links-row">
+        <a class="lbtn" href="https://www.budget.com/" target="_blank" rel="noopener">🚗 Budget</a>
+        <a class="lbtn" href="https://www.wesalute.com/" target="_blank" rel="noopener">🎖️ WeSalute+</a>
+        <a class="lbtn" href="https://www.costcotravel.com/Rental-Cars" target="_blank" rel="noopener">🛒 Costco Travel</a>
+        <a class="lbtn" href="https://www.enterprise.com/en/car-rental-locations/us/ga/savannah.html" target="_blank" rel="noopener">🏢 Enterprise SAV</a>
+      </div>
     </div>
   </div>
 
@@ -1054,9 +1139,15 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
         <tr><td>Hybrid Calligraphy AWD</td><td>~$58,280</td></tr>
       </table>
       <p><span class="hl-green">Military discount: $500 bonus</span> (show LES). Stacks with 3.99% APR + $2,000 finance bonus.</p>
-      <p><span class="hl">Dealer:</span> AutoNation Hyundai Savannah — (912) 421-8277</p>
+      <p><span class="hl">Dealer:</span> <a class="lnk" href="https://www.autonationhyundaisavannah.com/" target="_blank" rel="noopener">AutoNation Hyundai Savannah</a> — <a class="lnk" href="tel:+19124218277">(912) 421-8277</a></p>
       <p><span class="hl">Family:</span> 3 rows, 329hp hybrid, 600+ mi range, rear occupant alert, LATCH everywhere.</p>
       <p><span class="hl">Lease vs buy:</span> ~$479–519/mo. SCRA allows early out with PCS orders.</p>
+      <div class="links-row">
+        <a class="lbtn" href="https://www.hyundaiusa.com/us/en/vehicles/palisade" target="_blank" rel="noopener">🚐 Build &amp; price</a>
+        <a class="lbtn" href="https://www.hyundaiusa.com/us/en/special-programs/military" target="_blank" rel="noopener">🎖️ Hyundai Military Program</a>
+        <a class="lbtn" href="https://www.autonationhyundaisavannah.com/new-inventory/index.htm" target="_blank" rel="noopener">🔎 Dealer inventory</a>
+        <a class="lbtn" href="tel:+19124218277">📞 Call dealer</a>
+      </div>
     </div>
   </div>
 

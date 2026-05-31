@@ -427,6 +427,8 @@ body::after {
 /* Edit / inline-edit affordances */
 .edit-btn { background: none; border: none; color: var(--faint); cursor: pointer; font-size: .82em; padding: 2px 6px; flex-shrink: 0; opacity: .55; transition: opacity .15s ease, color .15s ease; }
 .edit-btn:hover { opacity: 1; color: var(--teal); }
+.del-btn { background: none; border: none; color: var(--faint); cursor: pointer; font-size: .82em; padding: 2px 6px; flex-shrink: 0; opacity: .55; transition: opacity .15s ease, color .15s ease; }
+.del-btn:hover { opacity: 1; color: var(--red); }
 .item.editing > label, .item.editing > .date, .item.editing > button { display: none; }
 .item-edit { display: flex; gap: 8px; flex: 1; align-items: center; min-width: 0; }
 .item-edit input { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; color: var(--ink); font-family: inherit; outline: none; transition: border-color .2s ease; }
@@ -771,6 +773,7 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
       <div class="item"><input type="checkbox" id="h3" onchange="save()"><label for="h3">Cat vet appointment for travel</label><span class="date">Jun 22</span></div>
       <div class="item"><input type="checkbox" id="h4" onchange="save()"><label for="h4">Final checkout — main rental home (keys, garage openers, etc.)</label><span class="date">Jun 23</span></div>
       <div class="item"><input type="checkbox" id="h5" onchange="save()"><label for="h5">House cleaning complete / walkthrough with landlord</label><span class="date">Jun 23</span></div>
+      <div class="item"><input type="checkbox" id="h11" onchange="save()"><label for="h11">🚗 Ford Focus turn-in — Honolulu VPC, 09:45 appt</label><span class="date">Jun 24</span></div>
       <div class="item"><input type="checkbox" id="h6" onchange="save()"><label for="h6">Complete outprocessing / clear post</label><span class="date">Jun 24</span></div>
       <div class="item"><input type="checkbox" id="h7" onchange="save()"><label for="h7">Close/update bank accounts, auto insurance address</label><span class="date">Jun 25</span></div>
       <div class="item"><input type="checkbox" id="h8" onchange="save()"><label for="h8">Return rental car</label><span class="date">Jun 30</span></div>
@@ -1046,12 +1049,12 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
 </div>
 
 <script>
-function save(){const c={};document.querySelectorAll('input[type="checkbox"]').forEach(e=>{c[e.id]=e.checked});localStorage.setItem('pcs2026',JSON.stringify(c));updateProgress();updateBadges();syncPush()}
+function save(){const c={};document.querySelectorAll('.item input[type="checkbox"]').forEach(e=>{if(e.id)c[e.id]=e.checked});localStorage.setItem('pcs2026',JSON.stringify(c));updateProgress();updateBadges();syncPush()}
 function load(){try{const d=JSON.parse(localStorage.getItem('pcs2026')||'{}');Object.keys(d).forEach(id=>{const el=document.getElementById(id);if(el)el.checked=d[id]})}catch(e){}updateProgress();updateBadges()}
-function updateProgress(){const a=document.querySelectorAll('input[type="checkbox"]');const d=[...a].filter(c=>c.checked).length;const t=a.length;const p=t?Math.round(d/t*100):0;document.getElementById('miniText').textContent=p+'%';document.getElementById('miniFill').style.width=p+'%';document.getElementById('cdDone').textContent=d;document.getElementById('cdLeft').textContent=t-d}
+function updateProgress(){const a=document.querySelectorAll('.item input[type="checkbox"]');const d=[...a].filter(c=>c.checked).length;const t=a.length;const p=t?Math.round(d/t*100):0;document.getElementById('miniText').textContent=p+'%';document.getElementById('miniFill').style.width=p+'%';document.getElementById('cdDone').textContent=d;document.getElementById('cdLeft').textContent=t-d}
 function updateBadges(){document.querySelectorAll('.card').forEach(c=>{const a=c.querySelectorAll('input[type="checkbox"]');if(!a.length)return;const d=[...a].filter(x=>x.checked).length;const b=c.querySelector('.badge');if(b)b.textContent=d+'/'+a.length;c.classList.toggle('done',d===a.length)})}
 function toggleCat(h){h.parentElement.classList.toggle('collapsed')}
-function uncheckAll(){if(!confirm('Reset every checkbox?'))return;document.querySelectorAll('input[type="checkbox"]').forEach(c=>c.checked=false);save()}
+function uncheckAll(){if(!confirm('Reset every checkbox?'))return;document.querySelectorAll('.item input[type="checkbox"]').forEach(c=>c.checked=false);save()}
 function expandAll(){document.querySelectorAll('.card').forEach(c=>c.classList.remove('collapsed'))}
 function collapseAll(){document.querySelectorAll('.card').forEach(c=>c.classList.add('collapsed'))}
 
@@ -1073,7 +1076,7 @@ function addTask(){
 
   const div=document.createElement('div');
   div.className='item';
-  div.innerHTML='<input type="checkbox" id="'+id+'" onchange="save()"><label for="'+id+'" title="'+escHtml(text)+'">'+escHtml(text)+'</label>'+(dateLabel?'<span class="date">'+dateLabel+'</span>':'')+'<button onclick="removeTask(this)" style="background:none;border:none;color:var(--faint);cursor:pointer;font-size:.9em;padding:2px 6px;flex-shrink:0" title="Remove">✕</button>';
+  div.innerHTML='<input type="checkbox" id="'+id+'" onchange="save()"><label for="'+id+'" title="'+escHtml(text)+'">'+escHtml(text)+'</label>'+(dateLabel?'<span class="date">'+dateLabel+'</span>':'');
   items.appendChild(div);
 
   // Expand the card if collapsed
@@ -1089,19 +1092,27 @@ function addTask(){
 }
 
 function removeTask(btn){
-  const item=btn.closest('.item');
-  const id=item.querySelector('input[type="checkbox"]').id;
+  const item=btn.closest('.item');if(!item)return;
+  const cb=item.querySelector('input[type="checkbox"]');const id=cb?cb.id:'';
+  if(!confirm('Delete this task?'))return;
   item.remove();
-  // Remove from saved custom tasks
-  let ct=JSON.parse(localStorage.getItem('pcs-custom')||'[]');
-  ct=ct.filter(t=>t.id!==id);
-  localStorage.setItem('pcs-custom',JSON.stringify(ct));
-  // Remove checkbox state
+  if(id.indexOf('qa')===0){
+    let ct=JSON.parse(localStorage.getItem('pcs-custom')||'[]');
+    ct=ct.filter(t=>t.id!==id);
+    localStorage.setItem('pcs-custom',JSON.stringify(ct));
+  }else if(id){
+    let del=JSON.parse(localStorage.getItem('pcs-deleted')||'[]');
+    if(del.indexOf(id)<0){del.push(id);localStorage.setItem('pcs-deleted',JSON.stringify(del))}
+  }
   let checks=JSON.parse(localStorage.getItem('pcs2026')||'{}');
   delete checks[id];
   localStorage.setItem('pcs2026',JSON.stringify(checks));
   save();
   renderCalendar();
+}
+function applyDeletions(){
+  let del;try{del=JSON.parse(localStorage.getItem('pcs-deleted')||'[]')}catch(e){return}
+  del.forEach(id=>{const cb=document.getElementById(id);if(cb){const it=cb.closest('.item');if(it)it.remove()}});
 }
 
 function saveCustomTasks(){
@@ -1128,7 +1139,7 @@ function loadCustomTasks(){
     if(document.getElementById(t.id))return;
     const div=document.createElement('div');
     div.className='item';
-    div.innerHTML='<input type="checkbox" id="'+t.id+'" onchange="save()"><label for="'+t.id+'" title="'+escHtml(t.text)+'">'+escHtml(t.text)+'</label>'+(t.date?'<span class="date">'+t.date+'</span>':'')+'<button onclick="removeTask(this)" style="background:none;border:none;color:var(--faint);cursor:pointer;font-size:.9em;padding:2px 6px;flex-shrink:0" title="Remove">✕</button>';
+    div.innerHTML='<input type="checkbox" id="'+t.id+'" onchange="save()"><label for="'+t.id+'" title="'+escHtml(t.text)+'">'+escHtml(t.text)+'</label>'+(t.date?'<span class="date">'+t.date+'</span>':'');
     items.appendChild(div);
   });
 }
@@ -1136,13 +1147,19 @@ function loadCustomTasks(){
 // ---- Edit existing tasks (built-in or custom) ----
 function injectEditButtons(){
   document.querySelectorAll('.item').forEach(item=>{
-    if(item.querySelector('.edit-btn'))return;
     if(!item.querySelector('input[type="checkbox"]'))return;
-    const b=document.createElement('button');
-    b.type='button';b.className='edit-btn';b.title='Edit';b.textContent='✎';
-    b.setAttribute('onclick','startEdit(this)');
-    const rm=item.querySelector('button[title="Remove"]');
-    if(rm)item.insertBefore(b,rm);else item.appendChild(b);
+    if(!item.querySelector('.edit-btn')){
+      const b=document.createElement('button');
+      b.type='button';b.className='edit-btn';b.title='Edit';b.textContent='✎';
+      b.setAttribute('onclick','startEdit(this)');
+      item.appendChild(b);
+    }
+    if(!item.querySelector('.del-btn')){
+      const d=document.createElement('button');
+      d.type='button';d.className='del-btn';d.title='Delete';d.textContent='🗑';
+      d.setAttribute('onclick','removeTask(this)');
+      item.appendChild(d);
+    }
   });
 }
 function startEdit(btn){
@@ -1210,6 +1227,7 @@ function collectState(){
     checks:JSON.parse(localStorage.getItem('pcs2026')||'{}'),
     custom:JSON.parse(localStorage.getItem('pcs-custom')||'[]'),
     overrides:JSON.parse(localStorage.getItem('pcs-overrides')||'{}'),
+    deleted:JSON.parse(localStorage.getItem('pcs-deleted')||'[]'),
     qc:parseInt(localStorage.getItem('pcs-qc')||'0')
   };
 }
@@ -1240,15 +1258,16 @@ function rebuildUI(){
     else if(dateEl){dateEl.remove()}
   });
   qaCounter=parseInt(localStorage.getItem('pcs-qc')||'0');
-  applyOverrides();loadCustomTasks();injectEditButtons();load();renderCalendar();
+  applyOverrides();loadCustomTasks();applyDeletions();injectEditButtons();load();renderCalendar();
 }
 function applyRemote(d){
   if(!d)return;
-  try{if(JSON.stringify(collectState())===JSON.stringify({checks:d.checks||{},custom:d.custom||[],overrides:d.overrides||{},qc:d.qc||0}))return}catch(e){}
+  try{if(JSON.stringify(collectState())===JSON.stringify({checks:d.checks||{},custom:d.custom||[],overrides:d.overrides||{},deleted:d.deleted||[],qc:d.qc||0}))return}catch(e){}
   if(document.querySelector('.item.editing'))return; // don't clobber an in-progress edit
   localStorage.setItem('pcs2026',JSON.stringify(d.checks||{}));
   localStorage.setItem('pcs-custom',JSON.stringify(d.custom||[]));
   localStorage.setItem('pcs-overrides',JSON.stringify(d.overrides||{}));
+  localStorage.setItem('pcs-deleted',JSON.stringify(d.deleted||[]));
   localStorage.setItem('pcs-qc',String(d.qc||0));
   __applyingRemote=true;rebuildUI();__applyingRemote=false;
 }
@@ -1367,7 +1386,7 @@ function loadCachedAI(){
 }
 
 // Build/deploy timestamp — bump on each deploy. Rendered in the viewer's local time.
-const LAST_UPDATED='2026-05-31T05:01:37Z';
+const LAST_UPDATED='2026-05-31T05:11:35Z';
 function fmtAgo(ms){
   const s=Math.floor(ms/1000);
   if(s<45)return'just now';
@@ -1393,7 +1412,7 @@ async function hardRefresh(){
   const u=new URL(location.href);u.searchParams.set('_r',Date.now());location.replace(u.toString());
 }
 renderUpdated();setInterval(renderUpdated,30000);
-updateCountdown();captureOriginals();applyOverrides();loadCustomTasks();injectEditButtons();load();renderCalendar();loadCachedAI();
+updateCountdown();captureOriginals();applyOverrides();loadCustomTasks();applyDeletions();injectEditButtons();load();renderCalendar();loadCachedAI();
 // Full text on hover for single-line (truncated) task labels
 document.querySelectorAll('.item label').forEach(l=>{if(!l.title)l.title=l.textContent.trim();});
 

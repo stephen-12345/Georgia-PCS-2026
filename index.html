@@ -184,6 +184,13 @@ a.chip:hover { background: var(--ink2); border-color: var(--ink2); color: #fff; 
 .res-grid a:hover { color: var(--teal2); border-color: var(--teal); background: var(--teal-glow); transform: translateY(-1px); }
 .res-grid a .ri { font-size: 1.15em; }
 
+/* Insider playbook tip rows */
+.pb { padding: 12px 0; border-bottom: 1px solid var(--border); font-size: .9em; line-height: 1.55; color: var(--ink2); }
+.pb:last-child { border-bottom: none; }
+.pb strong { color: var(--ink); }
+.pb .src { display: inline-block; margin-left: 4px; color: var(--teal); text-decoration: none; white-space: nowrap; font-weight: 600; font-size: .92em; border-bottom: 1px solid rgba(56,201,181,.3); }
+.pb .src:hover { color: var(--teal2); border-bottom-color: var(--teal2); }
+
 /* ========== Countdown ========== */
 .countdown { margin-top: 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 .cd {
@@ -658,6 +665,7 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
       <a class="chip" href="#sec-checklist">📋 Checklist</a>
       <a class="chip" href="#sec-resources">🔗 Key links</a>
       <a class="chip" href="#sec-tips">💡 Tips & tricks</a>
+      <a class="chip" href="#sec-playbook">🧠 Insider playbook</a>
       <a class="chip" href="#sec-packing">🧳 Packing list</a>
       <a class="chip" href="#sec-bmw">🚙 BMW X5 sale</a>
       <a class="chip" href="#sec-hotels">🏨 GA hotels</a>
@@ -891,6 +899,99 @@ footer .sig { font-family: 'Playfair Display', serif; color: var(--ink2); font-s
     <div class="tip"><strong>📝 DLA & TLE</strong>Submit advance ASAP. Keep all receipts for lodging, meals, incidentals. TLE covers up to 14 days of temporary lodging.</div>
     <div class="tip"><strong>🧽 House cleaning</strong>Book professional deep clean after move-out ($200-400). Focus on appliances, bathrooms, baseboards, windows. Photograph for deposit protection.</div>
     <div class="tip"><strong>🪖 In-processing</strong>Bring 10+ copies of orders, marriage & birth certs, POA. Takes ~1 week. Housing, DEERS, Tricare, finance — all first week.</div>
+  </div>
+
+  <!-- Insider playbook -->
+  <div class="sh" id="sec-playbook">
+    <div class="kicker">Your concierge playbook</div>
+    <h2>50+ insider hacks & local intel</h2>
+    <p>The money-saving tricks, forgotten entitlements, discount programs, and local gems that experienced military families swear by — every claim links to its official source.</p>
+  </div>
+
+  <!-- Playbook: Money -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span><span class="title">💰 Money, entitlements & move hacks</span><span class="badge">16 tips</span>
+    </div>
+    <div class="body">
+      <div class="pb"><strong>Book refundable rentals, then rebook as prices drop.</strong> Costco Travel and most major brands let you reserve free-cancel with no card charge — lock a rate now and rebook lower anytime. Use AutoSlash to auto-track price drops on an existing reservation. <a class="src" href="https://www.autoslash.com/" target="_blank" rel="noopener">AutoSlash ↗</a></div>
+      <div class="pb"><strong>Claim up to $2,000 in pet-move costs (OCONUS rate).</strong> Because Hawaii is OCONUS, you can be reimbursed up to $2,000 for shipping one pet — airfare, crate, health certs, microchip, pet hotel. Keep every receipt and file with your travel voucher. <a class="src" href="https://www.travel.dod.mil/About/News/Article/Article/3434474/dod-approves-pet-expenses-reimbursement-due-to-pcs/" target="_blank" rel="noopener">DoD pet reimbursement ↗</a></div>
+      <div class="pb"><strong>Do a partial PPM on whatever you self-move.</strong> Anything you haul yourself (extra baggage, boxes you ship) is weighable and reimbursable at ~95% of the government rate; only profit is taxed, and you have 45 days to file. <a class="src" href="https://www.dfas.mil/MilitaryMembers/travelpay/armypcs/dityppmmoves/" target="_blank" rel="noopener">DFAS PPM ↗</a></div>
+      <div class="pb"><strong>Get certified empty + full weight tickets.</strong> For any PPM, weigh empty and loaded (two copies each, name/grade on them), stand outside the vehicle both times, and keep the ~$10 scale receipts — they're reimbursable too. <a class="src" href="https://www.militaryonesource.mil/resources/millife-guides/preparing-to-move-or-pcs/" target="_blank" rel="noopener">OneSource ↗</a></div>
+      <div class="pb"><strong>Declare member AND spouse pro-gear to dodge weight overages.</strong> Properly declared professional gear doesn't count against your allowance — plus up to 500 lbs of spouse pro-gear. Declare it in DPS before pack day. <a class="src" href="https://www.militaryonesource.mil/benefits/pcs-entitlements/" target="_blank" rel="noopener">PCS entitlements ↗</a></div>
+      <div class="pb"><strong>Request DLA + an ~80% travel advance 10–15 days out.</strong> Dislocation Allowance is paid once per fiscal year by grade/dependents — get the advance up front so you're not fronting hotel and deposit cash. <a class="src" href="https://www.militaryonesource.mil/benefits/military-dislocation-allowance/" target="_blank" rel="noopener">DLA info ↗</a></div>
+      <div class="pb"><strong>Take interest-free PCS advance pay if cash is tight.</strong> You can draw up to a month of base pay (often 30 days before to 60 after the move), interest-free, repaid over 12 months — far cheaper than a credit card for a 3-week hotel stay. <a class="src" href="https://www.dfas.mil/MilitaryMembers/travelpay/armypcs/" target="_blank" rel="noopener">DFAS Army PCS ↗</a></div>
+      <div class="pb"><strong>You may get up to 21 days of TLE now, not 14.</strong> DoD extended CONUS Temporary Lodging Expense to as many as 21 days at the new station — confirm your authorization at finance and plan the hotel stay around it. <a class="src" href="https://www.travel.dod.mil/About/News/Article/Article/3981433/dod-authorizes-additional-7-days-to-conus-temporary-lodging-expense/" target="_blank" rel="noopener">TLE update ↗</a></div>
+      <div class="pb"><strong>Book hotels through FedRooms to stay at/under per diem.</strong> 12,000+ properties priced at or below the federal lodging per diem for government travelers — keeps your nightly rate inside the TLE cap. <a class="src" href="https://www.gsa.gov/travel/plan-a-trip/lodging/fedrooms" target="_blank" rel="noopener">FedRooms ↗</a></div>
+      <div class="pb"><strong>Look up the exact GSA per diem for your route + Hinesville/Savannah.</strong> Per diem varies by location — check before booking so you stay under the lodging ceiling and know your daily M&IE. <a class="src" href="https://www.gsa.gov/travel/plan-book/per-diem-rates" target="_blank" rel="noopener">GSA per diem ↗</a></div>
+      <div class="pb"><strong>Claim MALT mileage + per diem for the driving leg.</strong> Once your Ford Focus lands stateside, the miles you drive to Fort Stewart pay MALT (≈$0.21/mi in 2026 — confirm current rate) plus per diem per traveler. Map the most direct authorized route. <a class="src" href="https://www.travel.dod.mil/Travel-Transportation-Rates/Per-Diem/" target="_blank" rel="noopener">DTMO rates ↗</a></div>
+      <div class="pb"><strong>Turn the Focus in clean, empty, quarter-tank — and photograph it.</strong> Book the Honolulu VPC early, remove all personal items, and document existing damage with dated photos at the joint inspection. Undocumented "new" damage is the #1 shipping dispute. <a class="src" href="https://home.army.mil/hawaii/news/articles/summersurgehi-understanding-how-ship-your-privately-owned-vehicle-hawaii" target="_blank" rel="noopener">Hawaii POV guide ↗</a></div>
+      <div class="pb"><strong>Use your free OCONUS Non-Temp Storage entitlement.</strong> Leaving Hawaii authorizes government-paid storage for items you don't ship — just no food, liquids, or lithium batteries. Arrange through DPS. <a class="src" href="https://download.militaryonesource.mil/12038/MOS/Factsheets/FactSheet-NTS-Final.pdf" target="_blank" rel="noopener">NTS fact sheet ↗</a></div>
+      <div class="pb"><strong>Hand-carry valuables and build a serial-number photo inventory before pack day.</strong> Hand-carry jewelry, documents, small electronics; photograph high-value items with make/model/serial and confirm each is listed on the inventory. This is what wins claims. <a class="src" href="https://download.militaryonesource.mil/12038/MOS/Factsheets/TipsToEnsureAnAccurateInventory.pdf" target="_blank" rel="noopener">Inventory tips ↗</a></div>
+      <div class="pb"><strong>Hit the Full Replacement Value deadlines in DPS.</strong> File loss/damage notice within 75 days of delivery and the full claim within 9 months to keep FRV coverage. Inspect boxes as they come off the truck. <a class="src" href="https://www.militaryonesource.mil/resources/millife-guides/moving-claims/" target="_blank" rel="noopener">Moving claims ↗</a></div>
+      <div class="pb"><strong>Run USAA / Navy Federal PCS tools — and sell the BMW before you leave.</strong> Model cash flow with their free PCS calculators; selling the X5 privately in Hawaii's tight market usually beats a mainland trade-in and saves you from shipping a car you're offloading. <a class="src" href="https://www.navyfederal.org/makingcents/home-ownership/pcs-checklist-for-military-moves.html" target="_blank" rel="noopener">NavyFed PCS ↗</a></div>
+    </div>
+  </div>
+
+  <!-- Playbook: Discounts -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span><span class="title">🎟️ Discounts & free perks</span><span class="badge">10 tips</span>
+    </div>
+    <div class="body">
+      <div class="pb"><strong>Grab the free America the Beautiful military annual pass.</strong> Active-duty members and dependents get a free interagency pass covering 2,000+ federal sites (Fort Pulaski included) — pick one up at any park entrance with a military ID. <a class="src" href="https://store.usgs.gov/MilitaryPass" target="_blank" rel="noopener">Military Pass ↗</a></div>
+      <div class="pb"><strong>Buy attraction tickets through Fort Stewart MWR (ITT).</strong> The on-post Leisure Travel Services office sells deeply discounted theme-park, attraction, and cruise tickets — including Disney and Universal — to active-duty families. <a class="src" href="https://stewarthunter.armymwr.com/programs/leisure-travel" target="_blank" rel="noopener">Stewart MWR ITT ↗</a></div>
+      <div class="pb"><strong>Use the Disney Armed Forces Salute for 2026.</strong> Discounted multi-day Walt Disney World tickets and resort room savings for eligible service members — buy at your base ticket office or Shades of Green. <a class="src" href="https://disneyworld.disney.go.com/special-offers/military-multi-day-tickets-2026/" target="_blank" rel="noopener">Disney Salute ↗</a></div>
+      <div class="pb"><strong>Apply for Army child-care fee assistance (MCCYN).</strong> Offsets civilian child-care costs when on-post care isn't available — apply through Child Care Aware of America after you arrive. <a class="src" href="https://www.childcareaware.org/fee-assistancerespite/military-families/army/afa-program/" target="_blank" rel="noopener">Child Care Aware ↗</a></div>
+      <div class="pb"><strong>Enroll once for 10% off at Home Depot.</strong> Year-round 10% military discount (up to $400/yr) — verify via SheerID, then show your QR code in the app at checkout. <a class="src" href="https://www.homedepot.com/c/military" target="_blank" rel="noopener">Home Depot ↗</a></div>
+      <div class="pb"><strong>Get 10% off + free perks at Lowe's.</strong> Everyday 10% military discount plus free Silver Key status (free shipping, bonus points) — verify once with ID.me and link your MyLowe's account. <a class="src" href="https://www.lowes.com/l/about/honor-our-military" target="_blank" rel="noopener">Lowe's ↗</a></div>
+      <div class="pb"><strong>Unlock GovX member pricing.</strong> Free members-only store with up to 50% off 1,000+ tactical and lifestyle brands — verify your service status in minutes. <a class="src" href="https://www.govx.com/" target="_blank" rel="noopener">GovX ↗</a></div>
+      <div class="pb"><strong>Save 25% on the Georgia State Parks ParkPass.</strong> Active military and veterans get 25% off the annual pass — purchase in person at any Georgia state park with your military ID. <a class="src" href="https://gastateparks.org/ParkPass" target="_blank" rel="noopener">GA ParkPass ↗</a></div>
+      <div class="pb"><strong>Shop tax-free online at the Exchange.</strong> ShopMyExchange offers tax-free, military-exclusive pricing on electronics, apparel, and more — handy for re-stocking a new house. <a class="src" href="https://www.shopmyexchange.com/" target="_blank" rel="noopener">ShopMyExchange ↗</a></div>
+      <div class="pb"><strong>Lean on Military OneSource — it's free and 24/7.</strong> Personalized moving plans, free financial counseling, and confidential relocation/stress counseling for the whole family. Call 800-342-9647. <a class="src" href="https://www.militaryonesource.mil/moving-pcs/" target="_blank" rel="noopener">OneSource ↗</a></div>
+    </div>
+  </div>
+
+  <!-- Playbook: Settling in GA -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span><span class="title">🍑 Settling into Georgia</span><span class="badge">12 tips</span>
+    </div>
+    <div class="body">
+      <div class="pb"><strong>Know the GA license rules for military.</strong> Active-duty and dependents can renew by mail while stationed out of state; if you're establishing residency, visit DDS within 30 days of getting a permanent address. <a class="src" href="https://dds.georgia.gov/georgia-licenseid/military-veterans-and-national-guard" target="_blank" rel="noopener">GA DDS military ↗</a></div>
+      <div class="pb"><strong>Claim the TAVT non-resident military exemption.</strong> Georgia charges a one-time Title Ad Valorem Tax instead of sales tax — but non-resident active-duty members can be exempt by filing affidavit PT-472NS at the county tax commissioner. <a class="src" href="https://dor.georgia.gov/motor-vehicles/vehicle-registration-license-plates/vehicle-taxes-title-ad-valorem-tax-tavt-and" target="_blank" rel="noopener">GA TAVT ↗</a></div>
+      <div class="pb"><strong>Confirm your electric provider by street address.</strong> Richmond Hill/Hinesville is split between Georgia Power and Coastal Electric Cooperative — check which serves your street before signing a lease (Coastal offers same-day start before 3 p.m.). <a class="src" href="https://coastalelectric.coop/your-service/start-stop-move-service/start-service/" target="_blank" rel="noopener">Coastal Electric ↗</a></div>
+      <div class="pb"><strong>Check internet options at your exact address.</strong> Xfinity/Comcast covers most of the area, with fiber (Clearwave, Brightspeed) and AT&T in pockets — availability is street-specific. <a class="src" href="https://www.xfinity.com/local/ga/hinesville" target="_blank" rel="noopener">Xfinity Hinesville ↗</a></div>
+      <div class="pb"><strong>Name-drop the MIC3 Interstate Compact at school.</strong> It requires Georgia schools to ease enrollment, records transfer, and placement for military kids — reference it by name if a school balks at enrolling on hand-carried Hawaii records. <a class="src" href="https://mic3.net/" target="_blank" rel="noopener">MIC3 ↗</a></div>
+      <div class="pb"><strong>Pre-register for Bryan County Schools (Richmond Hill).</strong> Register online with residency proof, birth certificate, immunization, and Hawaii transcripts; kindergartners must turn 5 by Sept 1. <a class="src" href="https://www.bryancountyschools.org/page/registration" target="_blank" rel="noopener">Bryan County ↗</a></div>
+      <div class="pb"><strong>Or register with Liberty County Schools (Hinesville).</strong> Online enrollment portal for new students — have residency, immunization, and prior-school records ready digitally. District office: 912-876-2161. <a class="src" href="https://www.liberty.k12.ga.us/studentregistration/" target="_blank" rel="noopener">Liberty County ↗</a></div>
+      <div class="pb"><strong>Transfer to Tricare East and pick a new PCM.</strong> Update your GA address in DEERS first, then move enrollment to Tricare East and choose a PCM for each family member (Winn ACH on post, or a network provider). Humana Military: 800-444-5445. <a class="src" href="https://www.tricare.mil/LifeEvents/Moving/Prime/ADSM" target="_blank" rel="noopener">Tricare moving ↗</a></div>
+      <div class="pb"><strong>File USPS mail forwarding before you leave Hawaii.</strong> Forward First-Class mail for 12 months; it can take up to 2 weeks to start, so do it early. <a class="src" href="https://www.usps.com/manage/forward.htm" target="_blank" rel="noopener">USPS forward ↗</a></div>
+      <div class="pb"><strong>Decide on voter residency.</strong> Establishing GA residency? Register or update your address online (deadline: 5th Monday before an election). Many active-duty families instead keep their home-state residency. <a class="src" href="https://registertovote.sos.ga.gov/" target="_blank" rel="noopener">GA voter reg ↗</a></div>
+      <div class="pb"><strong>Compare on-post (Balfour Beatty) vs. off-post BAH early.</strong> Fort Stewart family housing is privatized through Balfour Beatty (homes by rank/family size); weigh it against renting/buying in Richmond Hill (top schools) or Hinesville. Start the housing application early. <a class="src" href="https://home.army.mil/stewart/my-fort/newcomers-1/housing" target="_blank" rel="noopener">Stewart housing ↗</a></div>
+      <div class="pb"><strong>Join the local spouse Facebook groups for real-time intel.</strong> "Fort Stewart Army Spouses" and similar groups are the fastest way to crowdsource a vet for the cat, a pediatrician, a dentist, and honest rental leads. <a class="src" href="https://www.facebook.com/groups/1491663071045243/" target="_blank" rel="noopener">Stewart spouses ↗</a></div>
+    </div>
+  </div>
+
+  <!-- Playbook: Explore -->
+  <div class="card">
+    <div class="card-header" onclick="toggleCat(this)">
+      <span class="arrow">▼</span><span class="title">🏖️ Explore Savannah & the coast</span><span class="badge">12 spots</span>
+    </div>
+    <div class="body">
+      <div class="pb"><strong>Tybee Island beaches.</strong> The closest beach (~30 min from Savannah) — five public beaches, a fishing pier, gentle surf. Park near the north-end lighthouse lots and bring buckets for crabbing off the Lazaretto Creek pier. <a class="src" href="https://visittybee.com/list/family-friendly-activities" target="_blank" rel="noopener">Visit Tybee ↗</a></div>
+      <div class="pb"><strong>Tybee Island Light Station.</strong> Georgia's oldest, tallest lighthouse — 178 steps to a 360° ocean view; ticket includes 2 hrs free parking, kids 5 & under free. <a class="src" href="https://www.tybeelighthouse.org/" target="_blank" rel="noopener">Tybee Light ↗</a></div>
+      <div class="pb"><strong>Fort Pulaski National Monument.</strong> Civil War coastal fort with weekend cannon demos, drawbridge, and moat — FREE with your military pass, kids under 16 always free (card-only, no cash). <a class="src" href="https://www.nps.gov/fopu/planyourvisit/fees.htm" target="_blank" rel="noopener">Fort Pulaski ↗</a></div>
+      <div class="pb"><strong>Wormsloe State Historic Site.</strong> The jaw-dropping 1.5-mile avenue of 400+ moss-draped live oaks, plus tabby ruins and colonial demos — pair it with Skidaway 10 min away. <a class="src" href="https://gastateparks.org/Wormsloe" target="_blank" rel="noopener">Wormsloe ↗</a></div>
+      <div class="pb"><strong>Skidaway Island State Park.</strong> 588 acres of maritime-forest and salt-marsh trails plus a free Interpretive Center with live snakes and a giant ground-sloth replica; parking just $5. <a class="src" href="https://gastateparks.org/SkidawayIsland" target="_blank" rel="noopener">Skidaway ↗</a></div>
+      <div class="pb"><strong>Oatland Island Wildlife Center.</strong> 1.5-mile forest trail past wolves, bobcats, alligators, and bison — FREE admission for military families on Armed Forces Day, July 5, Memorial & Veterans Day with ID. <a class="src" href="https://oatland.sccpss.com/visit/admissions-hours" target="_blank" rel="noopener">Oatland Island ↗</a></div>
+      <div class="pb"><strong>Forsyth Park.</strong> Savannah's iconic 1851 park — the Paris-style fountain, two playgrounds, and a splash pad that runs on hot summer days. Free, shaded, and the perfect base for the historic squares. <a class="src" href="https://www.savannahga.gov/4103/Forsyth-Park" target="_blank" rel="noopener">Forsyth Park ↗</a></div>
+      <div class="pb"><strong>Savannah Children's Museum.</strong> An open-air museum in the historic railway shops — sensory gardens, a maze, giant puzzles, climbing exhibits; combine with the Georgia State Railroad Museum next door. <a class="src" href="https://www.google.com/search?q=Savannah+Children%27s+Museum+Tricentennial+Park" target="_blank" rel="noopener">Details ↗</a></div>
+      <div class="pb"><strong>J.F. Gregory Park (Richmond Hill).</strong> 335 acres between Stewart and Hunter — 3+ miles of trails, a big playground, a 10-acre fishing lake, birding tower, and rentable pavilions popular for unit cookouts. <a class="src" href="https://exploregeorgia.org/richmond-hill/outdoors-nature/parks/jf-gregory-park" target="_blank" rel="noopener">J.F. Gregory ↗</a></div>
+      <div class="pb"><strong>Jekyll Island & the Golden Isles (day trip).</strong> ~75 min south — ten miles of beach, the surreal Driftwood Beach, 22 miles of bike trails, and the Georgia Sea Turtle Center where kids meet rescued turtles. <a class="src" href="https://www.goldenisles.com/islands-towns/jekyll-island/" target="_blank" rel="noopener">Golden Isles ↗</a></div>
+      <div class="pb"><strong>Hilton Head Island, SC (day trip).</strong> ~30 miles across US-278 — calmer, sheltered family beaches, dolphin and kayak tours, biking, and a petting farm. An easy half-day add-on. <a class="src" href="https://www.hiltonheadisland.org/" target="_blank" rel="noopener">Hilton Head ↗</a></div>
+      <div class="pb"><strong>Tybee with kids — the local guide.</strong> The Marine Science Center's touch tanks, hour-long dolphin tours, crabbing, and the Crab Shack with baby gators in the lagoon. <a class="src" href="https://exploregeorgia.org/things-to-do/article/7-things-to-do-with-kids-on-tybee-island" target="_blank" rel="noopener">Tybee kids guide ↗</a></div>
+    </div>
   </div>
 
   <!-- Packing -->
